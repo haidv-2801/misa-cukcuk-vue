@@ -1,71 +1,58 @@
 <template>
-<div class="main">
+  <div class="main">
     <!-- form employee -->
-    <transition name="slide">
-        <EmployeeDetail 
-            v-show="isDisplayedEmployeeDetail"
-            @toggleEmployeeDetail="toggleEmployeeDetail"/>
-    </transition>
-    
+    <EmployeeDetail ref="formEmployeeDetail"/>
+
     <!-- toolbar -->
-    <ToolBar @toggleEmployeeDetail="toggleEmployeeDetail"/>
+    <ToolBar @openFormEmployeeDetail="openFormEmployeeDetail" />
 
     <!-- filterbar -->
     <FilterBar />
 
     <!-- grid -->
-    <Grid @toggleEmployeeDetail="toggleEmployeeDetail"/>
+    <Grid @openFormEmployeeDetail="openFormEmployeeDetail" />
 
     <!-- Pagination -->
-    <Paging/>
-
-    
-</div>
+    <Paging />
+  </div>
 </template>
 
 <script>
-import EmployeeDetail from '../views/employee/EmployeeDetail.vue';
-import ToolBar from '@/components/views/employee/ToolBar'
+import EmployeeDetail from "../views/employee/EmployeeDetail.vue";
+import ToolBar from "@/components/views/employee/ToolBar";
 // import ToolBar from '../views/employee/ToolBar.vue'
-import FilterBar from '../views/employee/FilterBar.vue';
-import Grid from '../common/Grid.vue';
-import Paging from '../common/Paging.vue';
+import FilterBar from "../views/employee/FilterBar.vue";
+import Grid from "../common/Grid.vue";
+import Paging from "../common/Paging.vue";
 
 export default {
-    name:'Main',
-    components: {
-        EmployeeDetail,
-        ToolBar,
-        FilterBar,
-        Grid,
-        Paging
+  name: "Main",
+  components: {
+    EmployeeDetail,
+    ToolBar,
+    FilterBar,
+    Grid,
+    Paging,
+  },
+  data() {
+    return {
+      isDisplayedEmployeeDetail: false,
+    };
+  },
+  methods: {
+   /**
+     * Hàm mở form employeedetail
+     * DVHAI 14/06/2021
+     */
+    openFormEmployeeDetail(item = null) {
+      this.$refs.formEmployeeDetail.openForm(item);
+      //gửi sự kiện mở overlay cho app
+      this.$bus.emit("displayOverlay");
     },
-    data() {
-        return {
-            isDisplayedEmployeeDetail: false,
-        }
-    },
-    methods: {
-        toggleEmployeeDetail(item = null) {
-            console.log(item);
-            this.isDisplayedEmployeeDetail = !this.isDisplayedEmployeeDetail;
-            
-            //gửi sự kiện mở overlay cho app
-            this.$bus.emit("displayOverlay");
-        }
-    }
-}
+  },
+};
 </script>
 
 <style scoped>
-    /* transition */
-    .slide-leave-active, .slide-enter-active {
-        transition: all .3s ease;
-    }
-
-    .slide-enter, .slide-leave-to {
-        transform: translateY(-50%);
-        opacity: 0;
-    }
-    @import url("../../assets/css/common/main.css");
+@import url("../../assets/css/common/main.css");
 </style>

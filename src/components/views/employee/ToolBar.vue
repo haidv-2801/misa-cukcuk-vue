@@ -5,7 +5,7 @@
     </div>
     <div class="toolbar__right">
       <button
-        @click="toggleEmployeeDetail()"
+        @click="openFormEmployeeDetail()"
         class="btn buttonItem"
         commandtype="Add"
         title="Thêm mới"
@@ -32,8 +32,8 @@ export default {
         }
     },
     methods: {
-        toggleEmployeeDetail() {
-          this.$emit('toggleEmployeeDetail');
+        openFormEmployeeDetail() {
+          this.$emit('openFormEmployeeDetail');
         }
     }
 };

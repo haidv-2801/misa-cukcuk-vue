@@ -17,7 +17,7 @@
                     :key="index"
                     :class="{'active': curRowClicked == index}"
                     @click="rowClick(index)"
-                    @dblclick="toggleEmployeeDetail(row)"
+                    @dblclick="openFormEmployeeDetail(row)"
                 >
                     <td 
                         v-for="(column, index) in data.thead" 
@@ -92,8 +92,8 @@ export default {
          * nếu là edit thì bind dữ liệu lên
          * DVHAI 13/06/2021
          */
-        toggleEmployeeDetail(item) {
-            this.$emit('toggleEmployeeDetail', item);
+        openFormEmployeeDetail(row) {
+          this.$emit('openFormEmployeeDetail', row);
         }
     }
 }
@@ -101,8 +101,8 @@ export default {
 
 <style>
     .active {
-        background-color: rgb(227 243 238) !important;
-        color: black !important;
+        background-color: rgb(227 243 238);
+        color: black;
     }
 
     .main__grid {

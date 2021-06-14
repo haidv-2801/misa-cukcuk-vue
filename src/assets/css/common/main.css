@@ -2,13 +2,6 @@
     background-image: url(../../icon/arrow-up.svg) !important;
 }
 
-.style__number {
-    text-align: right;
-}
-
-.style__date {
-    text-align: center;
-}
 /* main css */
 .main {
     flex-direction: column;
@@ -26,8 +19,6 @@
 .align-center {
     text-align: center;
 }
-
-
 
 .selected-row {
     background-color: #e3f3ee !important;

@@ -1,14 +1,24 @@
 <template>
   <div class="row__item">
-    <label v-if="styleObject.required">{{name}}(<span class="color-red">*</span>)</label>
-    <label v-else>{{name}}</label>
-    <input class="focus" :type="type" :style="styleObject" />
+    <label 
+    :for="data.inputId"
+    v-if="data.isRequired"
+      >{{ data.labelText }}(<span class="color-red">*</span>)</label
+    >
+    <label 
+    v-else>{{ data.labelText }}</label>
+    <input
+      class="focus"
+      v-model="data.model"
+      :type="data.inputType"
+      :style="styleObject"
+    />
   </div>
 </template>
 
 <script>
 export default {
-  name:'InputLabel',
+  name: "InputLabel",
   props: {
     data: {
       type: Object,
@@ -16,20 +26,8 @@ export default {
     },
     styleObject: {
       type: Object,
-      default: function() {
-        return {
-          required: false
-        }
-      }
+      default: () => {},
     },
-    name: {
-      type: String,
-      default: 'Chưa có tên',
-    },
-    type: {
-      type: String,
-      default: 'text',
-    }
   },
   data() {
     return {};

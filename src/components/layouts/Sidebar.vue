@@ -20,7 +20,7 @@
         :key="index"
         :class="{
           'sidebar__row--hover': curHoverItem == index,
-          active: curSelectedItem == index,
+          'active': curSelectedItem == index,
         }"
         @click="evtRowClick(index, $event)"
         @mouseover="evtMouseOver(index)"

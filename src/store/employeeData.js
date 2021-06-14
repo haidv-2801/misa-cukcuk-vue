@@ -51,6 +51,12 @@ employee.column = [
         displayType: ''
     },
     {
+      fieldName: 'DepartmentName',
+      displayName: 'Phòng ban',
+      dataType: '',
+      displayType: ''
+    },
+    {
         fieldName: 'PositionName',
         displayName: 'Vị trí',
         dataType: '',
