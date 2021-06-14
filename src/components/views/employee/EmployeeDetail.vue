@@ -51,114 +51,47 @@
           <div class="title__solid--blue"></div>
           <div class="form__content">
             <div class="form__row">
-              <!-- <div class="row__item">
-                <label for="">Mã nhân viên(<span class="required">*</span>)</label>
-                <input
-                  class="focus"
-                  fieldname="EmployeeCode"
-                  type="text"
-                  required="true"/>
-              </div> -->
-              <InputLabel />
+              <InputLabel
+                :name="'Mã nhân viên'"
+                :styleObject="{ required: true }"
+              />
 
-              <div class="row__item">
-                <label for="">Họ và tên(<span class="required">*</span>)</label>
-                <input
-                  class="focus"
-                  fieldname="FullName"
-                  type="text"
-                  required="true"
-                />
-              </div>
+              <InputLabel
+                :name="'Họ và tên'"
+                :styleObject="{ required: true }"
+              />
             </div>
             <div class="form__row">
-              <div class="row__item">
-                <label for="">Ngày sinh</label>
-                <input class="focus" fieldname="DateOfBirth" type="date" />
-              </div>
+              <InputLabel :name="'Ngày sinh'" :type="'Date'" />
               <div class="row__item">
                 <label for="">Giới tính</label>
-                <!-- <select class="form-select" FieldName="Gender">
-                                    <option value="0">Nữ</option>
-                                    <option value="1" selected>Nam</option>
-                                    <option value="2">Khác</option>
-                                </select> -->
-
                 <div class="dropdown__gender dropdown__key left__item">
-                  <input
-                    tabindex=""
-                    class="dropdown-box focus"
-                    fieldname="Gender"
-                    enumname="Gender"
-                    type="dropdown"
-                    datatype="Enum"
-                    readonly=""
+                  <Dropdown
+                    :styleObject="styleDropdown"
+                    :data="dropdownData[3]"
                   />
-                  <div class="dropdown__items">
-                    <div class="dropdown__row" row="1">
-                      <div class="svg__box"></div>
-                      <span>Nam</span>
-                    </div>
-                    <div class="dropdown__row" row="0">
-                      <div class="svg__box"></div>
-                      <span>Nữ</span>
-                    </div>
-                    <div class="dropdown__row" row="2">
-                      <div class="svg__box"></div>
-                      <span>Khác</span>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
             <div class="form__row">
-              <div class="row__item">
-                <label for=""
-                  >Số CMTND/ Căn cước(<span class="required">*</span>)</label
-                >
-                <input
-                  class="focus"
-                  fieldname="IdentityNumber"
-                  required="true"
-                  type="text"
-                />
-              </div>
-              <div class="row__item">
-                <label for="">Ngày cấp</label>
-                <input class="focus" type="date" />
-              </div>
+              <InputLabel
+                :name="'Số CMTND/ Căn cước'"
+                :styleObject="{ required: true }"
+              />
+              <InputLabel :name="'Ngày cấp'" :type="'Date'" />
             </div>
             <div class="form__row">
-              <div class="row__item">
-                <label for="">Nơi cấp</label>
-                <input class="focus" type="text" />
-              </div>
+              <InputLabel :name="'Nơi cấp'" />
 
               <div class="row__item"></div>
             </div>
             <div class="form__row">
-              <div class="row__item">
-                <label for="">Email(<span class="required">*</span>)</label>
-                <input
-                  class="focus"
-                  fieldname="Email"
-                  required="true"
-                  type="email"
-                />
-              </div>
-              <div class="row__item">
-                <label for=""
-                  >Số điện thoại(<span class="required">*</span>)</label
-                >
-                <input
-                  class="focus"
-                  fieldname="PhoneNumber"
-                  datatype="Number"
-                  required="true"
-                  min="0"
-                  type="number"
-                />
-              </div>
+              <InputLabel :name="'Email'" :styleObject="{ required: true }" />
+              <InputLabel
+                :type="'number'"
+                :name="'Số điện thoại'"
+                :styleObject="{ required: true }"
+              />
             </div>
           </div>
         </div>
@@ -171,36 +104,31 @@
             <div class="form__row">
               <div class="row__item">
                 <label for="">Vịtrí</label>
-                <input class="focus" fieldname="PositionName" type="text" />
+                <Dropdown
+                  :styleObject="styleDropdown"
+                  :data="dropdownData[0]"
+                />
               </div>
               <div class="row__item">
                 <label for="">Phòng ban</label>
-                <input class="focus" fieldname="DepartmentName" type="text" />
-              </div>
-            </div>
-            <div class="form__row">
-              <div class="row__item">
-                <label for="">Mã số thuế cá nhân</label>
-                <input class="focus" type="text" />
-              </div>
-              <div class="row__item">
-                <label for="">Mức lương cơ bản</label>
-                <input
-                  class="focus"
-                  fieldname="Salary"
-                  datatype="Number"
-                  type="money"
+                <Dropdown
+                  :styleObject="styleDropdown"
+                  :data="dropdownData[1]"
                 />
               </div>
             </div>
             <div class="form__row">
+              <InputLabel :type="'number'" :name="'Mã số thuế cá nhân'" />
+              <InputLabel :type="'number'" :name="'Mức lương cơ bản'" />
+            </div>
+            <div class="form__row">
+              <InputLabel :name="'Ngày gia nhập công ty'" :type="'Date'" />
               <div class="row__item">
-                <label for="">Ngày gia nhập công ty</label
-                ><input class="focus" type="date" />
-              </div>
-              <div class="row__item">
-                <label for="">Tình trạng công việc</label
-                ><input class="focus" type="text" />
+                <label for="">Tình trạng công việc</label>
+                <Dropdown
+                  :styleObject="styleDropdown"
+                  :data="dropdownData[2]"
+                />
               </div>
             </div>
           </div>
@@ -208,18 +136,71 @@
       </div>
     </div>
     <div class="form__bottom">
-      <button class="btn-default" @click="closeForm()">Hủy</button>
-      <button class="btn-default btn-green">Lưu</button>
+      <button class="btn-default btn-cancel" @click="closeForm()">Hủy</button>
+      <button class="btn-default btn-green">
+        <svg
+          width="16"
+          height="16"
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="far"
+          data-icon="save"
+          class="btn-icon-left svg-inline--fa fa-save fa-w-14"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 448 512"
+        >
+          <path
+            fill="currentColor"
+            d="M433.941 129.941l-83.882-83.882A48 48 0 0 0 316.118 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V163.882a48 48 0 0 0-14.059-33.941zM272 80v80H144V80h128zm122 352H54a6 6 0 0 1-6-6V86a6 6 0 0 1 6-6h42v104c0 13.255 10.745 24 24 24h176c13.255 0 24-10.745 24-24V83.882l78.243 78.243a6 6 0 0 1 1.757 4.243V426a6 6 0 0 1-6 6zM224 232c-48.523 0-88 39.477-88 88s39.477 88 88 88 88-39.477 88-88-39.477-88-88-88zm0 128c-22.056 0-40-17.944-40-40s17.944-40 40-40 40 17.944 40 40-17.944 40-40 40z"
+          ></path>
+        </svg>
+        <span>Lưu</span>
+      </button>
     </div>
   </div>
 </template>
 
 <script>
 import InputLabel from "../../common/InputLabel.vue";
+import Dropdown from "../../common/Dropdown.vue";
 
 export default {
+  name: "EmployeeDetail",
   components: {
     InputLabel,
+    Dropdown,
+  },
+  data() {
+    return {
+      dropdownData: [
+        {
+          title: "Tất cả phòng ban",
+          items: [
+            "Phòng nhân sự",
+            "Phòng kế toán",
+            "Phòng kinh doanh",
+            "Phòng sản xuất",
+          ],
+        },
+        {
+          title: "Tất cả vị trí",
+          items: ["Giám đốc", "Fresher Web", "DepOops", "BA"],
+        },
+        {
+          title: "Chọn tình trạng",
+          items: ["Đang làm việc", "Nhân viên cũ", "Thử việc", "Chính thức"],
+        },
+        {
+          title: "Chọn giới tính",
+          items: ["Nam", "Nữ", "Khác"],
+        },
+      ],
+      styleDropdown: {
+        width: "100%",
+        height: "36px !important",
+      },
+    };
   },
   methods: {
     /**
@@ -235,192 +216,5 @@ export default {
 </script>
 
 <style scoped>
-.focus:focus-visible {
-  outline-color: #019160;
-}
-
-.required {
-  color: red;
-}
-
-/* button */
-.btn-default {
-  cursor: pointer !important;
-  padding: 0 16px;
-  outline: none;
-  border: none;
-  font-family: GoogleRegular;
-  height: 40px;
-  border-radius: 4px;
-}
-
-.btn-green {
-  color: #ffffff;
-  background-color: #019160;
-}
-
-.btn-green:hover {
-  background-color: #2fbe8e;
-}
-
-.btn-green:active {
-  background-color: #01b075;
-}
-
-html {
-  font-family: GoogleRegular;
-  font-size: 13px;
-  background-color: whitesmoke;
-}
-
-.overlay {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  overflow: auto;
-}
-
-.form__add {
-  overflow: auto;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px;
-  z-index: 9999999999999999999;
-  position: absolute;
-  background-color: white;
-  border-radius: 4px;
-  flex-direction: column;
-  max-height: 100vh;
-  width: 740px;
-}
-
-.form__head,
-.form__main,
-.form__bottom {
-  padding: 0 24px;
-}
-
-.form__title {
-  font-family: GoogleMedium;
-  font-size: 15px;
-}
-
-.form__head {
-  width: 100%;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.head__left {
-}
-
-.head__right {
-  cursor: pointer;
-}
-
-.head__right:hover {
-  opacity: 0.5;
-  cursor: pointer;
-}
-
-.form__main {
-  display: flex;
-  flex: 1;
-}
-
-.main__left {
-  margin-right: 10px;
-  flex: 1;
-}
-
-.img__field {
-  width: 150px;
-  height: 150px;
-}
-
-.img__field svg {
-  cursor: pointer;
-  width: 100%;
-  height: 100%;
-  fill: #bbbbbb;
-}
-
-.img__required {
-  text-align: center;
-}
-
-.main__right {
-  display: flex;
-  flex-direction: column;
-  flex: 3;
-}
-
-.form__group {
-  width: 100%;
-}
-
-.form__group:first-child {
-  flex: 2;
-}
-
-.form__group input {
-  width: 100%;
-  border: 1px solid #bbbbbb;
-  border-radius: 5px;
-  color: #000000;
-  height: 36px !important;
-}
-
-.form__row {
-  display: flex;
-  margin: 0px 0px 16px 0px;
-}
-
-.form__bottom {
-  background-color: #e9ebee;
-  width: 100%;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.form__bottom button {
-  margin-left: 20px;
-}
-
-.row__item label {
-  margin-bottom: 4px;
-  font-family: GoogleMedium;
-  font-size: 13px;
-  display: block;
-}
-
-.row__item {
-  flex: 1;
-  margin-right: 10px;
-}
-
-.title__solid--blue {
-  margin: 10px 0px;
-  height: 4px;
-  width: 100px;
-  background-color: #019160;
-}
-
-/* gender */
-
-.dropdown__gender {
-  position: relative;
-  width: 100%;
-}
+@import url("../../../assets/css/views/employee/EmployeeDetail.css");
 </style>

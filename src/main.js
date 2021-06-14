@@ -4,12 +4,13 @@ import Store from './store'
 // import library from '@fortawesome/fontawesome-svg-core'
 // import fas from '@fortawesome/free-solid-svg-icons'
 // import fab from '@fortawesome/free-brands-svg-icons'
+import Bus from '../EventBus.js'
 import App from './App.vue'
 
 // library.add(fas, fab)
 // Vue.component('font-`awesome`-icon', FontAwesomeIcon)
 // import Router from './router'
-
+Vue.use(Bus)
 Vue.config.productionTip = false
 
 new Vue({

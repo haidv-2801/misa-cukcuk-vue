@@ -33,7 +33,7 @@ export default {
     },
     methods: {
         toggleEmployeeDetail() {
-            this.$emit('toggleEmployeeDetail');
+          this.$emit('toggleEmployeeDetail');
         }
     }
 };

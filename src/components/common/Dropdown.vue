@@ -1,15 +1,23 @@
 <template>
-  <div class="dropdown dropdown__key left__item">
+  <div 
+    class="dropdown dropdown__key left__item"
+    :style="styleObject"
+  >
     <!-- dropdown head -->
     <div 
-    tabindex="8" 
+    tabindex="0" 
     class="dropdown-box" 
     :class="{ focus: isShow}"
+    @focus="addInputOutlineColor($event)"
+    @blur="removeInputOutlineColor($event)"
     >
       <span class="flex-1" @click="isShow = !isShow">{{ txtTitle }}</span>
 
       <span class="group-icon">
-        <span @click="resetTitle()" class="box__icon icon-textclear">
+        <span 
+        v-show="visibleClearIcon"
+        @click="resetTitle()" 
+        class="box__icon icon-textclear">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -89,14 +97,19 @@ export default {
     data: {
       type: [Object, Array],
     },
+    styleObject: {
+      type: Object,
+      default: ()=>{}
+    }
   },
   data() {
     return {
       isShow: false,
       curHoverItem: -1,
       curSelectedItem: -1,
-      visibleIcon: false,
+      visibleCheckedIcon: false,
       txtTitle: this.data.title,
+      visibleClearIcon: false
     };
   },
   methods: {
@@ -112,13 +125,18 @@ export default {
       this.toggleDropdown();
 
       //hiển thị icon xác nhận đã click
-      this.visibleIcon = !this.visibleIcon;
+      this.visibleCheckedIcon = !this.visibleCheckedIcon;
 
       //bind data lên title
       this.txtTitle = evt.target.innerText;
 
+      //hiển thị clear icon
+      this.visibleClearIcon = true;
+
+      //clear hover
       this.evtMouseOut();
     },
+
     /**
      * Gán index = -1
      * để bỏ hover color
@@ -127,6 +145,7 @@ export default {
     evtMouseOut() {
       this.curHoverItem = -10;
     },
+
     /**
      * Gán index của dòng đang có mouseover
      * cho curHoverItem
@@ -146,8 +165,11 @@ export default {
       //bỏ check các item
       this.curSelectedItem = -1;
 
-      //
+      //đóng dropdown
       this.isShow = false;
+
+      //ẩn clear icon
+      this.visibleClearIcon = false;
     },
 
     /**
@@ -157,6 +179,22 @@ export default {
     toggleDropdown() {
       this.isShow = !this.isShow;
     },
+
+    /**
+     * Thay đổi màu khi focus
+     * DVHAI 12/06/2021
+     */
+    addInputOutlineColor(e) {
+      e.target.classList.add('focus');
+    },
+
+    /**
+     * Xóa focus
+     * DVHAI 12/06/2021
+     */
+    removeInputOutlineColor(e) {
+      e.target.classList.remove('focus');
+    }
   },
   computed: {},
   watch: {},
@@ -229,7 +267,7 @@ export default {
   color: #000000;
   font-weight: 400;
   font-family: "GoogleRegular";
-  height: 40px !important;
+  height: 40px;
   line-height: 40px;
   border-radius: 4px;
   font-size: 13px;

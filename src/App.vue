@@ -1,23 +1,23 @@
 <template>
-
   <div id="app">
-      <!-- loader -->
-      <div id="loading">
-          <img id="loading-image" src="./assets/img/loader.gif" alt="Loading..." />
-      </div>
+    <!-- loader -->
+    <div id="loading">
+      <img id="loading-image" src="./assets/img/loader.gif" alt="Loading..." />
+    </div>
 
-      <!-- sidebar -->
-      <Sidebar :data="navItems" />
+    <div class="overlay" v-show="displayOverlay"></div>
 
-      <!-- content -->
-      <div class="content">
+    <!-- sidebar -->
+    <Sidebar :data="navItems" />
 
-        <!-- header -->
-        <Header />
+    <!-- content -->
+    <div class="content">
+      <!-- header -->
+      <Header />
 
-        <!-- main -->
-        <Main />
-      </div>
+      <!-- main -->
+      <Main />
+    </div>
   </div>
 </template>
 
@@ -29,16 +29,21 @@ import Main from './components/layouts/Main.vue';
 
 export default {
   name: 'App',
+  created() {
+    //lắng nghe sự kiện bật overlay
+    this.$bus.on('displayOverlay', () => { this.displayOverlay = !this.displayOverlay })
+  },
   data() {
     return {
       navItems: [
-        {icon:'', text:'Tổng quan'}, 
-        {icon:'', text:'Báo cáo'}, 
-        {icon:'', text:'Mua hàng'}, 
-        {icon:'', text:'Danh mục nhân viên'}, 
-        {icon:'', text:'Danh mục khách hàng'}, 
-        {icon:'', text:'Thiết lập hệ thống'}, 
-      ]
+        {icon:'', text:'Tổng quan'},
+        {icon:'', text:'Báo cáo'},
+        {icon:'', text:'Mua hàng'},
+        {icon:'', text:'Danh mục nhân viên'},
+        {icon:'', text:'Danh mục khách hàng'},
+        {icon:'', text:'Thiết lập hệ thống'},
+      ],
+      displayOverlay: false
     }
   }
   ,
@@ -46,25 +51,29 @@ export default {
     Sidebar,
     Header,
     Main
-  }
+  },
+  methods: {
+
+  },
 }
 </script>
 
 <style>
-  #app {
-    display: flex;
-    width: 100%;
-    height: 100vh;
-  }
+#app {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
 
-  /* content css */
-  .content {
-      flex-direction: column;
-      flex: 1;
-      display: flex;
-      width: calc(100vw - var(--size-sidebar-expanded));
-      height: 100%;
-  }
+/* content css */
+.content {
+  background-color: white;
+  flex-direction: column;
+  flex: 1;
+  display: flex;
+  width: calc(100vw - var(--size-sidebar-expanded));
+  height: 100%;
+}
 
-  @import url("./assets/css/common/common.css");
+@import url("./assets/css/common/common.css");
 </style>

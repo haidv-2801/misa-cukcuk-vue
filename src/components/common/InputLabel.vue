@@ -1,7 +1,8 @@
 <template>
   <div class="row__item">
-    <label>Mã nhân viên(<span class="color-red">*</span>)</label>
-    <input class="focus" type="text" required="true" />
+    <label v-if="styleObject.required">{{name}}(<span class="color-red">*</span>)</label>
+    <label v-else>{{name}}</label>
+    <input class="focus" :type="type" :style="styleObject" />
   </div>
 </template>
 
@@ -13,6 +14,22 @@ export default {
       type: Object,
       default: () => {},
     },
+    styleObject: {
+      type: Object,
+      default: function() {
+        return {
+          required: false
+        }
+      }
+    },
+    name: {
+      type: String,
+      default: 'Chưa có tên',
+    },
+    type: {
+      type: String,
+      default: 'text',
+    }
   },
   data() {
     return {};
@@ -27,6 +44,7 @@ input {
   border-radius: 5px;
   color: #000000;
   height: 36px;
+  padding-left: 16px;
 }
 
 .color-red {

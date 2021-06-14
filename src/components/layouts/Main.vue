@@ -19,7 +19,7 @@
     <!-- Pagination -->
     <Paging/>
 
-    <div class="overlay"></div>
+    
 </div>
 </template>
 
@@ -47,7 +47,11 @@ export default {
     },
     methods: {
         toggleEmployeeDetail(item = null) {
+            console.log(item);
             this.isDisplayedEmployeeDetail = !this.isDisplayedEmployeeDetail;
+            
+            //gửi sự kiện mở overlay cho app
+            this.$bus.emit("displayOverlay");
         }
     }
 }
