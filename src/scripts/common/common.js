@@ -107,36 +107,4 @@ CommonFn.removeSymbol = (value) => {
     return value.replace(/[^\d]/gi, '');
 }
 
-// // Hàm ajax gọi lên server lấy dữ liệu
-// CommonFn.Ajax = (url, method, data, fnCallBack, async = true) => {
-//     $.ajax({
-//         url: url,
-//         method: method,
-//         async: async,
-//         data: JSON.stringify(data),
-//         headers: {
-//             "Content-Type": "application/json"
-//         },
-//         crossDomain: true,
-//         contentType: "application/json;charset=utf-8",
-//         dataType: "json",
-//         beforeSend:function() {
-//             $('#loading').show();
-//             // setTimeout(() => {
-//             //     $('#loading').hide();
-//             // }, 5000);
-//         },
-//         success: function (response) {
-            
-//             fnCallBack(response);
-//         },
-//         error: function (errormessage) {
-//             console.log(errormessage.responseText);
-//         },
-//         complete: function() {
-//             $('#loading').hide();
-//         }
-//     })
-// }
-
 export default CommonFn

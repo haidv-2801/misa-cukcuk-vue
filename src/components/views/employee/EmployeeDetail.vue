@@ -153,7 +153,7 @@
 <script>
 import InputLabel from "../../common/InputLabel.vue";
 import Dropdown from "../../common/Dropdown.vue";
-// import EmployeeModel from "../../../models/employeeModel.js";
+import EmployeeModel from "../../../models/employeeModel.js";
 
 function initState() {
   return {
@@ -169,22 +169,22 @@ function initState() {
           "Phòng kinh doanh",
           "Phòng sản xuất",
         ],
-        selected: null
+        selected: null,
       },
       {
         title: "Tất cả vị trí",
         items: ["Giám đốc", "Fresher Web", "DepOops", "BA"],
-        selected: null
+        selected: null,
       },
       {
         title: "Chọn tình trạng",
         items: ["Đang làm việc", "Nhân viên cũ", "Thử việc", "Chính thức"],
-        selected: null
+        selected: null,
       },
       {
         title: "Chọn giới tính",
         items: ["Nam", "Nữ", "Khác"],
-        selected: null
+        selected: null,
       },
     ],
 
@@ -266,6 +266,8 @@ function initState() {
       labelText: "Ngày gia nhập công ty",
       inputType: "date",
     },
+
+    employeeModel: new EmployeeModel().initData(),
   };
 }
 
@@ -310,11 +312,30 @@ export default {
       //để clear text
       Object.assign(this.$data, initState());
 
-      if(item) {
+      if (item != null) {
         //dropdown binding
 
-        //input binding
-        this.employeeCodeInput.model =
+        //Lấy bản ghi theo id
+        let emp = this.getEmployeeById(item.EmployeeId);
+        
+        //ánh xạ dữ liệu sang model
+        for (const key in this.employeeModel) {
+          if (Object.prototype.hasOwnProperty.call(emp, key)) {
+            this.employeeModel[key] = emp[key];
+          }
+        }
+
+        this.employeeCodeInput.model = this.employeeModel.EmployeeCode;
+        this.employeeNameInput.model = this.employeeModel.FullName;
+        this.dateOfBirthInput.model = this.employeeModel.DateOfBirth;
+        this.identityNumberInput.model = this.employeeModel.identityNumberInput;
+        this.identityDateInput.model = this.employeeModel.IdentityDate;
+        this.identityPlaceInput.model = this.employeeModel.IdentityPlace;
+        this.emailInput.model = this.employeeModel.Email;
+        this.phoneNumberInput.model = this.employeeModel.PhoneNumber;
+        this.taxCodeInput.model = this.employeeModel.PersonalTaxCode;
+        this.salaryInput.model = this.employeeModel.Salary;
+        this.joinDateInput.model = this.employeeModel.JoinDate;
       }
 
       this.isOpen = true;
@@ -326,41 +347,42 @@ export default {
      */
     getEmployeeById(id) {
       console.log(id);
+
       return {
-        "EmployeeId": "00b7abf8-c9a3-11eb-94eb-42010a8c0002",
-        "EmployeeCode": "MF866",
-        "FirstName": null,
-        "LastName": null,
-        "FullName": "Do Van Hai",
-        "Gender": null,
-        "DateOfBirth": null,
-        "PhoneNumber": "335565656",
-        "Email": "mail@gmail.com",
-        "Address": null,
-        "IdentityNumber": null,
-        "IdentityDate": null,
-        "IdentityPlace": null,
-        "JoinDate": null,
-        "MartialStatus": null,
-        "EducationalBackground": null,
-        "QualificationId": null,
-        "DepartmentId": null,
-        "PositionId": null,
-        "WorkStatus": null,
-        "PersonalTaxCode": null,
-        "Salary": 122222222222,
-        "PositionCode": null,
-        "PositionName": null,
-        "DepartmentCode": null,
-        "DepartmentName": null,
-        "QualificationName": null,
-        "GenderName": null,
-        "EducationalBackgroundName": null,
-        "MartialStatusName": null,
-        "CreatedDate": "2021-06-10T04:19:09",
-        "CreatedBy": null,
-        "ModifiedDate": "2021-06-10T04:32:09",
-        "ModifiedBy": null
+        EmployeeId: "00b7abf8-c9a3-11eb-94eb-42010a8c0002",
+        EmployeeCode: "MF866",
+        FirstName: null,
+        LastName: null,
+        FullName: "Do Van Hai",
+        Gender: 1,
+        DateOfBirth: null,
+        PhoneNumber: "335565656",
+        Email: "mail@gmail.com",
+        Address: "Nam Định",
+        identityNumberInput: "036200011834",
+        IdentityDate: null,
+        IdentityPlace: "Nam Định",
+        JoinDate: null ,
+        MartialStatus: null,
+        EducationalBackground: null,
+        QualificationId: null,
+        DepartmentId: null,
+        PositionId: null,
+        WorkStatus: null,
+        PersonalTaxCode: "11324567",
+        Salary: 122222222222,
+        PositionCode: null,
+        PositionName: "FresherWeb",
+        DepartmentCode: null,
+        DepartmentName: "IT",
+        QualificationName: null,
+        GenderName: null,
+        EducationalBackgroundName: null,
+        MartialStatusName: null,
+        CreatedDate: "2021-06-10T04:19:09",
+        CreatedBy: null,
+        ModifiedDate: "2021-06-10T04:32:09",
+        ModifiedBy: null,
       };
     },
   },

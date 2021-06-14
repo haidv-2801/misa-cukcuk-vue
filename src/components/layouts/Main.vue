@@ -45,7 +45,9 @@ export default {
      * DVHAI 14/06/2021
      */
     openFormEmployeeDetail(item = null) {
+      //gọi hàm mở form ở form
       this.$refs.formEmployeeDetail.openForm(item);
+
       //gửi sự kiện mở overlay cho app
       this.$bus.emit("displayOverlay");
     },

@@ -8,8 +8,11 @@ export default class employeeModel {
             PhoneNumber: '',
             Email: '',
             Address: '',
-            IdentityNumber: '',
+            identityNumberInput: '',
+            IdentityPlace: '',
             PositionName: '',
+            PersonalTaxCode: '',
+            JoinDate: '',
             DepartmentName: '',
             Salary: ''
         };

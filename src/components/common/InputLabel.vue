@@ -1,22 +1,24 @@
 <template>
   <div class="row__item">
-    <label 
-    :for="data.inputId"
-    v-if="data.isRequired"
+    <label :for="data.inputId" v-if="data.isRequired"
       >{{ data.labelText }}(<span class="color-red">*</span>)</label
     >
-    <label 
-    v-else>{{ data.labelText }}</label>
+    <label v-else>{{ data.labelText }}</label>
     <input
       class="focus"
-      v-model="data.model"
       :type="data.inputType"
       :style="styleObject"
+      v-model="data.model"
+      @blur="validateRequired()"
     />
   </div>
 </template>
 
 <script>
+// import Enumeration from ".././../scripts/common/enumeration";
+import Resource from ".././../scripts/common/resource";
+// import CommonFn from ".././../scripts/common/common";
+
 export default {
   name: "InputLabel",
   props: {
@@ -30,7 +32,50 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      isValid: true,
+      errors: "",
+    };
+  },
+  methods: {
+    validate() {
+      this.validateRequired();
+
+      this.validateType();
+    },
+
+    validateType() {
+      if (this.data.dataType) {
+        switch (this.data.dataType) {
+          case Resource.DataTypeColumn.Number:
+            if(this.data.model.trim() === '' || isNaN(this.data.model)) {
+              this.isValid = false;
+              this.errors = 'Nhập đúng định dạng';
+            }
+            break;
+          case Resource.DataTypeColumn.Date:
+
+            break;
+          case Resource.DataTypeColumn.Enum:
+
+            break;
+        }
+      }
+    },
+
+    validateRequired() {
+      if (this.data.isRequired == true) {
+        if (this.data.model.trim() === "") {
+          this.isValid = false;
+          this.errors = this.data.labelText + "không được trống";
+          alert(this.errors);
+        }
+      } else {
+        //
+      }
+    },
+
+    
   },
 };
 </script>
