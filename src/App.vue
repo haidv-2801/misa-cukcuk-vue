@@ -76,4 +76,5 @@ export default {
 }
 
 @import url("./assets/css/common/common.css");
+@import url("./assets/css/common/tooltip.css");
 </style>

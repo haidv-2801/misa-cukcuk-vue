@@ -1,28 +1,43 @@
 <template>
-  <div class="row__item">
+  <div
+    class="row__item tooltip"
+    :style="{ '--scale': tooltipScale, '--tooltip-message': validation.error }"
+  >
     <label :for="data.inputId" v-if="data.isRequired"
       >{{ data.labelText }}(<span class="color-red">*</span>)</label
     >
     <label v-else>{{ data.labelText }}</label>
     <input
+      :id="data.inputId"
       class="focus"
       :type="data.inputType"
       :style="styleObject"
       v-model="data.model"
-      @blur="validateRequired()"
-      @focus="isValid = true"
-      :class="{'notValidControl': !isValid}"
+      @focus="focus"
+      @blur="blur"
+      :class="{ notValidControl: !validation.isValid }"
     />
   </div>
 </template>
 
 <script>
 // import Enumeration from ".././../scripts/common/enumeration";
-import Resource from ".././../scripts/common/resource";
+// import Resource from ".././../scripts/common/resource";
 // import CommonFn from ".././../scripts/common/common";
+
+function initState() {
+  return {
+    validation: {
+      isValid: true,
+      error: "",
+    },
+    tooltipScale: 0,
+  };
+}
 
 export default {
   name: "InputLabel",
+  components: {},
   props: {
     data: {
       type: Object,
@@ -34,61 +49,51 @@ export default {
     },
   },
   data() {
-    return {
-      isValid: true,
-      errors: "",
-    };
+    return initState();
   },
-  methods: {
-    validate() {
-      this.validateRequired();
 
-      this.validateType();
+  methods: {
+    focus() {
+      this.resetComponent();
     },
 
-    validateType() {
-      if (this.data.dataType) {
-        switch (this.data.dataType) {
-          case Resource.DataTypeColumn.Number:
-            if(this.data.model.trim() === '' || isNaN(this.data.model)) {
-              this.isValid = false;
-              this.errors = 'Nhập đúng định dạng';
-            }
-            break;
-          case Resource.DataTypeColumn.Date:
+    blur() {
+      this.validate();
+    },
 
-            break;
-          case Resource.DataTypeColumn.Enum:
-
-            break;
-        }
-      }
+    validate() {
+      this.validateRequired();
     },
 
     validateRequired() {
       if (this.data.isRequired == true) {
-        if (this.data.model.trim() === "") {
-          this.isValid = false;
-          this.errors = this.data.labelText + "không được trống";
-          alert(this.errors);
+        if (!this.data.model || this.data.model.toString().trim() == "") {
+          this.validation.isValid = false;
+          this.tooltipScale = 1;
+          this.validation.error =
+            '"' + this.data.labelText + " không được trống" + '"';
+        } else {
+          this.validation.isValid = true;
         }
-      } else {
-        //
       }
     },
 
-    
+    resetComponent() {
+      Object.assign(this.$data, initState());
+    },
   },
 };
 </script>
 
 <style scoped>
+@import url("../../assets/css/common/tooltip.css");
+
 input {
   width: 100%;
   border: 1px solid #bbbbbb;
   border-radius: 5px;
   color: #000000;
-  height: 36px;
+  height: 40px;
   padding-left: 16px;
 }
 

@@ -24,20 +24,7 @@
       <div class="form__main">
         <div class="main__left">
           <div class="img__field">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-person-circle"
-              viewBox="0 0 16 16"
-            >
-              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
-              <path
-                fill-rule="evenodd"
-                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
-              ></path>
-            </svg>
+            
           </div>
           <div class="img__required">
             (Vui lòng chọn ảnh có định <br />
@@ -53,7 +40,6 @@
             <div class="form__content">
               <div class="form__row">
                 <InputLabel :data="employeeCodeInput" />
-
                 <InputLabel :data="employeeNameInput" />
               </div>
               <div class="form__row">
@@ -286,9 +272,9 @@ export default {
      * Clear dữ liệu form khi mở lại
      * DVHAI 14/06/2021
      */
-    // resetWindow() {
-    //   Object.assign(this.$data, initState());
-    // },
+    resetWindow() {
+      Object.assign(this.$data, initState());
+    },
 
     /**
      * Hàm đóng form
@@ -310,14 +296,14 @@ export default {
 
       //map dữ liệu từ init state sang data mặc định
       //để clear text
-      Object.assign(this.$data, initState());
+      this.resetWindow();
 
       if (item != null) {
         //dropdown binding
 
         //Lấy bản ghi theo id
         let emp = this.getEmployeeById(item.EmployeeId);
-        
+
         //ánh xạ dữ liệu sang model
         for (const key in this.employeeModel) {
           if (Object.prototype.hasOwnProperty.call(emp, key)) {
@@ -362,7 +348,7 @@ export default {
         identityNumberInput: "036200011834",
         IdentityDate: null,
         IdentityPlace: "Nam Định",
-        JoinDate: null ,
+        JoinDate: null,
         MartialStatus: null,
         EducationalBackground: null,
         QualificationId: null,

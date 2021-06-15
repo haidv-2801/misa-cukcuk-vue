@@ -141,18 +141,6 @@ body {
   outline-color: #019160;
 }
 
-.search-box {
-  width: calc(var(--size-width-M) * 4.5);
-  height: 40px !important;
-  background-image: url(../../icon/search.png);
-  background-position: 16px center;
-  background-repeat: no-repeat;
-  background-size: 16px 16px;
-  width: 275px;
-  min-width: 125px;
-  text-indent: 40px;
-}
-
 /* font */
 .title {
   font-size: 20px !important;
