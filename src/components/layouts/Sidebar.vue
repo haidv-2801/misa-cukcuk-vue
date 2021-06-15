@@ -26,7 +26,7 @@
         @mouseover="evtMouseOver(index)"
         @mouseout="evtMouseOut()"
       >
-        <div class="item__icon"></div>
+        <div class="item__icon" :class="'icon' + (index + 1)"></div>
         <div class="item__title">{{ item.text }}</div>
       </div>
     </div>

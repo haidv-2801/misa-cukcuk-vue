@@ -89,6 +89,7 @@
 
 .icon2 {
     background-image: url(../../icon/report.png);
+    /* background-image: url(../../icon/report.svg); */
 }
 
 .icon3 {
@@ -100,6 +101,10 @@
 }
 
 .icon5 {
+    background-image: url(../../icon/dic-employee.png);
+}
+
+.icon6 {
     background-image: url(../../icon/setting.png);
 }
 

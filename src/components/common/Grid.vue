@@ -99,10 +99,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     .active {
-        background-color: rgb(227 243 238);
-        color: black;
+        background-color: rgb(227 243 238) !important;
+        color: black !important;
     }
 
     .main__grid {

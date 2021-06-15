@@ -10,6 +10,8 @@
       :style="styleObject"
       v-model="data.model"
       @blur="validateRequired()"
+      @focus="isValid = true"
+      :class="{'notValidControl': !isValid}"
     />
   </div>
 </template>
