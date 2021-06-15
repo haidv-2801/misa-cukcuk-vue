@@ -17,11 +17,11 @@
       </thead>
       <tbody>
         <tr
-          v-for="(row, index) in data.tbody"
+          v-for="(item, index) in data.tbody"
           :key="index"
           :class="{ active: curRowClicked == index }"
           @click="rowClick(index)"
-          @dblclick="openFormEmployeeDetail(row)"
+          @dblclick="openFormEmployeeDetail(item)"
         >
           <td
             v-for="(column, index) in data.thead"
@@ -33,7 +33,7 @@
           >
             {{
               formatValue(
-                row[column.fieldName],
+                item[column.fieldName],
                 column.dataType,
                 column.displayType
               )
@@ -65,7 +65,22 @@ export default {
       curRowClicked: 0,
     };
   },
+  created() {
+    this.getDataServer();
+  },
   methods: {
+    /**
+     * Get data from serve
+     * DVHAI 13/06/2021
+     */
+    getDataServer() {
+      this.axios
+        .get("http://cukcuk.manhnv.net/v1/Employees")
+        .then((response) => {
+          this.data.tbody = response.data;
+        });
+    },
+
     /**
      * Hàm format value từ dạng thô sang chuẩn
      * DVHAI 13/06/2021
@@ -103,8 +118,8 @@ export default {
      * nếu là edit thì bind dữ liệu lên
      * DVHAI 13/06/2021
      */
-    openFormEmployeeDetail(row) {
-      this.$emit("openFormEmployeeDetail", row);
+    openFormEmployeeDetail(item) {
+      this.$emit("openFormEmployeeDetail", item);
     },
   },
 };
@@ -131,7 +146,7 @@ table {
 
 table tr {
   cursor: pointer;
-  height: 40px;
+  height: 48px;
   border-bottom: 1px solid var(--color-hint);
 }
 
@@ -154,7 +169,7 @@ table thead tr {
 } */
 
 tbody {
-    display: block;
+  display: block;
 }
 
 table td,
@@ -170,19 +185,20 @@ table td {
 }
 
 table {
-    height: calc(100% - 56px - 66px);
-    width: 100%;
+  height: calc(100% - 56px - 66px);
+  width: 100%;
 }
 
 tbody {
-    display: block;
-    height: calc(100vh - 56px - 49px - 56px - 66px - 49px);
-    overflow: auto;
+  display: block;
+  height: calc(100vh - 56px - 49px - 56px - 66px - 49px);
+  overflow: auto;
 }
 
-thead, tbody tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
+thead,
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
 }
 </style>

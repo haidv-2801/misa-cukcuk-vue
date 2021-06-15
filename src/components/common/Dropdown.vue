@@ -311,6 +311,10 @@ export default {
   height: 16px;
 }
 
+svg {
+  transition: .2s;
+}
+
 .dropdown__row--hover {
   background-color: #e9ebee;
 }

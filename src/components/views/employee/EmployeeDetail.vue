@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <div v-show="isOpen" class="form__add ui-draggable">
+    <div v-if="isOpen" class="form__add ui-draggable">
       <div class="form__head ui-draggable-handle">
         <div class="head__left">
           <h2>THÔNG TIN NHÂN VIÊN</h2>
@@ -23,9 +23,7 @@
       </div>
       <div class="form__main">
         <div class="main__left">
-          <div class="img__field">
-            
-          </div>
+          <div class="img__field"></div>
           <div class="img__required">
             (Vui lòng chọn ảnh có định <br />
             dạng <br />.jpg .jpeg .png .gif)
@@ -292,8 +290,6 @@ export default {
      * DVHAI 14/06/2021
      */
     openForm(item) {
-      console.log(item);
-
       //map dữ liệu từ init state sang data mặc định
       //để clear text
       this.resetWindow();
@@ -302,19 +298,19 @@ export default {
         //dropdown binding
 
         //Lấy bản ghi theo id
-        let emp = this.getEmployeeById(item.EmployeeId);
+        var emp = this.getEmployeeById(item.EmployeeId);
 
         //ánh xạ dữ liệu sang model
-        for (const key in this.employeeModel) {
+        for (let key in this.employeeModel) {
           if (Object.prototype.hasOwnProperty.call(emp, key)) {
-            this.employeeModel[key] = emp[key];
+            this.employeeModel[key] = emp[key]
           }
         }
 
         this.employeeCodeInput.model = this.employeeModel.EmployeeCode;
         this.employeeNameInput.model = this.employeeModel.FullName;
         this.dateOfBirthInput.model = this.employeeModel.DateOfBirth;
-        this.identityNumberInput.model = this.employeeModel.identityNumberInput;
+        this.identityNumberInput.model = this.employeeModel.IdentityNumber;
         this.identityDateInput.model = this.employeeModel.IdentityDate;
         this.identityPlaceInput.model = this.employeeModel.IdentityPlace;
         this.emailInput.model = this.employeeModel.Email;
@@ -322,6 +318,7 @@ export default {
         this.taxCodeInput.model = this.employeeModel.PersonalTaxCode;
         this.salaryInput.model = this.employeeModel.Salary;
         this.joinDateInput.model = this.employeeModel.JoinDate;
+
       }
 
       this.isOpen = true;
@@ -332,44 +329,11 @@ export default {
      * DVHAI 14/06/2021
      */
     getEmployeeById(id) {
-      console.log(id);
-
-      return {
-        EmployeeId: "00b7abf8-c9a3-11eb-94eb-42010a8c0002",
-        EmployeeCode: "MF866",
-        FirstName: null,
-        LastName: null,
-        FullName: "Do Van Hai",
-        Gender: 1,
-        DateOfBirth: null,
-        PhoneNumber: "335565656",
-        Email: "mail@gmail.com",
-        Address: "Nam Định",
-        identityNumberInput: "036200011834",
-        IdentityDate: null,
-        IdentityPlace: "Nam Định",
-        JoinDate: null,
-        MartialStatus: null,
-        EducationalBackground: null,
-        QualificationId: null,
-        DepartmentId: null,
-        PositionId: null,
-        WorkStatus: null,
-        PersonalTaxCode: "11324567",
-        Salary: 122222222222,
-        PositionCode: null,
-        PositionName: "FresherWeb",
-        DepartmentCode: null,
-        DepartmentName: "IT",
-        QualificationName: null,
-        GenderName: null,
-        EducationalBackgroundName: null,
-        MartialStatusName: null,
-        CreatedDate: "2021-06-10T04:19:09",
-        CreatedBy: null,
-        ModifiedDate: "2021-06-10T04:32:09",
-        ModifiedBy: null,
-      };
+      this.axios
+        .get("http://cukcuk.manhnv.net/v1/Employees/" + id)
+        .then((response) => {
+          return response.data;
+        });
     },
   },
 };

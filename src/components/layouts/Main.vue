@@ -44,7 +44,8 @@ export default {
      * Hàm mở form employeedetail
      * DVHAI 14/06/2021
      */
-    openFormEmployeeDetail(item = null) {
+    openFormEmployeeDetail(item) {
+      console.log(item)
       //gọi hàm mở form ở form
       this.$refs.formEmployeeDetail.openForm(item);
 
