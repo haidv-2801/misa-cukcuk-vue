@@ -1,1 +1,17 @@
 https://www.youtube.com/watch?v=SW5OfTAxtDY : validate form
+
+// for (let key in this.employeeModel) {
+        //   console.log(emp[key]);
+        // }
+
+        // this.employeeCodeInput.model = this.employeeModel.EmployeeCode;
+        // this.employeeNameInput.model = this.employeeModel.FullName;
+        // this.dateOfBirthInput.model = this.employeeModel.DateOfBirth;
+        // this.identityNumberInput.model = this.employeeModel.IdentityNumber;
+        // this.identityDateInput.model = this.employeeModel.IdentityDate;
+        // this.identityPlaceInput.model = this.employeeModel.IdentityPlace;
+        // this.emailInput.model = this.employeeModel.Email;
+        // this.phoneNumberInput.model = this.employeeModel.PhoneNumber;
+        // this.taxCodeInput.model = this.employeeModel.PersonalTaxCode;
+        // this.salaryInput.model = this.employeeModel.Salary;
+        // this.joinDateInput.model = this.employeeModel.JoinDate;

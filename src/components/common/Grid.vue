@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     /**
-     * Get data from serve
+     * Get data from server
      * DVHAI 13/06/2021
      */
     getDataServer() {
@@ -82,7 +82,7 @@ export default {
     },
 
     /**
-     * Hàm format value từ dạng thô sang chuẩn
+     * Format value
      * DVHAI 13/06/2021
      */
     formatValue(data, dataType, dataDisplayType) {
@@ -105,8 +105,7 @@ export default {
     },
 
     /**
-     * Gán index của dòng được click vào
-     * biến so sánh active class
+     * Event click row
      * DVHAI 13/06/2021
      */
     rowClick(index) {
@@ -114,8 +113,8 @@ export default {
     },
 
     /**
-     * Đóng mở form employee
-     * nếu là edit thì bind dữ liệu lên
+     * Open form
+     * If edit mode -> bind data
      * DVHAI 13/06/2021
      */
     openFormEmployeeDetail(item) {
@@ -138,7 +137,7 @@ export default {
   margin-top: 10px;
   height: calc(100vh - 228px);
 }
-
+/* 
 table {
   width: 100%;
   border-collapse: collapse;
@@ -162,11 +161,11 @@ table thead tr {
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
-/* table th {
+table th {
   position: sticky;
   background-color: #fff;
   top: 0;
-} */
+}
 
 tbody {
   display: block;
@@ -174,8 +173,23 @@ tbody {
 
 table td,
 th {
+  white-space: nowrap;
   padding: 0 10px 0 16px;
   text-align: left;
+} */
+
+.align-right {
+  text-align: right;
+}
+
+.align-center {
+  text-align: center;
+}
+
+table th {
+  position: sticky;
+  background-color: #fff;
+  top: 0;
 }
 
 table td {
@@ -183,13 +197,52 @@ table td {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
+/* i */
 table {
-  height: calc(100% - 56px - 66px);
   width: 100%;
+  border-collapse: collapse;
 }
 
-tbody {
+table tr {
+  cursor: pointer;
+  height: 40px;
+  border-bottom: 1px solid var(--color-hint);
+}
+
+table tbody tr:nth-child(odd) {
+  background-color: #fafafa;
+}
+
+table tbody tr:hover {
+  background-color: #e9ebee;
+}
+
+table thead tr {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+table th {
+  position: sticky;
+  background-color: #fff;
+  top: 0;
+}
+
+table td,
+th {
+  white-space: nowrap;
+  padding: 0 10px 0 16px;
+  text-align: left;
+  max-width: 120px;
+}
+/* i */
+
+/* table {
+  overflow-x: scroll;
+  height: calc(100% - 56px - 66px);
+  width: 100%;
+}  */
+
+/* tbody {
   display: block;
   height: calc(100vh - 56px - 49px - 56px - 66px - 49px);
   overflow: auto;
@@ -200,5 +253,5 @@ tbody tr {
   display: table;
   width: 100%;
   table-layout: fixed;
-}
+}  */
 </style>

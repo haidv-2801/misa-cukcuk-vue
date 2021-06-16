@@ -37,11 +37,11 @@
             <div class="title__solid--blue"></div>
             <div class="form__content">
               <div class="form__row">
-                <InputLabel :data="employeeCodeInput" />
-                <InputLabel :data="employeeNameInput" />
+                <!-- <InputLabel :data="employeeCodeInput" />
+                <InputLabel :data="employeeNameInput" /> -->
               </div>
               <div class="form__row">
-                <InputLabel :data="dateOfBirthInput" />
+                <!-- <InputLabel :data="dateOfBirthInput" /> -->
                 <div class="row__item">
                   <label for="">Giới tính</label>
                   <div class="dropdown__gender dropdown__key left__item">
@@ -53,17 +53,17 @@
                 </div>
               </div>
               <div class="form__row">
-                <InputLabel :data="identityNumberInput" />
-                <InputLabel :data="identityDateInput" />
+                <!-- <InputLabel :data="identityNumberInput" /> -->
+                <!-- <InputLabel :data="identityDateInput" /> -->
               </div>
               <div class="form__row">
-                <InputLabel :data="identityPlaceInput" />
+                <!-- <InputLabel :data="identityPlaceInput" /> -->
 
                 <div class="row__item"></div>
               </div>
               <div class="form__row">
-                <InputLabel :data="emailInput" />
-                <InputLabel :data="phoneNumberInput" />
+                <!-- <InputLabel :data="emailInput" /> -->
+                <!-- <InputLabel :data="phoneNumberInput" /> -->
               </div>
             </div>
           </div>
@@ -90,8 +90,8 @@
                 </div>
               </div>
               <div class="form__row">
-                <InputLabel :data="taxCodeInput" />
-                <InputLabel :data="salaryInput" />
+                <!-- <InputLabel :data="taxCodeInput" /> -->
+                <!-- <InputLabel :data="salaryInput" /> -->
               </div>
               <div class="form__row">
                 <InputLabel :data="joinDateInput" />
@@ -138,6 +138,7 @@
 import InputLabel from "../../common/InputLabel.vue";
 import Dropdown from "../../common/Dropdown.vue";
 import EmployeeModel from "../../../models/employeeModel.js";
+import employeeModel from '../../../models/employeeModel.js';
 
 function initState() {
   return {
@@ -251,7 +252,7 @@ function initState() {
       inputType: "date",
     },
 
-    employeeModel: new EmployeeModel().initData(),
+    employeeModel: {}
   };
 }
 
@@ -267,7 +268,7 @@ export default {
   },
   methods: {
     /**
-     * Clear dữ liệu form khi mở lại
+     * Reset all fields
      * DVHAI 14/06/2021
      */
     resetWindow() {
@@ -275,65 +276,65 @@ export default {
     },
 
     /**
-     * Hàm đóng form
+     * Close form
      * DVHAI 11/06/2021
      */
     closeForm() {
       this.isOpen = false;
 
-      //gửi sự kiện mở overlay cho app
+      //hide overlay
+      this.invokeOverlay();
+    },
+
+    /**
+     * Invoke overlay
+     * DVHAI 14/06/2021
+     */
+    invokeOverlay() {
       this.$bus.emit("displayOverlay");
     },
 
     /**
-     * Hàm mở form
+     * Open form
      * DVHAI 14/06/2021
      */
     openForm(item) {
-      //map dữ liệu từ init state sang data mặc định
-      //để clear text
       this.resetWindow();
 
-      if (item != null) {
-        //dropdown binding
-
-        //Lấy bản ghi theo id
-        var emp = this.getEmployeeById(item.EmployeeId);
-
-        //ánh xạ dữ liệu sang model
-        for (let key in this.employeeModel) {
-          if (Object.prototype.hasOwnProperty.call(emp, key)) {
-            this.employeeModel[key] = emp[key]
-          }
-        }
-
-        this.employeeCodeInput.model = this.employeeModel.EmployeeCode;
-        this.employeeNameInput.model = this.employeeModel.FullName;
-        this.dateOfBirthInput.model = this.employeeModel.DateOfBirth;
-        this.identityNumberInput.model = this.employeeModel.IdentityNumber;
-        this.identityDateInput.model = this.employeeModel.IdentityDate;
-        this.identityPlaceInput.model = this.employeeModel.IdentityPlace;
-        this.emailInput.model = this.employeeModel.Email;
-        this.phoneNumberInput.model = this.employeeModel.PhoneNumber;
-        this.taxCodeInput.model = this.employeeModel.PersonalTaxCode;
-        this.salaryInput.model = this.employeeModel.Salary;
-        this.joinDateInput.model = this.employeeModel.JoinDate;
-
+      if(item != null) {
+        this.bindDataForm(item.EmployeeId);
       }
 
       this.isOpen = true;
     },
 
     /**
-     * Hàm lấy data từ csdl theo id
+     * Bind data to edit form
+     * DVHAI 14/06/2021
+     */
+    bindDataForm(id) {
+        //Get record by id
+        var emp = this.getEmployeeById(id);
+        if(emp != null) {
+          this.employeeModel = JSON.parse(JSON.stringify(emp));
+          
+        }
+    },
+
+    /**
+     * Get record by id
      * DVHAI 14/06/2021
      */
     getEmployeeById(id) {
+      var item = null;
+
       this.axios
         .get("http://cukcuk.manhnv.net/v1/Employees/" + id)
         .then((response) => {
-          return response.data;
+          item = response.data;
         });
+
+      return item;
     },
   },
 };
