@@ -86,22 +86,34 @@ export default {
      * DVHAI 13/06/2021
      */
     formatValue(data, dataType, dataDisplayType) {
+      let formattedData = data;
+
       if (dataType) {
         switch (dataType) {
           case this.Resource.DataTypeColumn.Number:
             if (dataDisplayType == "Money")
-              data = this.CommonFn.formatMoney(data);
+              formattedData = this.CommonFn.formatMoney(formattedData);
             break;
           case this.Resource.DataTypeColumn.Date:
-            data = this.CommonFn.formatDate(data);
+            formattedData = this.CommonFn.formatDate(formattedData);
             break;
           case this.Resource.DataTypeColumn.Enum:
             if (dataDisplayType == "Gender")
-              data = this.CommonFn.getValueEnum(data, dataDisplayType);
+              formattedData = this.CommonFn.getValueEnum(
+                formattedData,
+                dataDisplayType
+              );
+
+            if (dataDisplayType == "WorkStatus")
+              formattedData = this.CommonFn.getValueEnum(
+                formattedData,
+                dataDisplayType
+              );
+
             break;
         }
       }
-      return data;
+      return formattedData;
     },
 
     /**
@@ -232,7 +244,7 @@ th {
   white-space: nowrap;
   padding: 0 10px 0 16px;
   text-align: left;
-  max-width: 120px;
+  max-width: 300px;
 }
 /* i */
 

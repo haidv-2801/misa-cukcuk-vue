@@ -1,0 +1,691 @@
+<template>
+  <transition name="slide">
+    <div v-if="isOpen" class="form__add ui-draggable">
+      <div class="form__head ui-draggable-handle">
+        <div class="head__left">
+          <h2>THÔNG TIN NHÂN VIÊN</h2>
+        </div>
+        <div class="head__right">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            fill="currentColor"
+            class="bi bi-x"
+            viewBox="0 0 16 16"
+            @click="closeForm()"
+          >
+            <path
+              d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+            ></path>
+          </svg>
+        </div>
+      </div>
+      <div class="form__main">
+        <div class="main__left">
+          <div class="img__field"></div>
+          <div class="img__required">
+            (Vui lòng chọn ảnh có định <br />
+            dạng <br />.jpg .jpeg .png .gif)
+          </div>
+        </div>
+        <div class="main__right">
+          <div class="form__group">
+            <div class="form__title">
+              A. THÔNG TIN CHUNG
+            </div>
+            <div class="title__solid--blue"></div>
+            <div class="form__content">
+              <div class="form__row">
+                <!-- code -->
+                <div
+                  class="row__item tooltip"
+                  :style="{
+                    '--scale': tooltipScale,
+                    '--tooltip-message': validation.error,
+                  }"
+                >
+                  <label
+                    :for="employeeCodeInput.inputId"
+                    v-if="employeeCodeInput.isRequired"
+                    >{{ employeeCodeInput.labelText }}(<span class="color-red"
+                      >*</span
+                    >)</label
+                  >
+                  <label v-else>{{ employeeCodeInput.labelText }}</label>
+                  <input
+                    rules="required"
+                    class="focus"
+                    :id="employeeCodeInput.inputId"
+                    :type="employeeCodeInput.inputType"
+                    :class="{ notValidControl: !validation.isValid }"
+                    v-model="employeeModel.EmployeeCode"
+                    @focus="focus"
+                    @blur="blur"
+                  />
+                </div>
+
+                <!-- full name -->
+                <div
+                  class="row__item tooltip"
+                  :style="{
+                    '--scale': tooltipScale,
+                    '--tooltip-message': validation.error,
+                  }"
+                >
+                  <label
+                    :for="employeeNameInput.inputId"
+                    v-if="employeeNameInput.isRequired"
+                    >{{ employeeNameInput.labelText }}(<span class="color-red"
+                      >*</span
+                    >)</label
+                  >
+                  <label v-else>{{ employeeNameInput.labelText }}</label>
+                  <input
+                    :id="employeeNameInput.inputId"
+                    class="focus"
+                    :type="employeeNameInput.inputType"
+                    v-model="employeeModel.FullName"
+                    @focus="focus"
+                    @blur="blur"
+                    :class="{ notValidControl: !validation.isValid }"
+                  />
+                </div>
+              </div>
+              <div class="form__row">
+                <!-- dateofbirth -->
+                <div
+                  class="row__item tooltip"
+                  :style="{
+                    '--scale': tooltipScale,
+                    '--tooltip-message': validation.error,
+                  }"
+                >
+                  <label
+                    :for="dateOfBirthInput.inputId"
+                    v-if="dateOfBirthInput.isRequired"
+                    >{{ dateOfBirthInput.labelText }}(<span class="color-red"
+                      >*</span
+                    >)</label
+                  >
+                  <label v-else>{{ dateOfBirthInput.labelText }}</label>
+                  <input
+                    :id="dateOfBirthInput.inputId"
+                    class="focus"
+                    :type="dateOfBirthInput.inputType"
+                    v-model="employeeModel.DateOfBirth"
+                    @focus="focus"
+                    @blur="blur"
+                    :class="{ notValidControl: !validation.isValid }"
+                  />
+                </div>
+                <!-- gender -->
+                <div class="row__item">
+                  <label for="">Giới tính</label>
+                  <div class="dropdown__gender dropdown__key left__item">
+                    <Dropdown
+                      :styleObject="styleDropdown"
+                      :data="dropdownData[3]"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="form__row">
+                <!-- identity number -->
+                <div
+                  class="row__item tooltip"
+                  :style="{
+                    '--scale': tooltipScale,
+                    '--tooltip-message': validation.error,
+                  }"
+                >
+                  <label
+                    :for="identityNumberInput.inputId"
+                    v-if="identityNumberInput.isRequired"
+                    >{{ identityNumberInput.labelText }}(<span class="color-red"
+                      >*</span
+                    >)</label
+                  >
+                  <label v-else>{{ identityNumberInput.labelText }}</label>
+                  <input
+                    :id="identityNumberInput.inputId"
+                    class="focus"
+                    :type="identityNumberInput.inputType"
+                    v-model="employeeModel.IdentityNumber"
+                    @focus="focus"
+                    @blur="blur"
+                    :class="{ notValidControl: !validation.isValid }"
+                  />
+                </div>
+
+                <!-- identity date -->
+                <div
+                  class="row__item tooltip"
+                  :style="{
+                    '--scale': tooltipScale,
+                    '--tooltip-message': validation.error,
+                  }"
+                >
+                  <label
+                    :for="identityDateInput.inputId"
+                    v-if="identityDateInput.isRequired"
+                    >{{ identityDateInput.labelText }}(<span class="color-red"
+                      >*</span
+                    >)</label
+                  >
+                  <label v-else>{{ identityDateInput.labelText }}</label>
+                  <input
+                    :id="identityDateInput.inputId"
+                    class="focus"
+                    :type="identityDateInput.inputType"
+                    v-model="employeeModel.IdentityDate"
+                    @focus="focus"
+                    @blur="blur"
+                    :class="{ notValidControl: !validation.isValid }"
+                  />
+                </div>
+              </div>
+              <div class="form__row">
+                <!-- identity place -->
+                <div
+                  class="row__item tooltip"
+                  :style="{
+                    '--scale': tooltipScale,
+                    '--tooltip-message': validation.error,
+                  }"
+                >
+                  <label
+                    :for="identityPlaceInput.inputId"
+                    v-if="identityPlaceInput.isRequired"
+                    >{{ identityPlaceInput.labelText }}(<span class="color-red"
+                      >*</span
+                    >)</label
+                  >
+                  <label v-else>{{ identityPlaceInput.labelText }}</label>
+                  <input
+                    :id="identityPlaceInput.inputId"
+                    class="focus"
+                    :type="identityPlaceInput.inputType"
+                    v-model="employeeModel.IdentityPlace"
+                    @focus="focus"
+                    @blur="blur"
+                    :class="{ notValidControl: !validation.isValid }"
+                  />
+                </div>
+
+                <div class="row__item"></div>
+              </div>
+              <div class="form__row">
+                <!-- email -->
+                <div
+                  class="row__item tooltip"
+                  :style="{
+                    '--scale': tooltipScale,
+                    '--tooltip-message': validation.error,
+                  }"
+                >
+                  <label :for="emailInput.inputId" v-if="emailInput.isRequired"
+                    >{{ emailInput.labelText }}(<span class="color-red">*</span
+                    >)</label
+                  >
+                  <label v-else>{{ emailInput.labelText }}</label>
+                  <input
+                    :id="emailInput.inputId"
+                    class="focus"
+                    :type="emailInput.inputType"
+                    v-model="employeeModel.Email"
+                    @focus="focus"
+                    @blur="blur"
+                    :class="{ notValidControl: !validation.isValid }"
+                  />
+                </div>
+
+                <!-- phonenumber -->
+                <div
+                  class="row__item tooltip"
+                  :style="{
+                    '--scale': tooltipScale,
+                    '--tooltip-message': validation.error,
+                  }"
+                >
+                  <label
+                    :for="phoneNumberInput.inputId"
+                    v-if="phoneNumberInput.isRequired"
+                    >{{ phoneNumberInput.labelText }}(<span class="color-red"
+                      >*</span
+                    >)</label
+                  >
+                  <label v-else>{{ phoneNumberInput.labelText }}</label>
+                  <input
+                    class="focus"
+                    :id="phoneNumberInput.inputId"
+                    :type="phoneNumberInput.inputType"
+                    :class="{ notValidControl: !validation.isValid }"
+                    v-mask="'(###) ###-####'"
+                    v-model="employeeModel.PhoneNumber"
+                    @focus="focus"
+                    @blur="blur"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form__group">
+            <div class="form__title">
+              B. THÔNG TIN CÔNG VIỆC
+            </div>
+            <div class="title__solid--blue"></div>
+            <div class="form__content">
+              <div class="form__row">
+                <div class="row__item">
+                  <label for="">Vịtrí</label>
+                  <Dropdown
+                    :styleObject="styleDropdown"
+                    :data="dropdownData[0]"
+                  />
+                </div>
+                <div class="row__item">
+                  <label for="">Phòng ban</label>
+                  <Dropdown
+                    :styleObject="styleDropdown"
+                    :data="dropdownData[1]"
+                  />
+                </div>
+              </div>
+              <div class="form__row">
+                <!-- <InputLabel :data="taxCodeInput" /> -->
+                <!-- taxCode -->
+                <div
+                  class="row__item tooltip"
+                  :style="{
+                    '--scale': tooltipScale,
+                    '--tooltip-message': validation.error,
+                  }"
+                >
+                  <label
+                    :for="taxCodeInput.inputId"
+                    v-if="taxCodeInput.isRequired"
+                    >{{ taxCodeInput.labelText }}(<span class="color-red"
+                      >*</span
+                    >)</label
+                  >
+                  <label v-else>{{ taxCodeInput.labelText }}</label>
+                  <input
+                    :id="taxCodeInput.inputId"
+                    class="focus"
+                    :type="taxCodeInput.inputType"
+                    v-model="employeeModel.PersonalTaxCode"
+                    @focus="focus"
+                    @blur="blur"
+                    :class="{ notValidControl: !validation.isValid }"
+                  />
+                </div>
+                <!-- salary -->
+                <div
+                  class="row__item tooltip"
+                  :style="{
+                    '--scale': tooltipScale,
+                    '--tooltip-message': validation.error,
+                  }"
+                >
+                  <label
+                    :for="salaryInput.inputId"
+                    v-if="salaryInput.isRequired"
+                    >{{ salaryInput.labelText }}(<span class="color-red">*</span
+                    >)</label
+                  >
+                  <label v-else>{{ salaryInput.labelText }}</label>
+
+                  <input
+                    class="focus"
+                    :id="salaryInput.inputId"
+                    :type="salaryInput.inputType"
+                    v-money="money"
+                    v-model="employeeModel.Salary"
+                    @focus="focus"
+                    @blur="blur"
+                    :class="{ notValidControl: !validation.isValid }"
+                  />
+                </div>
+              </div>
+              <div class="form__row">
+                <!-- joinDateInput -->
+                <div
+                  class="row__item tooltip"
+                  :style="{
+                    '--scale': tooltipScale,
+                    '--tooltip-message': validation.error,
+                  }"
+                >
+                  <label
+                    :for="joinDateInput.inputId"
+                    v-if="joinDateInput.isRequired"
+                    >{{ joinDateInput.labelText }}(<span class="color-red"
+                      >*</span
+                    >)</label
+                  >
+                  <label v-else>{{ joinDateInput.labelText }}</label>
+                  <input
+                    class="focus"
+                    :id="joinDateInput.inputId"
+                    :type="joinDateInput.inputType"
+                    v-model="employeeModel.JoinDate"
+                    @focus="focus"
+                    @blur="test()"
+                    :class="{ notValidControl: !validation.isValid }"
+                  />
+                </div>
+
+                <div class="row__item">
+                  <label for="">Tình trạng công việc</label>
+                  <Dropdown
+                    :styleObject="styleDropdown"
+                    :data="dropdownData[2]"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form__bottom">
+        <button class="btn-default btn-cancel" @click="closeForm()">Hủy</button>
+        <button class="btn-default btn-green">
+          <svg
+            width="16"
+            height="16"
+            aria-hidden="true"
+            focusable="false"
+            data-prefix="far"
+            data-icon="save"
+            class="btn-icon-left svg-inline--fa fa-save fa-w-14"
+            role="img"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 448 512"
+          >
+            <path
+              fill="currentColor"
+              d="M433.941 129.941l-83.882-83.882A48 48 0 0 0 316.118 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V163.882a48 48 0 0 0-14.059-33.941zM272 80v80H144V80h128zm122 352H54a6 6 0 0 1-6-6V86a6 6 0 0 1 6-6h42v104c0 13.255 10.745 24 24 24h176c13.255 0 24-10.745 24-24V83.882l78.243 78.243a6 6 0 0 1 1.757 4.243V426a6 6 0 0 1-6 6zM224 232c-48.523 0-88 39.477-88 88s39.477 88 88 88 88-39.477 88-88-39.477-88-88-88zm0 128c-22.056 0-40-17.944-40-40s17.944-40 40-40 40 17.944 40 40-17.944 40-40 40z"
+            ></path>
+          </svg>
+          <span>Lưu</span>
+        </button>
+      </div>
+    </div>
+  </transition>
+</template>
+
+<script>
+import Dropdown from "../../common/Dropdown.vue";
+
+function initState() {
+  return {
+    isOpen: false,
+
+    // data form
+    dropdownData: [
+      {
+        title: "Tất cả phòng ban",
+        items: [
+          "Phòng nhân sự",
+          "Phòng kế toán",
+          "Phòng kinh doanh",
+          "Phòng sản xuất",
+        ],
+        selected: -1,
+      },
+      {
+        title: "Tất cả vị trí",
+        items: ["Giám đốc", "Fresher Web", "DepOops", "BA"],
+        selected: -1,
+      },
+      {
+        title: "Chọn tình trạng",
+        items: ["Đang làm việc", "Nhân viên cũ", "Thử việc", "Chính thức"],
+        selected: -1,
+      },
+      {
+        title: "Chọn giới tính",
+        items: ["Nữ", "Nam", "Khác"],
+        selected: 0,
+      },
+    ],
+
+    styleDropdown: {
+      width: "100%",
+      height: "36px !important",
+    },
+
+    //input
+    employeeCodeInput: {
+      inputId: "inputEmployeeCode",
+      labelText: "Mã nhân viên",
+      isRequired: true,
+      inputType: "text",
+    },
+
+    employeeNameInput: {
+      inputId: "inputFullname",
+      labelText: "Họ và tên",
+      isRequired: true,
+      inputType: "text",
+    },
+
+    dateOfBirthInput: {
+      inputId: "inputDateOfBirth",
+      labelText: "Ngày sinh",
+      inputType: "text",
+    },
+
+    identityNumberInput: {
+      inputId: "inputIdentityNumber",
+      labelText: "Số CMTND/ Căn cước",
+      isRequired: true,
+      inputType: "text",
+    },
+
+    identityDateInput: {
+      inputId: "inputIdentityDate",
+      labelText: "Ngày cấp",
+      inputType: "text",
+    },
+
+    identityPlaceInput: {
+      inputId: "inputIdentityPlace",
+      labelText: "Nơi cấp",
+      inputType: "text",
+    },
+
+    emailInput: {
+      inputId: "inputEmail",
+      labelText: "Email",
+      isRequired: true,
+      inputType: "text",
+      dataType: "Email",
+    },
+
+    phoneNumberInput: {
+      inputId: "inputPhoneNumber",
+      labelText: "Số điện thoại",
+      isRequired: true,
+      inputType: "text",
+    },
+
+    taxCodeInput: {
+      inputId: "inputTaxCode",
+      labelText: "Mã số thuế cá nhân",
+      inputType: "text",
+    },
+
+    salaryInput: {
+      inputId: "inputSalary",
+      labelText: "Mức lương cơ bản",
+      inputType: "text",
+      dataType: "Number",
+    },
+
+    joinDateInput: {
+      inputId: "inputJoinDate",
+      labelText: "Ngày gia nhập công ty",
+      inputType: "date",
+    },
+
+    //field input
+    validation: {
+      isValid: true,
+      error: "",
+    },
+    tooltipScale: 0,
+
+    //model
+    employeeModel: {},
+
+    //money field
+    money: {
+      decimal: ",",
+      thousands: ".",
+      prefix: "",
+      suffix: " (vnđ)",
+      precision: 0,
+      masked: false,
+    },
+  };
+}
+
+export default {
+  name: "EmployeeDetail",
+  components: {
+    Dropdown,
+  },
+  props: {},
+  data() {
+    return initState();
+  },
+  methods: {
+    /**
+     * Reset all fields
+     * DVHAI 14/06/2021
+     */
+    resetWindow() {
+      Object.assign(this.$data, initState());
+    },
+
+    /**
+     * Close form
+     * DVHAI 11/06/2021
+     */
+    closeForm() {
+      this.isOpen = false;
+
+      //hide overlay
+      this.invokeOverlay();
+    },
+
+    /**
+     * Invoke overlay
+     * DVHAI 14/06/2021
+     */
+    invokeOverlay() {
+      this.$bus.emit("displayOverlay");
+    },
+
+    /**
+     * Open form
+     * DVHAI 14/06/2021
+     */
+    openForm(item) {
+      this.resetWindow();
+
+      if (item != null) {
+        this.bindDataForm(item);
+      }
+
+      this.isOpen = true;
+    },
+
+    /**
+     * Bind data to edit form
+     * DVHAI 14/06/2021
+     */
+    bindDataForm(emp) {
+      //Get record by id
+      // var emp = this.getEmployeeById(id);
+      // if (emp != null) {
+      this.employeeModel = JSON.parse(JSON.stringify(emp));
+      // }
+    },
+
+    /**
+     * Get record by id
+     * DVHAI 14/06/2021
+     */
+    getEmployeeById(id) {
+      console.log(id);
+      // var item = null;
+      // this.axios
+      //   .get("http://cukcuk.manhnv.net/v1/Employees/" + id)
+      //   .then((response) => {
+      //     item = response.data;
+      //   }).catch(error => console.log(error));
+      // return item;
+    },
+
+    //input method
+    focus() {},
+
+    blur() {
+      this.validate();
+    },
+
+    test(e) {
+      console.log(e)
+    }
+    ,
+
+    validate() {},
+  },
+  computed: {},
+};
+</script>
+
+<style scoped>
+@import url("../../../assets/css/common/tooltip.css");
+
+input {
+  width: 100%;
+  border: 1px solid #bbbbbb;
+  border-radius: 5px;
+  color: #000000;
+  height: 40px;
+  padding-left: 16px;
+}
+
+.color-red {
+  color: red;
+}
+
+.row__item label {
+  margin-bottom: 4px;
+  font-family: GoogleMedium;
+  font-size: 13px;
+  display: block;
+}
+
+.row__item {
+  flex: 1;
+  margin-right: 10px;
+}
+
+/* transition */
+.slide-leave-active,
+.slide-enter-active {
+  transition: all 0.3s ease;
+}
+
+.slide-enter,
+.slide-leave-to {
+  transform: translateY(-50%);
+  opacity: 0;
+}
+@import url("../../../assets/css/views/employee/EmployeeDetail.css");
+</style>

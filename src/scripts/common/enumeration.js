@@ -15,6 +15,13 @@ Enumeration.Gender = {
     Other: 2,   //Khác
 };
 
+//Tinh trang
+Enumeration.WorkStatus = {
+    Active: 0, //Dang lam viec
+    Intern: 1,    //Dang thu viec
+    Retired: 2,   //Nghi viec
+};
+
 
 //Giới tính
 Enumeration.Keyboard = {

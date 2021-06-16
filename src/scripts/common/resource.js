@@ -24,6 +24,14 @@ Resource.Gender = {
     Other: "Khác",
 };
 
+//Tinh trang
+Resource.WorkStatus = {
+    Active: "Đang làm việc", //Dang lam viec
+    Intern: "Đang thử việc",    //Dang thu viec
+    Retired: "Đã nghỉ việc",   //Nghi viec
+};
+
+
 
 
 //Các comandtype của toolbar

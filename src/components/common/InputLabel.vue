@@ -12,7 +12,7 @@
       class="focus"
       :type="data.inputType"
       :style="styleObject"
-      v-model="data.model"
+      v-model="cloneModel"
       @focus="focus"
       @blur="blur"
       :class="{ notValidControl: !validation.isValid }"
@@ -21,19 +21,10 @@
 </template>
 
 <script>
+import moment from "moment";
 // import Enumeration from ".././../scripts/common/enumeration";
 // import Resource from ".././../scripts/common/resource";
 // import CommonFn from ".././../scripts/common/common";
-
-function initState() {
-  return {
-    validation: {
-      isValid: true,
-      error: "",
-    },
-    tooltipScale: 0,
-  };
-}
 
 export default {
   name: "InputLabel",
@@ -43,19 +34,27 @@ export default {
       type: Object,
       default: () => {},
     },
+    model: {
+      type: [String, Object, Date, Number],
+      default: "",
+    },
     styleObject: {
       type: Object,
       default: () => {},
     },
   },
   data() {
-    return initState();
+    return {
+      validation: {
+        isValid: true,
+        error: "",
+      },
+      tooltipScale: 0,
+      cloneModel: JSON.parse(JSON.stringify(this.model)),
+    };
   },
-
   methods: {
-    focus() {
-      this.resetComponent();
-    },
+    focus() {},
 
     blur() {
       this.validate();
@@ -67,7 +66,7 @@ export default {
 
     validateRequired() {
       if (this.data.isRequired == true) {
-        if (!this.data.model || this.data.model.toString().trim() == "") {
+        if (!this.cloneModel || this.cloneModel.toString().trim() == "") {
           this.validation.isValid = false;
           this.tooltipScale = 1;
           this.validation.error =
@@ -80,6 +79,18 @@ export default {
 
     resetComponent() {
       Object.assign(this.$data, initState());
+    },
+  },
+  computed: {},
+  watch: {
+    cloneModel() {
+      this.$bus.emit("changeValueInput", this.data.inputId, this.cloneModel);
+    },
+    model() {
+      this.cloneModel = JSON.parse(JSON.stringify(this.model));
+      if (this.data.dataType == "Date") {
+        this.cloneModel = moment(this.cloneModel).format("YYYY-MM-DD");
+      }
     },
   },
 };

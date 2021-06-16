@@ -65,7 +65,7 @@
           }"
           v-for="(item, i) in data.items"
           :key="i"
-          @click="evtRowClick(i, $event)"
+          @click="evtRowClick(i)"
           @mouseover="evtMouseOver(i)"
           @mouseout="evtMouseOut()"
         >
@@ -100,6 +100,10 @@ export default {
     styleObject: {
       type: Object,
       default: ()=>{}
+    },
+    model: {
+      type: Number,
+      default: -1
     }
   },
   data() {
@@ -107,30 +111,31 @@ export default {
       isShow: false,
       curHoverItem: -1,
       curSelectedItem: -1,
-      visibleCheckedIcon: false,
       txtTitle: this.data.title,
-      visibleClearIcon: false
+      visibleClearIcon: false,
+      cloneModel: 0
     };
+  },
+  created() {
+    
   },
   methods: {
    
     /**
-     * Gán index của dòng đang click cho curSelectedItem
+     * Row click
      * DVHAI 12/06/2021
      */
-    evtRowClick(index, evt) {
+    evtRowClick(index) {
       this.curSelectedItem = index;
 
-      //click xong đóng dropdown
-      this.toggleDropdown();
+      //open dropdown items
+      this.closeDropdown();
 
-      //hiển thị icon xác nhận đã click
-      this.visibleCheckedIcon = !this.visibleCheckedIcon;
+      //bind data to title
+      if(this.curSelectedItem != null && this.curSelectedItem >= 0)
+        this.txtTitle = this.data.items[this.curSelectedItem];
 
-      //bind data lên title
-      this.txtTitle = evt.target.innerText;
-
-      //hiển thị clear icon
+      //show clear icon
       this.visibleClearIcon = true;
 
       //clear hover
@@ -138,12 +143,11 @@ export default {
     },
 
     /**
-     * Gán index = -1
-     * để bỏ hover color
+     * Reset current hovered item
      * DVHAI 12/06/2021
      */
     evtMouseOut() {
-      this.curHoverItem = -10;
+      this.curHoverItem = -1;
     },
 
     /**
@@ -156,32 +160,40 @@ export default {
     },
 
     /**
-     * Mặc định dropdown title
+     * Default dropdown title
      * DVHAI 12/06/2021
      */
     resetTitle() {
       this.txtTitle = this.data.title;
       
-      //bỏ check các item
-      this.curSelectedItem = -1;
+      //unchecked item
+      this.curSelectedItem = null;
 
-      //đóng dropdown
-      this.isShow = false;
+      //close dropdown
+      this.closeDropdown();
 
-      //ẩn clear icon
+      //hide clear icon
       this.visibleClearIcon = false;
     },
 
     /**
-     * Show list item của dropdown
+     * Show list item dropdown
      * DVHAI 12/06/2021
      */
-    toggleDropdown() {
-      this.isShow = !this.isShow;
+    openDropdown() {
+      this.isShow = true;
     },
 
     /**
-     * Thay đổi màu khi focus
+     * Hide list item dropdown
+     * DVHAI 12/06/2021
+     */
+    closeDropdown() {
+      this.isShow = false;
+    },
+
+    /**
+     * Change outline color
      * DVHAI 12/06/2021
      */
     addInputOutlineColor(e) {
@@ -189,7 +201,7 @@ export default {
     },
 
     /**
-     * Xóa focus
+     * Lost focus
      * DVHAI 12/06/2021
      */
     removeInputOutlineColor(e) {
@@ -197,7 +209,21 @@ export default {
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    cloneModel() {
+      this.$bus.emit("changeValueInput", this.data.inputId, this.cloneModel);
+    },
+    
+    model() {
+      this.cloneModel = JSON.parse(JSON.stringify(this.model));
+      if(this.curSelectedItem != null)
+        this.evtRowClick(this.cloneModel)
+    },
+
+    curSelectedItem() {
+      this.cloneModel = this.curSelectedItem;
+    }
+  },
 };
 </script>
 

@@ -67,7 +67,13 @@ employee.column = [
         displayName: 'Lương',
         dataType: 'Number',
         displayType: 'Money'
-    }
+    },
+    {
+        fieldName: 'WorkStatus',
+        displayName: 'Tình trạng',
+        dataType: 'Enum',
+        displayType: 'WorkStatus'
+    },
 ]
 
 employee.data = []
