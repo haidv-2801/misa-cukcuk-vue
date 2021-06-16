@@ -38,16 +38,19 @@
             <div class="form__content">
               <div class="form__row">
                 <InputLabel
+                  @changeValueInput="changeValueInput"
                   :model="employeeModel.EmployeeCode"
                   :data="employeeCodeInput"
                 />
                 <InputLabel
+                  @changeValueInput="changeValueInput"
                   :model="employeeModel.FullName"
                   :data="employeeNameInput"
                 />
               </div>
               <div class="form__row">
                 <InputLabel
+                  @changeValueInput="changeValueInput"
                   :model="employeeModel.DateOfBirth"
                   :data="dateOfBirthInput"
                 />
@@ -57,23 +60,26 @@
                     <Dropdown
                       :model="employeeModel.Gender"
                       :styleObject="styleDropdown"
-                      :data="dropdownData[3]"
+                      :data="genderDropdown"
                     />
                   </div>
                 </div>
               </div>
               <div class="form__row">
                 <InputLabel
+                  @changeValueInput="changeValueInput"
                   :model="employeeModel.IdentityNumber"
                   :data="identityNumberInput"
                 />
                 <InputLabel
+                  @changeValueInput="changeValueInput"
                   :model="employeeModel.IdentityDate"
                   :data="identityDateInput"
                 />
               </div>
               <div class="form__row">
                 <InputLabel
+                  @changeValueInput="changeValueInput"
                   :model="employeeModel.IdentityPlace"
                   :data="identityPlaceInput"
                 />
@@ -81,8 +87,13 @@
                 <div class="row__item"></div>
               </div>
               <div class="form__row">
-                <InputLabel :model="employeeModel.Email" :data="emailInput" />
                 <InputLabel
+                  @changeValueInput="changeValueInput"
+                  :model="employeeModel.Email"
+                  :data="emailInput"
+                />
+                <InputLabel
+                  @changeValueInput="changeValueInput"
                   :model="employeeModel.PhoneNumber"
                   :data="phoneNumberInput"
                 />
@@ -101,7 +112,7 @@
                   <Dropdown
                     :model="employeeModel.PositionName"
                     :styleObject="styleDropdown"
-                    :data="dropdownData[0]"
+                    :data="positionDropdown"
                   />
                 </div>
                 <div class="row__item">
@@ -109,19 +120,25 @@
                   <Dropdown
                     :model="employeeModel.DepartmentName"
                     :styleObject="styleDropdown"
-                    :data="dropdownData[1]"
+                    :data="departmentDropdown"
                   />
                 </div>
               </div>
               <div class="form__row">
                 <InputLabel
+                  @changeValueInput="changeValueInput"
                   :model="employeeModel.PersonalTaxCode"
                   :data="taxCodeInput"
                 />
-                <InputLabel :model="employeeModel.Salary" :data="salaryInput" />
+                <InputLabel
+                  @changeValueInput="changeValueInput"
+                  :model="employeeModel.Salary"
+                  :data="salaryInput"
+                />
               </div>
               <div class="form__row">
                 <InputLabel
+                  @changeValueInput="changeValueInput"
                   :model="employeeModel.JoinDate"
                   :data="joinDateInput"
                 />
@@ -130,7 +147,7 @@
                   <Dropdown
                     :model="employeeModel.WorkStatus"
                     :styleObject="styleDropdown"
-                    :data="dropdownData[2]"
+                    :data="workStatusDropdown"
                   />
                 </div>
               </div>
@@ -140,7 +157,7 @@
       </div>
       <div class="form__bottom">
         <button class="btn-default btn-cancel" @click="closeForm()">Hủy</button>
-        <button class="btn-default btn-green">
+        <button @click="save()" class="btn-default btn-green">
           <svg
             width="16"
             height="16"
@@ -158,7 +175,7 @@
               d="M433.941 129.941l-83.882-83.882A48 48 0 0 0 316.118 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V163.882a48 48 0 0 0-14.059-33.941zM272 80v80H144V80h128zm122 352H54a6 6 0 0 1-6-6V86a6 6 0 0 1 6-6h42v104c0 13.255 10.745 24 24 24h176c13.255 0 24-10.745 24-24V83.882l78.243 78.243a6 6 0 0 1 1.757 4.243V426a6 6 0 0 1-6 6zM224 232c-48.523 0-88 39.477-88 88s39.477 88 88 88 88-39.477 88-88-39.477-88-88-88zm0 128c-22.056 0-40-17.944-40-40s17.944-40 40-40 40 17.944 40 40-17.944 40-40 40z"
             ></path>
           </svg>
-          <span @click="save()">Lưu</span>
+          <span>Lưu</span>
         </button>
       </div>
     </div>
@@ -174,47 +191,45 @@ import Dropdown from "../../common/Dropdown.vue";
 function initState() {
   return {
     isOpen: false,
-
-    // data form
-    dropdownData: [
-      {
-        inputId: "DepartmentName",
-        title: "Tất cả phòng ban",
-        items: [
-          "Phòng nhân sự",
-          "Phòng kế toán",
-          "Phòng kinh doanh",
-          "Phòng sản xuất",
-        ],
-        dataType: "Enum",
-        enumName: "",
-      },
-      {
-        inputId: "PositionName",
-        title: "Tất cả vị trí",
-        items: ["Giám đốc", "Fresher Web", "DepOops", "BA"],
-        dataType: "Enum",
-        enumName: "",
-      },
-      {
-        inputId: "WorkStatus",
-        title: "Chọn tình trạng",
-        items: ["Đang làm việc", "Đang thử việc", "Đã nghỉ việc"],
-        dataType: "Enum",
-        enumName: "WorkStatus",
-      },
-      {
-        inputId: "Gender",
-        title: "Chọn giới tính",
-        items: ["Nữ", "Nam", "Khác"],
-        dataType: "Enum",
-        enumName: "Gender",
-      },
-    ],
-
     styleDropdown: {
       width: "100%",
       height: "36px !important",
+    },
+
+    // data form
+
+    departmentDropdown: {
+      inputId: "DepartmentName",
+      title: "Tất cả phòng ban",
+      items: [
+        "Phòng nhân sự",
+        "Phòng kế toán",
+        "Phòng kinh doanh",
+        "Phòng sản xuất",
+      ],
+      dataType: "Enum",
+      enumName: "",
+    },
+    positionDropdown: {
+      inputId: "PositionName",
+      title: "Tất cả vị trí",
+      items: ["Giám đốc", "Fresher Web", "DepOops", "BA"],
+      dataType: "Enum",
+      enumName: "",
+    },
+    workStatusDropdown: {
+      inputId: "WorkStatus",
+      title: "Chọn tình trạng",
+      items: ["Đang làm việc", "Đang thử việc", "Đã nghỉ việc"],
+      dataType: "Enum",
+      enumName: "WorkStatus",
+    },
+    genderDropdown: {
+      inputId: "Gender",
+      title: "Chọn giới tính",
+      items: ["Nữ", "Nam", "Khác"],
+      dataType: "Enum",
+      enumName: "Gender",
     },
 
     //input
@@ -223,7 +238,7 @@ function initState() {
       labelText: "Mã nhân viên",
       isRequired: true,
       inputType: "text",
-      validation: [],
+      validation: ["required", "minLength:3"],
     },
 
     employeeNameInput: {
@@ -231,7 +246,7 @@ function initState() {
       labelText: "Họ và tên",
       isRequired: true,
       inputType: "text",
-      validation: [],
+      validation: ["required"],
     },
 
     dateOfBirthInput: {
@@ -270,7 +285,7 @@ function initState() {
       labelText: "Email",
       isRequired: true,
       inputType: "text",
-      validation: [],
+      validation: ["required", "email"],
       dataType: "Email",
     },
 
@@ -279,7 +294,7 @@ function initState() {
       labelText: "Số điện thoại",
       isRequired: true,
       inputType: "text",
-      validation: [],
+      validation: ["required"],
     },
 
     taxCodeInput: {
@@ -306,7 +321,7 @@ function initState() {
     },
 
     employeeModel: {},
-    formMod: null,
+    formMode: null,
   };
 }
 
@@ -320,12 +335,7 @@ export default {
   data() {
     return initState();
   },
-  created() {
-    this.$bus.on("changeValueInput", (key, value) => {
-      this.employeeModel[key] = value;
-      console.log(value);
-    });
-  },
+  created() {},
   methods: {
     /**
      * Reset all fields
@@ -364,7 +374,7 @@ export default {
       if (item != null) {
         // this.bindDataForm(item);
         this.bindDataForm(item);
-        this.formMod = item.EmployeeId;
+        this.formMode = item.EmployeeId;
       }
 
       this.isOpen = true;
@@ -406,23 +416,45 @@ export default {
      * DVHAI 14/06/2021
      */
     save() {
-      if (!this.formMod) {
-        var url = `http://cukcuk.manhnv.net/v1/Employees/`;
+      if (!this.formMode) {
         this.axios
-          .post(url, this.employeeModel)
+          .post("http://cukcuk.manhnv.net/v1/Employees/", this.employeeModel)
           .then((response) => {
-            alert(response);
+            alert("Add");
+            this.refreshGrid();
           })
           .catch((error) => alert(error));
       } else {
-        var url = `http://cukcuk.manhnv.net/v1/Employees/` + this.employeeModel.EmployeeId;
         this.axios
-          .put(url, this.employeeModel)
+          .put(
+            "http://cukcuk.manhnv.net/v1/Employees/" +
+              this.employeeModel.EmployeeId,
+            this.employeeModel
+          )
           .then((response) => {
-            alert(response);
+            this.refreshGrid();
+            alert("Edit");
           })
           .catch((error) => alert(error));
       }
+    },
+
+    /**
+     * Refresh grid
+     * DVHAI 14/06/2021
+     */
+    refreshGrid() {
+      this.$emit("refreshGrid");
+    },
+
+    /**
+     * Change value input called inputlabel
+     * compoment
+     * DVHAI 14/06/2021
+     */
+    changeValueInput(key, value) {
+      this.employeeModel[key] = value;
+      console.log(value)
     },
   },
 };

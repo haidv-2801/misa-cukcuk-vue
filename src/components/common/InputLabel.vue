@@ -15,13 +15,14 @@
       v-model="cloneModel"
       @focus="focus"
       @blur="blur"
-      :class="{ notValidControl: !validation.isValid }"
+      :class="{ 'notValidControl': !validation.isValid }"
     />
   </div>
 </template>
 
 <script>
 import moment from "moment";
+import validate from "../../store/validator.js";
 // import Enumeration from ".././../scripts/common/enumeration";
 // import Resource from ".././../scripts/common/resource";
 // import CommonFn from ".././../scripts/common/common";
@@ -54,14 +55,32 @@ export default {
     };
   },
   methods: {
-    focus() {},
+    focus() {
+      this.tooltipScale = 0;
+      this.validation.isValid = true;
+    },
 
     blur() {
       this.validate();
     },
 
     validate() {
-      this.validateRequired();
+      for (const x of this.data.validation) {
+        var cons = x.split(":"),
+          validateResult =
+            cons.length > 1
+              ? validate[cons[0]](this.cloneModel)(cons[1])
+              : validate[x](this.cloneModel);
+
+        console.log(validateResult);
+        this.validation.isValid = validateResult.isValid;
+        this.validation.error = '"' + this.data.labelText + " " + validateResult.msg + '"';
+        this.tooltipScale = validateResult.isValid == false ? 1 : 0;
+
+        if (!validateResult.isValid) {
+          break;
+        }
+      }
     },
 
     validateRequired() {
@@ -76,15 +95,11 @@ export default {
         }
       }
     },
-
-    resetComponent() {
-      Object.assign(this.$data, initState());
-    },
   },
   computed: {},
   watch: {
     cloneModel() {
-      this.$bus.emit("changeValueInput", this.data.inputId, this.cloneModel);
+      this.$emit("changeValueInput", this.data.inputId, this.cloneModel);
     },
     model() {
       this.cloneModel = JSON.parse(JSON.stringify(this.model));

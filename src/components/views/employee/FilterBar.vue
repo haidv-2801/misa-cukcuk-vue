@@ -15,6 +15,7 @@
     </div>
     <div class="filter__right">
       <button
+      @click="refreshGrid()"
         class="btn"
         tabindex="11"
       ></button>
@@ -48,6 +49,16 @@ export default {
         },
       ],
     };
+  },
+
+  methods: {
+    /**
+     * Refresh grid
+     * DVHAI 14/06/2021
+     */
+    refreshGrid() {
+      this.$emit('refreshGrid');
+    },
   },
 };
 </script>

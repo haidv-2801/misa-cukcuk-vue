@@ -1,16 +1,16 @@
 <template>
   <div class="main">
     <!-- form employee -->
-    <EmployeeDetail ref="formEmployeeDetail"/>
+    <EmployeeDetail @refreshGrid="refreshGrid" ref="formEmployeeDetail"/>
 
     <!-- toolbar -->
     <ToolBar @openFormEmployeeDetail="openFormEmployeeDetail" />
 
     <!-- filterbar -->
-    <FilterBar />
+    <FilterBar @refreshGrid="refreshGrid" />
 
     <!-- grid -->
-    <Grid @openFormEmployeeDetail="openFormEmployeeDetail" />
+    <Grid ref="Grid" @openFormEmployeeDetail="openFormEmployeeDetail" />
 
     <!-- Pagination -->
     <Paging />
@@ -52,6 +52,10 @@ export default {
       //gửi sự kiện mở overlay cho app
       this.$bus.emit("displayOverlay");
     },
+
+    refreshGrid() {
+      this.$refs.Grid.getDataServer();
+    }
   },
 };
 </script>
