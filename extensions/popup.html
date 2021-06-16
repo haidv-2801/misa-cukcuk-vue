@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+.alert {
+    height: 48px;
+    width: 300px;
+    color: #000000;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 16%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.alert--sucess {
+    fill: #BAFFE7;
+    color: #BAFFE7;
+}
+
+.alert--error {
+    fill: #FFCECE;
+    color: #FFCECE; 
+}
+
+.alert--info {
+    fill: #D8EAFF;
+    color: #D8EAFF; 
+}
+
+.alert--warning {
+    fill: #FFE7AF;
+    color: #FFE7AF; 
+}
+
+.alert__icon {
+    background-color: rosybrown;
+    height: 24px;
+    width: 24px;
+}
+
+.alert__text {
+    flex: 1;
+    font-size: 13px;
+}
+
+.alert__close {
+    height: 20px;
+    width: 20px;
+    background-color: seagreen;
+}
+
+</style>
+<body>
+    <div class="alert">
+        <div class="alert__icon"></div>
+        <div class="alert__text">
+            <p>Nội dung đi kèm tiêu đề</p>
+        </div>
+        <div class="alert__close"></div>
+    </div>
+</body>
+</html>
