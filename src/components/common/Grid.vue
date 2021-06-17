@@ -74,9 +74,8 @@ export default {
      * DVHAI 13/06/2021
      */
     getSelectedRow() {
-      var ans = this.tbody[this.curRowClicked];
-      debugger
-      return ans;
+      var res = this.data.tbody[this.curRowClicked];
+      return res;
     },
 
     /**
@@ -84,6 +83,7 @@ export default {
      * DVHAI 13/06/2021
      */
     getDataServer() {
+      
       this.axios
         .get("http://cukcuk.manhnv.net/v1/Employees")
         .then((response) => {

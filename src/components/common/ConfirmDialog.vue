@@ -1,8 +1,6 @@
 <template>
-  <div v-show="isShow" class="alert">
-    <div
-    @click="closePopup()" 
-    class="alert__iconClose">
+  <div v-if="isShow" class="alert">
+    <div @click="closePopup()" class="alert__iconClose">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="16"
@@ -70,16 +68,24 @@ export default {
 
     closePopup() {
       this.isShow = false;
+
       this.invokeOverlay();
     },
 
     cancel() {
-        this.closePopup();
+      this.closePopup();
     },
 
     deleteRecord() {
-        var ans = this.$emit('getSelectedRow');
-        console.log(ans)
+      let ans = this.$emit("getSelectedRow"),
+        url = "http://cukcuk.manhnv.net/v1/Employees/" + ans.EmployeeId;
+
+      this.axios
+        .delete(url)
+        .then((response) => {
+          alert(response);
+          this.closePopup();
+        });
     },
 
     /**
@@ -89,7 +95,6 @@ export default {
     invokeOverlay() {
       this.$bus.emit("displayOverlay");
     },
-
   },
 };
 </script>

@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <!-- loader -->
-    <div id="loading">
+    <div 
+      v-show="displayLoader"
+      id="loading">
       <img id="loading-image" src="./assets/img/loader.gif" alt="Loading..." />
     </div>
 
@@ -31,7 +33,10 @@ export default {
   name: 'App',
   created() {
     //lắng nghe sự kiện bật overlay
-    this.$bus.on('displayOverlay', () => { this.displayOverlay = !this.displayOverlay })
+    this.$bus.on('displayOverlay', () => { this.displayOverlay = !this.displayOverlay });
+
+    //lắng nghe sự kiện bật overlay
+    this.$bus.on('displayLoader', () => { this.displayLoader = !this.displayLoader });
   },
   data() {
     return {
@@ -43,7 +48,8 @@ export default {
         {icon:'', text:'Danh mục khách hàng'},
         {icon:'', text:'Thiết lập hệ thống'},
       ],
-      displayOverlay: false
+      displayOverlay: false,
+      displayLoader: false,
     }
   }
   ,
