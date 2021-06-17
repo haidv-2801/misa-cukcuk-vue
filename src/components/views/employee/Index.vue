@@ -24,16 +24,16 @@
 </template>
 
 <script>
-import EmployeeDetail from "../views/employee/EmployeeDetail.vue";
+import EmployeeDetail from "../views/../employee/EmployeeDetail.vue";
 import ToolBar from "@/components/views/employee/ToolBar";
 // import ToolBar from '../views/employee/ToolBar.vue'
-import FilterBar from "../views/employee/FilterBar.vue";
-import Grid from "../common/Grid.vue";
-import Paging from "../common/Paging.vue";
-import ConfirmDialog from "../common/ConfirmDialog.vue";
+import FilterBar from "../../views/employee/FilterBar.vue";
+import Grid from "../../common/Grid.vue";
+import Paging from "../../common/Paging.vue";
+import ConfirmDialog from "../../common/ConfirmDialog.vue";
 
 export default {
-  name: "Main",
+  name: "Index",
   components: {
     EmployeeDetail,
     ToolBar,
@@ -77,5 +77,5 @@ export default {
 </script>
 
 <style scoped>
-@import url("../../assets/css/common/main.css");
+@import url("../../../assets/css/common/main.css");
 </style>

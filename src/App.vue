@@ -25,9 +25,9 @@
 
 <script>
 
-import Sidebar from './components/layouts/Sidebar.vue';
-import Header from './components/layouts/Header.vue';
-import Main from './components/layouts/Main.vue';
+import Sidebar from './components/layouts/TheSidebar.vue';
+import Header from './components/layouts/TheHeader.vue';
+import Main from './components/layouts/TheMain.vue';
 
 export default {
   name: 'App',
