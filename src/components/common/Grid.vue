@@ -3,6 +3,9 @@
     <table>
       <thead>
         <tr>
+          <th><input 
+          @click="toggleCheck()"
+          type="checkbox" /></th>
           <th
             v-for="(item, index) in data.thead"
             :key="index"
@@ -23,6 +26,9 @@
           @click="rowClick(index)"
           @dblclick="openFormEmployeeDetail(item)"
         >
+          <td><input 
+          :checked="isSelected"
+          type="checkbox" /></td>
           <td
             v-for="(column, index) in data.thead"
             :key="index"
@@ -63,12 +69,17 @@ export default {
       Enumeration: Enumeration,
       Resource: Resource,
       curRowClicked: 0,
+      isSelected: false
     };
   },
   created() {
     this.getDataServer();
   },
   methods: {
+    toggleCheck() {
+      this.isSelected = !this.isSelected;
+    },
+
     /**
      * Get selected row
      * DVHAI 13/06/2021
@@ -83,11 +94,12 @@ export default {
      * DVHAI 13/06/2021
      */
     getDataServer() {
-      
+      this.$bus.emit("displayLoader");
       this.axios
         .get("http://cukcuk.manhnv.net/v1/Employees")
         .then((response) => {
           this.data.tbody = response.data;
+          this.$bus.emit("displayLoader");
         });
     },
 

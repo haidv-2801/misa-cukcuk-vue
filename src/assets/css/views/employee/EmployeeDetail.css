@@ -1,6 +1,5 @@
-
 .focus:focus-visible {
-  border:1px solid #019160;
+  border: 1px solid #019160;
   outline: none;
 }
 
@@ -50,18 +49,37 @@ html {
 
 .form__add {
   overflow: auto;
+  bottom: 0;
   top: 0;
   left: 0;
   right: 0;
+  position: fixed;
   margin: auto;
   box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px;
   z-index: var(--z-index-high);
-  position: absolute;
   background-color: white;
   border-radius: 4px;
   flex-direction: column;
-  max-height: 100vh;
+  height: fit-content;
   width: 740px;
+}
+
+@media only screen and (max-height: 768px) {
+  .form__add {
+    overflow: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px;
+    z-index: var(--z-index-high);
+    position: absolute;
+    background-color: white;
+    border-radius: 4px;
+    flex-direction: column;
+    max-height: 100vh;
+    width: 740px;
+  }
 }
 
 .form__head,
@@ -103,7 +121,7 @@ html {
 }
 
 .img__field {
-  background-image: url('../../../img/default-avatar.jpg');
+  background-image: url("../../../img/default-avatar.jpg");
   background-repeat: no-repeat;
   background-size: contain;
   width: 150px;
