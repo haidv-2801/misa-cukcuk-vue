@@ -70,6 +70,16 @@ export default {
   },
   methods: {
     /**
+     * Get selected row
+     * DVHAI 13/06/2021
+     */
+    getSelectedRow() {
+      var ans = this.tbody[this.curRowClicked];
+      debugger
+      return ans;
+    },
+
+    /**
      * Get data from server
      * DVHAI 13/06/2021
      */

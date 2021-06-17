@@ -15,7 +15,7 @@
       v-model="cloneModel"
       @focus="focus"
       @blur="blur"
-      :class="{ 'notValidControl': !validation.isValid }"
+      :class="{ notValidControl: !validation.isValid }"
     />
   </div>
 </template>
@@ -23,9 +23,6 @@
 <script>
 import moment from "moment";
 import validate from "../../store/validator.js";
-// import Enumeration from ".././../scripts/common/enumeration";
-// import Resource from ".././../scripts/common/resource";
-// import CommonFn from ".././../scripts/common/common";
 
 export default {
   name: "InputLabel",
@@ -72,26 +69,14 @@ export default {
               ? validate[cons[0]](this.cloneModel)(cons[1])
               : validate[x](this.cloneModel);
 
-        console.log(validateResult);
         this.validation.isValid = validateResult.isValid;
-        this.validation.error = '"' + this.data.labelText + " " + validateResult.msg + '"';
+        this.validation.error =
+          '"' + this.data.labelText + " " + validateResult.msg + '"';
         this.tooltipScale = validateResult.isValid == false ? 1 : 0;
 
         if (!validateResult.isValid) {
+          this.$bus.emit("allInputValid", validateResult.isValid);
           break;
-        }
-      }
-    },
-
-    validateRequired() {
-      if (this.data.isRequired == true) {
-        if (!this.cloneModel || this.cloneModel.toString().trim() == "") {
-          this.validation.isValid = false;
-          this.tooltipScale = 1;
-          this.validation.error =
-            '"' + this.data.labelText + " không được trống" + '"';
-        } else {
-          this.validation.isValid = true;
         }
       }
     },
@@ -105,6 +90,7 @@ export default {
       this.cloneModel = JSON.parse(JSON.stringify(this.model));
       if (this.data.dataType == "Date") {
         this.cloneModel = moment(this.cloneModel).format("YYYY-MM-DD");
+        console.log(typeof this.cloneModel);
       }
     },
   },

@@ -29,7 +29,7 @@
             dạng <br />.jpg .jpeg .png .gif)
           </div>
         </div>
-        <div class="main__right">
+        <div ref="formGroup" class="main__right">
           <div class="form__group">
             <div class="form__title">
               A. THÔNG TIN CHUNG
@@ -38,11 +38,13 @@
             <div class="form__content">
               <div class="form__row">
                 <InputLabel
+                  MustValidate="true"
                   @changeValueInput="changeValueInput"
                   :model="employeeModel.EmployeeCode"
                   :data="employeeCodeInput"
                 />
                 <InputLabel
+                  MustValidate="true"
                   @changeValueInput="changeValueInput"
                   :model="employeeModel.FullName"
                   :data="employeeNameInput"
@@ -50,6 +52,7 @@
               </div>
               <div class="form__row">
                 <InputLabel
+                  MustValidate="true"
                   @changeValueInput="changeValueInput"
                   :model="employeeModel.DateOfBirth"
                   :data="dateOfBirthInput"
@@ -67,11 +70,13 @@
               </div>
               <div class="form__row">
                 <InputLabel
+                  MustValidate="true"
                   @changeValueInput="changeValueInput"
                   :model="employeeModel.IdentityNumber"
                   :data="identityNumberInput"
                 />
                 <InputLabel
+                  MustValidate="true"
                   @changeValueInput="changeValueInput"
                   :model="employeeModel.IdentityDate"
                   :data="identityDateInput"
@@ -79,6 +84,7 @@
               </div>
               <div class="form__row">
                 <InputLabel
+                  MustValidate="true"
                   @changeValueInput="changeValueInput"
                   :model="employeeModel.IdentityPlace"
                   :data="identityPlaceInput"
@@ -88,11 +94,13 @@
               </div>
               <div class="form__row">
                 <InputLabel
+                  MustValidate="true"
                   @changeValueInput="changeValueInput"
                   :model="employeeModel.Email"
                   :data="emailInput"
                 />
                 <InputLabel
+                  MustValidate="true"
                   @changeValueInput="changeValueInput"
                   :model="employeeModel.PhoneNumber"
                   :data="phoneNumberInput"
@@ -126,11 +134,13 @@
               </div>
               <div class="form__row">
                 <InputLabel
+                  MustValidate="true"
                   @changeValueInput="changeValueInput"
                   :model="employeeModel.PersonalTaxCode"
                   :data="taxCodeInput"
                 />
                 <InputLabel
+                  MustValidate="true"
                   @changeValueInput="changeValueInput"
                   :model="employeeModel.Salary"
                   :data="salaryInput"
@@ -138,6 +148,7 @@
               </div>
               <div class="form__row">
                 <InputLabel
+                  MustValidate="true"
                   @changeValueInput="changeValueInput"
                   :model="employeeModel.JoinDate"
                   :data="joinDateInput"
@@ -322,6 +333,7 @@ function initState() {
 
     employeeModel: {},
     formMode: null,
+    allInputValid: true
   };
 }
 
@@ -335,7 +347,11 @@ export default {
   data() {
     return initState();
   },
-  created() {},
+  created() {
+    this.$bus.on('allInputValid', (value) => {
+        this.allInputValid = value;
+    });
+  },
   methods: {
     /**
      * Reset all fields
@@ -415,28 +431,39 @@ export default {
      * Save data
      * DVHAI 14/06/2021
      */
-    save() {
-      if (!this.formMode) {
-        this.axios
-          .post("http://cukcuk.manhnv.net/v1/Employees/", this.employeeModel)
-          .then((response) => {
-            alert("Add");
-            this.refreshGrid();
-          })
-          .catch((error) => alert(error));
-      } else {
-        this.axios
-          .put(
-            "http://cukcuk.manhnv.net/v1/Employees/" +
-              this.employeeModel.EmployeeId,
-            this.employeeModel
-          )
-          .then((response) => {
-            this.refreshGrid();
-            alert("Edit");
-          })
-          .catch((error) => alert(error));
+    async save() {
+      this.allInputValid =  true;
+      var elValidate = this.$refs.formGroup.querySelectorAll("[MustValidate]");
+
+      for (const el of elValidate) {
+        await el.querySelector(".focus").focus();
+        await el.querySelector(".focus").blur();
       }
+      
+      if(this.allInputValid) {
+        if (!this.formMode) {
+          this.axios
+            .post("http://cukcuk.manhnv.net/v1/Employees/", this.employeeModel)
+            .then((response) => {
+              alert("Add : " + response);
+              this.refreshGrid();
+            })
+            .catch((error) => alert(error));
+        } else {
+          this.axios
+            .put(
+              "http://cukcuk.manhnv.net/v1/Employees/" +
+                this.employeeModel.EmployeeId,
+              this.employeeModel
+            )
+            .then((response) => {
+              this.refreshGrid();
+              alert("Edit " + response);
+            })
+            .catch((error) => alert(error));
+        }
+      }
+
     },
 
     /**
@@ -448,14 +475,29 @@ export default {
     },
 
     /**
-     * Change value input called inputlabel
+     * Change value input called by inputlabel
      * compoment
      * DVHAI 14/06/2021
      */
     changeValueInput(key, value) {
       this.employeeModel[key] = value;
-      console.log(value)
+      console.log(value);
     },
+
+    /**
+     * Check all input
+     * DVHAI 14/06/2021
+     */
+    async validateSuccess() {},
+
+    /**
+     * Change validate result
+     * DVHAI 14/06/2021
+     */
+    validateResult(value) {
+      if(typeof  value == Boolean) 
+        this.validateResult = value;
+    }
   },
 };
 </script>
@@ -473,4 +515,11 @@ export default {
   opacity: 0;
 }
 @import url("../../../assets/css/views/employee/EmployeeDetail.css");
+
+/* @media only screen and (max-width: 768px) {
+  .form__add {
+    height: 600px;
+    overflow: scroll;
+  }
+} */
 </style>

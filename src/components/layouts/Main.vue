@@ -1,10 +1,16 @@
 <template>
   <div class="main">
+    <!-- confirm popup -->
+    <ConfirmDialog @getSelectedRow="getSelectedRow" ref="confirmDialog" />
+
     <!-- form employee -->
-    <EmployeeDetail @refreshGrid="refreshGrid" ref="formEmployeeDetail"/>
+    <EmployeeDetail @refreshGrid="refreshGrid" ref="formEmployeeDetail" />
 
     <!-- toolbar -->
-    <ToolBar @openFormEmployeeDetail="openFormEmployeeDetail" />
+    <ToolBar
+      @openPopup="openPopup"
+      @openFormEmployeeDetail="openFormEmployeeDetail"
+    />
 
     <!-- filterbar -->
     <FilterBar @refreshGrid="refreshGrid" />
@@ -24,6 +30,7 @@ import ToolBar from "@/components/views/employee/ToolBar";
 import FilterBar from "../views/employee/FilterBar.vue";
 import Grid from "../common/Grid.vue";
 import Paging from "../common/Paging.vue";
+import ConfirmDialog from "../common/ConfirmDialog.vue";
 
 export default {
   name: "Main",
@@ -33,6 +40,7 @@ export default {
     FilterBar,
     Grid,
     Paging,
+    ConfirmDialog,
   },
   data() {
     return {
@@ -40,12 +48,12 @@ export default {
     };
   },
   methods: {
-   /**
+    /**
      * Hàm mở form employeedetail
      * DVHAI 14/06/2021
      */
     openFormEmployeeDetail(item) {
-      console.log(item)
+      console.log(item);
       //gọi hàm mở form ở form
       this.$refs.formEmployeeDetail.openForm(item);
 
@@ -55,7 +63,15 @@ export default {
 
     refreshGrid() {
       this.$refs.Grid.getDataServer();
-    }
+    },
+
+    openPopup() {
+      this.$refs.confirmDialog.openPopup();
+    },
+
+    getSelectedRow() {
+      return this.$refs.Grid.getSelectedRow();
+    },
   },
 };
 </script>
