@@ -503,23 +503,7 @@ export default {
 </script>
 
 <style scoped>
-/* transition */
-.slide-leave-active,
-.slide-enter-active {
-  transition: all 0.3s ease;
-}
 
-.slide-enter,
-.slide-leave-to {
-  transform: translateY(-50%);
-  opacity: 0;
-}
 @import url("../../../assets/css/views/employee/EmployeeDetail.css");
 
-/* @media only screen and (max-width: 768px) {
-  .form__add {
-    height: 600px;
-    overflow: scroll;
-  }
-} */
 </style>

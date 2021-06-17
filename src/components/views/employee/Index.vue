@@ -1,7 +1,10 @@
 <template>
   <div class="main">
     <!-- confirm popup -->
-    <ConfirmDialog @getSelectedRow="getSelectedRow" ref="confirmDialog" />
+    <ConfirmDialog 
+    ref="confirmDialog"
+    @deleteRecord="deleteRecord"
+    />
 
     <!-- form employee -->
     <EmployeeDetail @refreshGrid="refreshGrid" ref="formEmployeeDetail" />
@@ -69,9 +72,10 @@ export default {
       this.$refs.confirmDialog.openPopup();
     },
 
-    getSelectedRow() {
-      return this.$refs.Grid.getSelectedRow();
-    },
+    deleteRecord() {
+      debugger
+      this.$refs.Grid.deleteRecord();
+    }
   },
 };
 </script>

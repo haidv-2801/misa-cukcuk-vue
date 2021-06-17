@@ -154,6 +154,19 @@ export default {
     openFormEmployeeDetail(item) {
       this.$emit("openFormEmployeeDetail", item);
     },
+
+    deleteRecord() {
+      let url = "http://cukcuk.manhnv.net/v1/Employees/",
+          id = this.data.tbody[this.curRowClicked].EmployeeId,
+          urlFull = url + id;
+
+      this.axios
+        .delete(urlFull)
+        .then((response) => {
+          alert(response);
+          
+        });
+    }
   },
 };
 </script>
@@ -171,46 +184,6 @@ export default {
   margin-top: 10px;
   height: calc(100vh - 228px);
 }
-/* 
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-table tr {
-  cursor: pointer;
-  height: 48px;
-  border-bottom: 1px solid var(--color-hint);
-}
-
-table tbody tr:nth-child(odd) {
-  background-color: #fafafa;
-}
-
-table tbody tr:hover {
-  background-color: #e9ebee;
-}
-
-table thead tr {
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-}
-
-table th {
-  position: sticky;
-  background-color: #fff;
-  top: 0;
-}
-
-tbody {
-  display: block;
-}
-
-table td,
-th {
-  white-space: nowrap;
-  padding: 0 10px 0 16px;
-  text-align: left;
-} */
 
 .align-right {
   text-align: right;
@@ -269,23 +242,4 @@ th {
   max-width: 300px;
 }
 /* i */
-
-/* table {
-  overflow-x: scroll;
-  height: calc(100% - 56px - 66px);
-  width: 100%;
-}  */
-
-/* tbody {
-  display: block;
-  height: calc(100vh - 56px - 49px - 56px - 66px - 49px);
-  overflow: auto;
-}
-
-thead,
-tbody tr {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-}  */
 </style>

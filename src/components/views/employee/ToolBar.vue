@@ -22,9 +22,6 @@
       >
         <span>Xóa</span>
       </button>
-      <!--  <button class="btn buttonItem" commandtype="Edit" title="Sửa nhân viên" tabindex="10">
-            <span>Sửa</span>
-        </button> -->
     </div>
   </div>
 </template>
@@ -36,10 +33,18 @@ export default {
     return {};
   },
   methods: {
+    /**
+     * Open form employee detail
+     * DVHAI 17/06/2021
+     */
     openFormEmployeeDetail() {
       this.$emit("openFormEmployeeDetail");
     },
 
+    /**
+     * Open confirm popup
+     * DVHAI 17/06/2021
+     */
     openPopup() {
       this.$emit('openPopup');
     }
