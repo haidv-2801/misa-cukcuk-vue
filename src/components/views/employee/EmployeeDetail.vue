@@ -61,6 +61,7 @@
                   <label for="">Giới tính</label>
                   <div class="dropdown__gender dropdown__key left__item">
                     <Dropdown
+                      @changeValueInput="changeValueInput"
                       :model="employeeModel.Gender"
                       :styleObject="styleDropdown"
                       :data="genderDropdown"
@@ -118,6 +119,7 @@
                 <div class="row__item">
                   <label for="">Vịtrí</label>
                   <Dropdown
+                    @changeValueInput="changeValueInput"
                     :model="employeeModel.PositionName"
                     :styleObject="styleDropdown"
                     :data="positionDropdown"
@@ -126,6 +128,7 @@
                 <div class="row__item">
                   <label for="">Phòng ban</label>
                   <Dropdown
+                    @changeValueInput="changeValueInput"
                     :model="employeeModel.DepartmentName"
                     :styleObject="styleDropdown"
                     :data="departmentDropdown"
@@ -156,6 +159,7 @@
                 <div class="row__item">
                   <label for="">Tình trạng công việc</label>
                   <Dropdown
+                    @changeValueInput="changeValueInput"
                     :model="employeeModel.WorkStatus"
                     :styleObject="styleDropdown"
                     :data="workStatusDropdown"

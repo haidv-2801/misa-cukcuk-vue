@@ -211,7 +211,7 @@ export default {
   computed: {},
   watch: {
     cloneModel() {
-      this.$bus.emit("changeValueInput", this.data.inputId, this.cloneModel);
+      this.$emit("changeValueInput", this.data.inputId, this.cloneModel);
     },
     
     model() {

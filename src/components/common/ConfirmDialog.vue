@@ -19,7 +19,7 @@
         </svg>
       </div>
       <div class="alert__title">
-        <div class="title__text">Xóa bản ghi A</div>
+        <div class="title__text">Xóa bản ghi</div>
       </div>
       <div class="alert__main">
         <div class="main__icon">
@@ -41,7 +41,7 @@
           </svg>
         </div>
         <div class="main__text">
-          <p>Bạn có chắc muốn xóa <b>"..."</b> không</p>
+          <p>Bạn có chắc muốn xóa <b>"nhân viên"</b> không</p>
         </div>
       </div>
       <div class="alert__bottom">

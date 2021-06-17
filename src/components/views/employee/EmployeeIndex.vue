@@ -1,22 +1,22 @@
 <template>
   <div class="main">
+    <!-- toast msg -->
+    <Toast ref="Toast" />
+
     <!-- confirm popup -->
-    <ConfirmDialog 
-    ref="confirmDialog"
-    @deleteRecord="deleteRecord"
-    />
+    <ConfirmDialog ref="confirmDialog" @deleteRecord="deleteRecord" />
 
     <!-- form employee -->
     <EmployeeDetail @refreshGrid="refreshGrid" ref="formEmployeeDetail" />
 
     <!-- toolbar -->
-    <ToolBar
+    <EmployeeToolBar
       @openPopup="openPopup"
       @openFormEmployeeDetail="openFormEmployeeDetail"
     />
 
     <!-- filterbar -->
-    <FilterBar @refreshGrid="refreshGrid" />
+    <EmployeeFilterBar @refreshGrid="refreshGrid" />
 
     <!-- grid -->
     <Grid ref="Grid" @openFormEmployeeDetail="openFormEmployeeDetail" />
@@ -27,23 +27,24 @@
 </template>
 
 <script>
-import EmployeeDetail from "../views/../employee/EmployeeDetail.vue";
-import ToolBar from "@/components/views/employee/ToolBar";
-// import ToolBar from '../views/employee/ToolBar.vue'
-import FilterBar from "../../views/employee/FilterBar.vue";
+import EmployeeDetail from "./EmployeeDetail.vue";
+import EmployeeToolBar from "./EmployeeToolBar.vue";
+import EmployeeFilterBar from "./EmployeeFilterBar.vue";
 import Grid from "../../common/Grid.vue";
 import Paging from "../../common/Paging.vue";
 import ConfirmDialog from "../../common/ConfirmDialog.vue";
+import Toast from "../../common/Toast.vue";
 
 export default {
-  name: "Index",
+  name: "EmployeeIndex",
   components: {
     EmployeeDetail,
-    ToolBar,
-    FilterBar,
+    EmployeeToolBar,
+    EmployeeFilterBar,
     Grid,
     Paging,
     ConfirmDialog,
+    Toast,
   },
   data() {
     return {
@@ -52,30 +53,49 @@ export default {
   },
   methods: {
     /**
-     * Hàm mở form employeedetail
+     * Open from employee detail
      * DVHAI 14/06/2021
      */
     openFormEmployeeDetail(item) {
       console.log(item);
-      //gọi hàm mở form ở form
+      //invoke openform method
       this.$refs.formEmployeeDetail.openForm(item);
 
-      //gửi sự kiện mở overlay cho app
+      //send overlay event
       this.$bus.emit("displayOverlay");
     },
 
+    /**
+     * Refresh grid
+     * DVHAI 14/06/2021
+     */
     refreshGrid() {
       this.$refs.Grid.getDataServer();
     },
 
+    /**
+     * Open confirm popup
+     * DVHAI 14/06/2021
+     */
     openPopup() {
       this.$refs.confirmDialog.openPopup();
     },
 
+    /**
+     * Delete selected record
+     * DVHAI 14/06/2021
+     */
     deleteRecord() {
-      debugger
       this.$refs.Grid.deleteRecord();
-    }
+    },
+
+    /**
+     * Shoot success toast
+     * DVHAI 14/06/2021
+     */
+    shootToast() {
+      this.$refs.Toast.openToast();
+    },
   },
 };
 </script>
