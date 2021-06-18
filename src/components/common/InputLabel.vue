@@ -33,13 +33,15 @@ export default {
       default: () => {},
     },
     model: {
-      type: [String, Object, Date, Number],
       default: "",
     },
     styleObject: {
       type: Object,
       default: () => {},
     },
+  },
+  created() {
+    this.cloneModel = this.model;
   },
   data() {
     return {

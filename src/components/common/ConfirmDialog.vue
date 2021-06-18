@@ -93,7 +93,7 @@ export default {
 
     async deleteRecord() {
       await this.$emit("deleteRecord");
-      await this.$emit("openToast")
+      await this.$bus.emit("openToast", {type:'toast--success', text:'Xóa nhân viên thành công'})
       this.closePopup();
     },
 

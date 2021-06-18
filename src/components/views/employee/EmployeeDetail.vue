@@ -60,7 +60,7 @@
                 <div class="row__item">
                   <label for="">Giới tính</label>
                   <div class="dropdown__gender dropdown__key left__item">
-                    <Dropdown
+                    <DropdownAutoComplete
                       @changeValueInput="changeValueInput"
                       :model="employeeModel.Gender"
                       :styleObject="styleDropdown"
@@ -118,7 +118,7 @@
               <div class="form__row">
                 <div class="row__item">
                   <label for="">Vịtrí</label>
-                  <Dropdown
+                  <DropdownAutoComplete
                     @changeValueInput="changeValueInput"
                     :model="employeeModel.PositionName"
                     :styleObject="styleDropdown"
@@ -127,7 +127,7 @@
                 </div>
                 <div class="row__item">
                   <label for="">Phòng ban</label>
-                  <Dropdown
+                  <DropdownAutoComplete
                     @changeValueInput="changeValueInput"
                     :model="employeeModel.DepartmentName"
                     :styleObject="styleDropdown"
@@ -158,7 +158,7 @@
                 />
                 <div class="row__item">
                   <label for="">Tình trạng công việc</label>
-                  <Dropdown
+                  <DropdownAutoComplete
                     @changeValueInput="changeValueInput"
                     :model="employeeModel.WorkStatus"
                     :styleObject="styleDropdown"
@@ -200,6 +200,7 @@
 <script>
 import InputLabel from "../../common/InputLabel.vue";
 import Dropdown from "../../common/Dropdown.vue";
+import DropdownAutoComplete from "../../common/DropdownAutoComplete.vue";
 
 // import EmployeeModel from "../../../models/employeeModel.js";
 
@@ -215,6 +216,7 @@ function initState() {
 
     departmentDropdown: {
       inputId: "DepartmentName",
+      placeHolder: "Chọn/Nhập phòng ban",
       title: "Tất cả phòng ban",
       items: [
         "Phòng nhân sự",
@@ -225,8 +227,10 @@ function initState() {
       dataType: "Enum",
       enumName: "",
     },
+
     positionDropdown: {
       inputId: "PositionName",
+      placeHolder: "Chọn/Nhập vị trí",
       title: "Tất cả vị trí",
       items: ["Giám đốc", "Fresher Web", "DepOops", "BA"],
       dataType: "Enum",
@@ -234,6 +238,7 @@ function initState() {
     },
     workStatusDropdown: {
       inputId: "WorkStatus",
+      placeHolder: "Chọn/Nhập tình trạng",
       title: "Chọn tình trạng",
       items: ["Đang làm việc", "Đang thử việc", "Đã nghỉ việc"],
       dataType: "Enum",
@@ -241,6 +246,7 @@ function initState() {
     },
     genderDropdown: {
       inputId: "Gender",
+      placeHolder: "Chọn/Nhập giới tính",
       title: "Chọn giới tính",
       items: ["Nữ", "Nam", "Khác"],
       dataType: "Enum",
@@ -277,7 +283,7 @@ function initState() {
       labelText: "Số CMTND/ Căn cước",
       isRequired: true,
       inputType: "text",
-      validation: ['required'],
+      validation: ["required"],
     },
 
     identityDateInput: {
@@ -337,7 +343,7 @@ function initState() {
 
     employeeModel: {},
     formMode: null,
-    allInputValid: true
+    allInputValid: true,
   };
 }
 
@@ -346,14 +352,15 @@ export default {
   components: {
     InputLabel,
     Dropdown,
+    DropdownAutoComplete,
   },
   props: {},
   data() {
     return initState();
   },
   created() {
-    this.$bus.on('allInputValid', (value) => {
-        this.allInputValid = value;
+    this.$bus.on("allInputValid", (value) => {
+      this.allInputValid = value;
     });
   },
   methods: {
@@ -388,16 +395,42 @@ export default {
      * Open form
      * DVHAI 14/06/2021
      */
-    openForm(item) {
+    async openForm(item) {
       this.resetWindow();
 
       if (item != null) {
-        // this.bindDataForm(item);
         this.bindDataForm(item);
         this.formMode = item.EmployeeId;
+      } else {
+        this.employeeModel.EmployeeCode = await this.getNewEmployeeCode();
       }
 
       this.isOpen = true;
+    },
+
+    /**
+     * Get new employee code
+     * DVHAI 14/06/2021
+     */
+    async getNewEmployeeCode() {
+      let ans = "",
+        url = "http://cukcuk.manhnv.net/v1/Employees/NewEmployeeCode";
+
+      await this.axios
+        .get(url)
+        .then((response) => {
+          ans = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.closeForm();
+          this.$bus.emit("openToast", {
+            type: "toast--info",
+            text: "Lỗi tự động tạo mã",
+          });
+        });
+
+      return ans;
     },
 
     /**
@@ -426,7 +459,14 @@ export default {
         .then((response) => {
           this.employeeModel = response.data;
         })
-        .catch((error) => alert(error));
+        .catch((error) => {
+          console.log(error);
+          this.closeForm();
+          this.$bus.emit("openToast", {
+            type: "toast--info",
+            text: "Lỗi. Vui lòng liên hệ MISA",
+          });
+        });
 
       return item;
     },
@@ -436,23 +476,31 @@ export default {
      * DVHAI 14/06/2021
      */
     async save() {
-      this.allInputValid =  true;
+      this.allInputValid = true;
       var elValidate = this.$refs.formGroup.querySelectorAll("[MustValidate]");
 
       for (const el of elValidate) {
         await el.querySelector(".focus").focus();
         await el.querySelector(".focus").blur();
       }
-      
-      if(this.allInputValid) {
+
+      if (this.allInputValid) {
         if (!this.formMode) {
           this.axios
             .post("http://cukcuk.manhnv.net/v1/Employees/", this.employeeModel)
             .then((response) => {
-              alert("Add : " + response);
               this.refreshGrid();
+              this.$bus.emit("openToast", {
+                type: "toast--success",
+                text: "Thêm nhân viên thành công",
+              });
             })
-            .catch((error) => alert(error));
+            .catch((error) => {
+              this.$bus.emit("openToast", {
+                type: "toast--error",
+                text: "Lỗi. Vui lòng liên hệ MISA",
+              });
+            });
         } else {
           this.axios
             .put(
@@ -462,12 +510,20 @@ export default {
             )
             .then((response) => {
               this.refreshGrid();
-              alert("Edit " + response);
+              this.$bus.emit("openToast", {
+                type: "toast--success",
+                text: "Sửa nhân viên thành công",
+              });
             })
-            .catch((error) => alert(error));
+            .catch((error) => {
+              console.log(error);
+              this.$bus.emit("openToast", {
+                type: "toast--error",
+                text: "Lỗi. Vui lòng liên hệ MISA",
+              });
+            });
         }
       }
-
     },
 
     /**
@@ -499,15 +555,12 @@ export default {
      * DVHAI 14/06/2021
      */
     validateResult(value) {
-      if(typeof  value == Boolean) 
-        this.validateResult = value;
-    }
+      if (typeof value == Boolean) this.validateResult = value;
+    },
   },
 };
 </script>
 
 <style scoped>
-
 @import url("../../../assets/css/views/employee/EmployeeDetail.css");
-
 </style>

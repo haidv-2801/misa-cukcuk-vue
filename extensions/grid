@@ -19,8 +19,8 @@
         <tr
           v-for="(item, index) in data.tbody"
           :key="index"
-          :class="{ active: multiSelectList.includes(index) }"
-          @click.exact="selectRow(index)"
+          :class="{ active: curRowClicked == index || multiSelectList.includes(index)}"
+          @click.exact ="rowClick(index)"
           @dblclick="openFormEmployeeDetail(item)"
           @click.ctrl="multiSelectRow(index)"
         >
@@ -64,56 +64,21 @@ export default {
       CommonFn: CommonFn,
       Enumeration: Enumeration,
       Resource: Resource,
-      multiSelectList: [0],
+      curRowClicked: 0,
+      multiSelectList: [0]
     };
   },
   created() {
     this.getDataServer();
   },
   methods: {
-    selectRow(index) {
-      this.multiSelectList = [index];
-    },
-
-    /**
-     * Filter data
-     * DVHAI 13/06/2021
-     */
-    filterTable(filterString) {
-      if (filterString == "") {
-        this.getDataServer();
-      } else {
-        let url = `http://cukcuk.manhnv.net/v1/Employees/Filter?pageSize=10&pageNumber=1&fullName=${filterString}`;
-        this.axios
-          .get(url)
-          .then((response) => {
-            console.log(response);
-            this.data.tbody = response.data.Data;
-          })
-          .catch((error) => {
-            this.$bus.emit("openToast", {
-              type: "toast--info",
-              text: "Lỗi. Vui lòng liên hệ MISA",
-            });
-          });
-      }
-    },
-
-    /**
-     * Multiselect row by type ctl+click
-     * DVHAI 13/06/2021
-     */
     multiSelectRow(index) {
-      if (!this.multiSelectList.includes(index))
+      if(!this.multiSelectList.includes(index))
         this.multiSelectList.push(index);
-      else {
-        if (this.multiSelectList.length > 1) {
-          let realIndex = this.multiSelectList.indexOf(index);
-          this.multiSelectList.splice(realIndex, 1);
-        }
-      }
+      else
+        this.multiSelectList.splice(index, 1);
 
-      console.log(this.multiSelectList);
+      console.log(this.multiSelectList)
     },
 
     /**
@@ -121,7 +86,7 @@ export default {
      * DVHAI 13/06/2021
      */
     getSelectedRow() {
-      var res = this.multiSelectList[0];
+      var res = this.data.tbody[this.curRowClicked];
       return res;
     },
 
@@ -136,12 +101,8 @@ export default {
         .then((response) => {
           this.data.tbody = response.data;
           this.$bus.emit("displayLoader");
-        })
-        .catch((error) => {
-          this.$bus.emit("openToast", {
-            type: "toast--info",
-            text: "Lỗi. Vui lòng liên hệ MISA",
-          });
+        }).catch((error)=>{
+          this.$bus.emit("openToast", {type:'toast--info', text:'Lỗi. Vui lòng liên hệ MISA'});
         });
     },
 
@@ -185,8 +146,8 @@ export default {
      * DVHAI 13/06/2021
      */
     rowClick(index) {
-      this.multiSelectList = [];
-      this.curRowClicked = index;
+        this.multiSelectList = [];
+        this.curRowClicked = index;
     },
 
     /**
@@ -198,25 +159,19 @@ export default {
       this.$emit("openFormEmployeeDetail", item);
     },
 
-    async deleteRecord() {
-      for (const item of this.multiSelectList) {
-        let url = "http://cukcuk.manhnv.net/v1/Employees/",
-          id = this.data.tbody[item].EmployeeId,
+    deleteRecord() {
+      let url = "http://cukcuk.manhnv.net/v1/Employees/",
+          id = this.data.tbody[this.curRowClicked].EmployeeId,
           urlFull = url + id;
 
-        await this.axios
-          .delete(urlFull)
-          .then((response) => {
+      this.axios
+        .delete(urlFull)
+        .then((response) => {
             this.getDataServer();
-          })
-          .catch((error) => {
-            this.$bus.emit("openToast", {
-              type: "toast--error",
-              text: "Lỗi. Vui lòng liên hệ MISA",
-            });
-          });
-      }
-    },
+        }).catch((error)=>{
+          this.$bus.emit("openToast", {type:'toast--info', text:'Lỗi. Vui lòng liên hệ MISA'});
+        });
+    }
   },
 };
 </script>
