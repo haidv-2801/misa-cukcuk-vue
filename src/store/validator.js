@@ -74,7 +74,7 @@ validate.isValidDate = (value) => {
   if (value.toString().trim() == "") {
     return {
       isValid: true,
-      msg: ''
+      msg: "",
     };
   }
 
@@ -92,10 +92,10 @@ validate.isValidDate = (value) => {
 
   // Check the ranges of month and year
   if (year < 1000 || year > 3000 || month == 0 || month > 12) {
-    return {  
+    return {
       isValid: false,
-      msg: 'chưa đúng định dạng'
-    }
+      msg: "chưa đúng định dạng",
+    };
   }
 
   var monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -107,8 +107,7 @@ validate.isValidDate = (value) => {
   // Check the range of the day
   isValid = day > 0 && day <= monthLength[month - 1];
 
-  if(!isValid)
-    msg = "chưa đúng định dạng";
+  if (!isValid) msg = "chưa đúng định dạng";
 
   return {
     isValid,

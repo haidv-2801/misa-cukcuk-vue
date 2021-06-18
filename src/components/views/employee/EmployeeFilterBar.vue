@@ -6,18 +6,21 @@
         tabindex="7"
         class="search-box focus left__item"
         type="text"
-        placeholder="Tìm kiếm theo Mã Tên hoặc Số điện thoại "
+        placeholder="Tìm kiếm theo Mã Tên hoặc Số điện thoại"
+        v-debounce:300ms="filterTable"
+        v-model="filterData"
       />
 
-      <Dropdown v-bind:data="dropdownData[0]" />
+      <DropdownAutoComplete v-bind:data="dropdownData[0]" />
 
       <Dropdown v-bind:data="dropdownData[1]" />
     </div>
     <div class="filter__right">
       <button
-      @click="refreshGrid()"
+        @click="refreshGrid()"
         class="btn"
         tabindex="11"
+        title="Làm mới"
       ></button>
     </div>
   </div>
@@ -25,17 +28,20 @@
 
 <script>
 import Dropdown from "../../common/Dropdown.vue";
+import DropdownAutoComplete from "../../common/DropdownAutoComplete.vue";
 
 export default {
   name: "FilterBar",
   components: {
     Dropdown,
+    DropdownAutoComplete,
   },
   data() {
     return {
       dropdownData: [
         {
           title: "Tất cả phòng ban",
+          placeHolder: "Chọn/Nhập phòng ban",
           items: [
             "Phòng nhân sự",
             "Phòng kế toán",
@@ -45,9 +51,11 @@ export default {
         },
         {
           title: "Tất cả vị trí",
+          placeHolder: "Chọn/Nhập vị trí",
           items: ["Giám đốc", "Fresher Web", "DepOops", "BA"],
         },
       ],
+      filterData:''
     };
   },
 
@@ -57,9 +65,15 @@ export default {
      * DVHAI 14/06/2021
      */
     refreshGrid() {
-      this.$emit('refreshGrid');
+      this.$emit("refreshGrid");
     },
+
+    filterTable() {
+      this.$emit('filterTable', this.filterData);
+    }
   },
+
+  computed: {},
 };
 </script>
 
@@ -83,7 +97,7 @@ export default {
 .search-box {
   width: calc(var(--size-width-M) * 4.5);
   height: 40px !important;
-  background-image: url('../../../assets/icon/search.png');
+  background-image: url("../../../assets/icon/search.png");
   background-position: 16px center;
   background-repeat: no-repeat;
   background-size: 16px 16px;
@@ -125,9 +139,8 @@ export default {
 }
 
 .filter__right button:active {
-  background-color: #01B075 !important;
+  background-color: #01b075 !important;
 }
-
 
 .filter__right button:focus-visible {
   border: 1px solid #019160;

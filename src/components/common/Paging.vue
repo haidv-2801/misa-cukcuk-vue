@@ -34,18 +34,18 @@
         <polyline points="15 18 9 12 15 6"></polyline>
       </svg>
 
-      <button 
-        @click="btnClick($event)"
-        tabindex="15" class="btn btn-number"><span>1</span></button>
-      <button 
-        @click="btnClick($event)"
-        tabindex="16" class="btn btn-number"><span>2</span></button>
-      <button 
-        @click="btnClick($event)"
-        tabindex="17" class="btn btn-number"><span>3</span></button>
-      <button 
-        @click="btnClick($event)"
-        tabindex="18" class="btn btn-number"><span>4</span></button>
+      <button @click="btnClick($event)" tabindex="15" class="btn btn-number">
+        <span>1</span>
+      </button>
+      <button @click="btnClick($event)" tabindex="16" class="btn btn-number">
+        <span>2</span>
+      </button>
+      <button @click="btnClick($event)" tabindex="17" class="btn btn-number">
+        <span>3</span>
+      </button>
+      <button @click="btnClick($event)" tabindex="18" class="btn btn-number">
+        <span>4</span>
+      </button>
 
       <svg
         tabindex="19"
@@ -90,11 +90,10 @@ export default {
     return {};
   },
   methods: {
-      btnClick(e) {
-          alert("test")
-          e.target.classList.add('active');
-      }
-  }
+    btnClick(e) {
+      e.target.classList.add("active");
+    },
+  },
 };
 </script>
 

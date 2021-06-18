@@ -1,12 +1,8 @@
 <template>
   <div class="main">
-    <!-- toast msg -->
-    <Toast ref="Toast" />
-
     <!-- confirm popup -->
     <ConfirmDialog 
     ref="confirmDialog" 
-    @openToast="openToast"
     @deleteRecord="deleteRecord" />
 
     <!-- form employee -->
@@ -19,7 +15,9 @@
     />
 
     <!-- filterbar -->
-    <EmployeeFilterBar @refreshGrid="refreshGrid" />
+    <EmployeeFilterBar 
+    @filterTable="filterTable"
+    @refreshGrid="refreshGrid" />
 
     <!-- grid -->
     <Grid ref="Grid" @openFormEmployeeDetail="openFormEmployeeDetail" />
@@ -36,7 +34,6 @@ import EmployeeFilterBar from "./EmployeeFilterBar.vue";
 import Grid from "../../common/Grid.vue";
 import Paging from "../../common/Paging.vue";
 import ConfirmDialog from "../../common/ConfirmDialog.vue";
-import Toast from "../../common/Toast.vue";
 
 export default {
   name: "EmployeeIndex",
@@ -47,7 +44,6 @@ export default {
     Grid,
     Paging,
     ConfirmDialog,
-    Toast,
   },
   data() {
     return {
@@ -55,6 +51,11 @@ export default {
     };
   },
   methods: {
+
+    filterTable(value) {
+      this.$refs.Grid.filterTable(value);
+    },
+    
     /**
      * Open from employee detail
      * DVHAI 14/06/2021
@@ -92,13 +93,6 @@ export default {
       this.$refs.Grid.deleteRecord();
     },
 
-    /**
-     * Shoot success toast
-     * DVHAI 14/06/2021
-     */
-    openToast() {
-      this.$refs.Toast.openToast();
-    },
   },
 };
 </script>

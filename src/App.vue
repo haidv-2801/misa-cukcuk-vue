@@ -1,13 +1,17 @@
 <template>
   <div id="app">
     <!-- loader -->
-    <div 
-      v-show="displayLoader"
-      id="loading">
+    <div v-show="displayLoader" id="loading">
       <img id="loading-image" src="./assets/img/loader.gif" alt="Loading..." />
     </div>
 
+    <!-- overlay -->
     <div class="overlay" v-show="displayOverlay"></div>
+
+    <!-- toast msg -->
+    <div class="toast-list">
+      <Toast ref="Toast" />
+    </div>
 
     <!-- sidebar -->
     <Sidebar :data="navItems" />
@@ -24,44 +28,51 @@
 </template>
 
 <script>
-
-import Sidebar from './components/layouts/TheSidebar.vue';
-import Header from './components/layouts/TheHeader.vue';
-import Main from './components/layouts/TheMain.vue';
+import Sidebar from "./components/layouts/TheSidebar.vue";
+import Header from "./components/layouts/TheHeader.vue";
+import Main from "./components/layouts/TheMain.vue";
+import Toast from "../src/components/common/Toast.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   created() {
     //lắng nghe sự kiện bật overlay
-    this.$bus.on('displayOverlay', () => { this.displayOverlay = !this.displayOverlay });
+    this.$bus.on("displayOverlay", () => {
+      this.displayOverlay = !this.displayOverlay;
+    });
 
     //lắng nghe sự kiện bật overlay
-    this.$bus.on('displayLoader', () => { this.displayLoader = !this.displayLoader });
+    this.$bus.on("displayLoader", () => {
+      this.displayLoader = !this.displayLoader;
+    });
+
+    //lắng nghe sự kiện bật toast
+    this.$bus.on("openToast", (value) => {
+      this.$refs.Toast.openToast({ ...value });
+    });
   },
   data() {
     return {
       navItems: [
-        {icon:'', text:'Tổng quan'},
-        {icon:'', text:'Báo cáo'},
-        {icon:'', text:'Mua hàng'},
-        {icon:'', text:'Danh mục nhân viên'},
-        {icon:'', text:'Danh mục khách hàng'},
-        {icon:'', text:'Thiết lập hệ thống'},
+        { icon: "", text: "Tổng quan" },
+        { icon: "", text: "Báo cáo" },
+        { icon: "", text: "Mua hàng" },
+        { icon: "", text: "Danh mục nhân viên" },
+        { icon: "", text: "Danh mục khách hàng" },
+        { icon: "", text: "Thiết lập hệ thống" },
       ],
       displayOverlay: false,
       displayLoader: false,
-    }
-  }
-  ,
+    };
+  },
   components: {
     Sidebar,
     Header,
-    Main
+    Main,
+    Toast,
   },
-  methods: {
-
-  },
-}
+  methods: {},
+};
 </script>
 
 <style>
