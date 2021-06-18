@@ -46,14 +46,12 @@ export default {
     };
   },
   created() {
-    setTimeout(function() {
-      this.closeToast();
-    }, 3000);
+    setTimeout(this.closeToast(), 3000);
   },
 
   methods: {
     openToast() {
-      this.isShow = true;
+      this.isShow =true;
     },
 
     closeToast() {

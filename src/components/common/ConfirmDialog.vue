@@ -91,9 +91,13 @@ export default {
       //alert success
     },
 
+    /**
+     * Delete record
+     * DVHAI 17/06/2021
+     */
     async deleteRecord() {
       await this.$emit("deleteRecord");
-      await this.$emit("openToast")
+      await this.$emit("openToast");
       this.closePopup();
     },
 
