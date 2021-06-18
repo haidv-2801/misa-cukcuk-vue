@@ -4,7 +4,10 @@
     <Toast ref="Toast" />
 
     <!-- confirm popup -->
-    <ConfirmDialog ref="confirmDialog" @deleteRecord="deleteRecord" />
+    <ConfirmDialog 
+    ref="confirmDialog" 
+    @openToast="openToast"
+    @deleteRecord="deleteRecord" />
 
     <!-- form employee -->
     <EmployeeDetail @refreshGrid="refreshGrid" ref="formEmployeeDetail" />
@@ -93,7 +96,7 @@ export default {
      * Shoot success toast
      * DVHAI 14/06/2021
      */
-    shootToast() {
+    openToast() {
       this.$refs.Toast.openToast();
     },
   },

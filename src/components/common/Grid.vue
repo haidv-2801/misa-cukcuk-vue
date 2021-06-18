@@ -163,8 +163,7 @@ export default {
       this.axios
         .delete(urlFull)
         .then((response) => {
-          alert(response);
-          
+            this.getDataServer();
         });
     }
   },

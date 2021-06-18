@@ -277,7 +277,7 @@ function initState() {
       labelText: "Số CMTND/ Căn cước",
       isRequired: true,
       inputType: "text",
-      validation: [],
+      validation: ['required'],
     },
 
     identityDateInput: {

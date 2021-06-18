@@ -91,8 +91,9 @@ export default {
       //alert success
     },
 
-    deleteRecord() {
-      this.$emit("deleteRecord");
+    async deleteRecord() {
+      await this.$emit("deleteRecord");
+      await this.$emit("openToast")
       this.closePopup();
     },
 
