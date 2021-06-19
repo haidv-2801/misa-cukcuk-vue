@@ -16,6 +16,7 @@
       @focus="focus"
       @blur="blur"
       v-model="cloneModel"
+      v-mask="data.mask"
     />
   </div>
 </template>

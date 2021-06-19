@@ -262,6 +262,7 @@ function initState() {
       isRequired: true,
       inputType: "text",
       validation: ["required", "minLength:3"],
+      mask:""
     },
 
     employeeNameInput: {
@@ -270,6 +271,7 @@ function initState() {
       isRequired: true,
       inputType: "text",
       validation: ["required"],
+      mask:""
     },
 
     dateOfBirthInput: {
@@ -278,6 +280,7 @@ function initState() {
       inputType: "date",
       dataType: "Date",
       validation: [],
+      mask:""
     },
 
     identityNumberInput: {
@@ -286,6 +289,7 @@ function initState() {
       isRequired: true,
       inputType: "text",
       validation: ["required"],
+      mask:""
     },
 
     identityDateInput: {
@@ -294,6 +298,7 @@ function initState() {
       inputType: "date",
       dataType: "Date",
       validation: [],
+      mask:""
     },
 
     identityPlaceInput: {
@@ -301,6 +306,7 @@ function initState() {
       labelText: "Nơi cấp",
       inputType: "text",
       validation: [],
+      mask:""
     },
 
     emailInput: {
@@ -309,6 +315,7 @@ function initState() {
       isRequired: true,
       inputType: "text",
       validation: ["required", "email"],
+      mask:"",
       dataType: "Email",
     },
 
@@ -318,6 +325,7 @@ function initState() {
       isRequired: true,
       inputType: "text",
       validation: ["required"],
+      mask:"(###) ###-####"
     },
 
     taxCodeInput: {
@@ -325,6 +333,7 @@ function initState() {
       labelText: "Mã số thuế cá nhân",
       inputType: "text",
       validation: [],
+      mask:""
     },
 
     salaryInput: {
@@ -332,6 +341,7 @@ function initState() {
       labelText: "Mức lương cơ bản",
       inputType: "text",
       validation: [],
+      mask:"",
       dataType: "Number",
     },
 
@@ -341,6 +351,7 @@ function initState() {
       inputType: "date",
       dataType: "Date",
       validation: [],
+      mask:""
     },
 
     employeeModel: {},
