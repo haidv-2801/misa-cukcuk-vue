@@ -7,12 +7,9 @@
       >{{ data.labelText }}(<span class="color-red">*</span>)</label
     >
     <label v-else>{{ data.labelText }}</label>
-    <DxDateBox
-      v-if="data.inputType == 'date'"
-    />
+
 
     <input
-      v-else
       class="focus"
       :id="data.inputId"
       :type="data.inputType"
@@ -29,10 +26,14 @@
 <script>
 import moment from "moment";
 import validate from "../../store/validator.js";
+import DxDateBox from 'devextreme-vue/date-box';
+
 
 export default {
   name: "InputLabel",
-  components: {},
+  components: {
+    DxDateBox
+  },
   props: {
     data: {
       type: Object,
