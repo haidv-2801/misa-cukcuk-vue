@@ -8,14 +8,14 @@
     >
     <label v-else>{{ data.labelText }}</label>
     <input
-      :id="data.inputId"
       class="focus"
+      :id="data.inputId"
       :type="data.inputType"
       :style="styleObject"
-      v-model="cloneModel"
+      :class="{ notValidControl: !validation.isValid }"
       @focus="focus"
       @blur="blur"
-      :class="{ notValidControl: !validation.isValid }"
+      v-model="cloneModel"
     />
   </div>
 </template>
@@ -54,15 +54,27 @@ export default {
     };
   },
   methods: {
+    /**
+     * Focus input
+     * DVHAI 14/06/2021
+     */
     focus() {
       this.tooltipScale = 0;
       this.validation.isValid = true;
     },
 
+    /**
+     * Blur input
+     * DVHAI 14/06/2021
+     */
     blur() {
       this.validate();
     },
 
+    /**
+     * Validate
+     * DVHAI 14/06/2021
+     */
     validate() {
       for (const x of this.data.validation) {
         var cons = x.split(":"),
@@ -85,14 +97,22 @@ export default {
   },
   computed: {},
   watch: {
+    /**
+     * Change model value outside
+     * DVHAI 14/06/2021
+     */
     cloneModel() {
       this.$emit("changeValueInput", this.data.inputId, this.cloneModel);
     },
+
+    /**
+     * Clone new data
+     * DVHAI 14/06/2021
+     */
     model() {
       this.cloneModel = JSON.parse(JSON.stringify(this.model));
       if (this.data.dataType == "Date") {
         this.cloneModel = moment(this.cloneModel).format("YYYY-MM-DD");
-        console.log(typeof this.cloneModel);
       }
     },
   },

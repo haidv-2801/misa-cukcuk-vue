@@ -201,12 +201,12 @@
 import InputLabel from "../../common/InputLabel.vue";
 import Dropdown from "../../common/Dropdown.vue";
 import DropdownAutoComplete from "../../common/DropdownAutoComplete.vue";
-
 // import EmployeeModel from "../../../models/employeeModel.js";
 
 function initState() {
   return {
     isOpen: false,
+
     styleDropdown: {
       width: "100%",
       height: "36px !important",
@@ -236,6 +236,7 @@ function initState() {
       dataType: "Enum",
       enumName: "",
     },
+
     workStatusDropdown: {
       inputId: "WorkStatus",
       placeHolder: "Chọn/Nhập tình trạng",
@@ -244,6 +245,7 @@ function initState() {
       dataType: "Enum",
       enumName: "WorkStatus",
     },
+
     genderDropdown: {
       inputId: "Gender",
       placeHolder: "Chọn/Nhập giới tính",
@@ -452,7 +454,7 @@ export default {
      */
     async getEmployeeById(id) {
       let item = null,
-          url = `http://cukcuk.manhnv.net/v1/Employees/${id}`;
+        url = `http://cukcuk.manhnv.net/v1/Employees/${id}`;
 
       await this.axios
         .get(url)
@@ -476,13 +478,7 @@ export default {
      * DVHAI 14/06/2021
      */
     async save() {
-      this.allInputValid = true;
-      var elValidate = this.$refs.formGroup.querySelectorAll("[MustValidate]");
-
-      for (const el of elValidate) {
-        await el.querySelector(".focus").focus();
-        await el.querySelector(".focus").blur();
-      }
+      await this.validateSuccess();
 
       if (this.allInputValid) {
         if (this.formMode == null) {
@@ -504,12 +500,8 @@ export default {
             });
         } else {
           let url = `http://cukcuk.manhnv.net/v1/Employees/${this.employeeModel.EmployeeId}`;
-                debugger
           this.axios
-            .put(
-              url,
-              this.employeeModel
-            )
+            .put(url, this.employeeModel)
             .then((response) => {
               this.refreshGrid();
               this.$bus.emit("openToast", {
@@ -549,14 +541,14 @@ export default {
      * Check all input
      * DVHAI 14/06/2021
      */
-    async validateSuccess() {},
+    validateSuccess() {
+      this.allInputValid = true;
+      var elValidate = this.$refs.formGroup.querySelectorAll("[MustValidate]");
 
-    /**
-     * Change validate result
-     * DVHAI 14/06/2021
-     */
-    validateResult(value) {
-      if (typeof value == Boolean) this.validateResult = value;
+      for (const el of elValidate) {
+        el.querySelector(".focus").focus();
+        el.querySelector(".focus").blur();
+      }
     },
   },
 };

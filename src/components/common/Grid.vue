@@ -198,8 +198,12 @@ export default {
       this.$emit("openFormEmployeeDetail", item);
     },
 
+    /**
+     * Delete record
+     * DVHAI 13/06/2021
+     */
     async deleteRecord() {
-      for (const item of this.multiSelectList) {
+        for (const item of this.multiSelectList) {
         let url = "http://cukcuk.manhnv.net/v1/Employees/",
           id = this.data.tbody[item].EmployeeId,
           urlFull = url + id;
@@ -211,6 +215,8 @@ export default {
             this.selectRow[0];
           })
           .catch((error) => {
+            console.log(error);
+
             this.$bus.emit("openToast", {
               type: "toast--error",
               text: "Lỗi. Vui lòng liên hệ MISA",
