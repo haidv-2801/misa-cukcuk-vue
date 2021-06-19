@@ -1,0 +1,10 @@
+// new DevExpress.ui.dxDateBox(container, {
+//   "displayFormat": "dd/MM/yyyy",
+//   "height": "40px",
+//   "hint": "01/01/1900",
+//   "invalidDateMessage": "Ngày nhập không hợp lệ",
+//   "opened": true,
+//   "placeholder": "dd/MM/yyyy",
+//   "useMaskBehavior": true,
+//   "width": "100%"
+// });

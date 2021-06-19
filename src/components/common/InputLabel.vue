@@ -7,7 +7,12 @@
       >{{ data.labelText }}(<span class="color-red">*</span>)</label
     >
     <label v-else>{{ data.labelText }}</label>
+    <DxDateBox
+      v-if="data.inputType == 'date'"
+    />
+
     <input
+      v-else
       class="focus"
       :id="data.inputId"
       :type="data.inputType"

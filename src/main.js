@@ -10,6 +10,18 @@ import money from 'v-money'
 import router from './router'
 import vueDebounce   from "vue-debounce";
 
+// new DevExpress.ui.dxDateBox(container, {
+//   "displayFormat": "dd/MM/yyyy",
+//   "height": "40px",
+//   "hint": "01/01/1900",
+//   "invalidDateMessage": "Ngày nhập không hợp lệ",
+//   "opened": true,
+//   "placeholder": "dd/MM/yyyy",
+//   "useMaskBehavior": true,
+//   "width": "100%"
+// });
+
+
 //use
 
 Vue.use(Bus)
