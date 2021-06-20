@@ -80,14 +80,11 @@ export default {
      * DVHAI 13/06/2021
      */
     filterTable(filterString) {
-      if (filterString == "") {
-        this.getDataServer();
-      } else {
+      if (filterString.toString().length > 0) {
         let url = `http://cukcuk.manhnv.net/v1/Employees/Filter?pageSize=10&pageNumber=1&fullName=${filterString}`;
         this.axios
           .get(url)
           .then((response) => {
-            console.log(response);
             this.data.tbody = response.data.Data;
           })
           .catch((error) => {
@@ -96,6 +93,8 @@ export default {
               text: "Lỗi. Vui lòng liên hệ MISA",
             });
           });
+      } else {
+        this.getDataServer()
       }
     },
 
@@ -112,8 +111,6 @@ export default {
           this.multiSelectList.splice(realIndex, 1);
         }
       }
-
-      console.log(this.multiSelectList);
     },
 
     /**
@@ -212,7 +209,7 @@ export default {
           .delete(urlFull)
           .then((response) => {
             this.getDataServer();
-            this.selectRow[0];
+            this.multiSelectList = [0];
           })
           .catch((error) => {
             console.log(error);

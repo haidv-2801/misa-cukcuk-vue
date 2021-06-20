@@ -1,23 +1,42 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: 'Home',
-  //   component: Home
-  // },
   {
-    path: '/about',
+    path: '/',
     name: 'About',
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-    path: '/',
+    path: '/employee',
     name: 'Employee',
+    component: () => import('../components/views/employee/EmployeeIndex.vue')
+  },
+  {
+    path: '/setting',
+    name: 'Setting',
+    component: () => import('../components/views/employee/EmployeeIndex.vue')
+  },
+  {
+    path: '/report',
+    name: 'Report',
+    component: () => import('../components/views/employee/EmployeeIndex.vue')
+  },
+  {
+    path: '/overview',
+    name: 'Overview',
+    component: () => import('../views/About.vue')
+  },
+  {
+    path: '/customer',
+    name: 'Customer',
+    component: () => import('../components/views/employee/EmployeeIndex.vue')
+  },
+  {
+    path: '/product',
+    name: 'Product',
     component: () => import('../components/views/employee/EmployeeIndex.vue')
   }
 ]

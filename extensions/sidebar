@@ -4,9 +4,7 @@
     <div class="nav">
       <div class="nav__item">
         <!-- logo -->
-        <div 
-        title="Thu/Phóng"
-        class="nav__toggle btnToggle" @click="changeSidebarState()">
+        <div class="nav__toggle btnToggle" @click="changeSidebarState()">
           <!-- background here -->
         </div>
         <div class="nav__logo">
@@ -29,7 +27,6 @@
         @mouseout="evtMouseOut()"
       >
         <router-link
-          :title="item.text"
           :class="{ 'a__color--active': curSelectedItem == index }"
           :to="item.link"
         >
@@ -44,7 +41,6 @@
 <script>
 export default {
   name: "Sidebar",
-  components: {},
   data() {
     return {
       isCollapsed: false,
@@ -55,9 +51,7 @@ export default {
   props: {
     data: {
       type: Array,
-      default: function() {
-        return [];
-      },
+      default: [],
     },
   },
 
@@ -99,7 +93,6 @@ export default {
   computed: {},
   watch: {
     $route(to, from) {
-      console.log(from);
       let index = this.data.map((x) => x.link).indexOf(to.path);
       this.curSelectedItem = index;
     },

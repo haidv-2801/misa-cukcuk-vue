@@ -8,13 +8,49 @@
     >
     <label v-else>{{ data.labelText }}</label>
 
+    <DxDateBox
+      :displayFormat="'dd/MM/yyyy'"
+      :placeholder="'dd/MM/yyyy'"
+      :useMaskBehavior="true"
+      :min="'01/01/1900'"
+      :height="40"
+      :showClearButton="true"
+      :onFocusIn="focus"
+      :onFocusOut="blur"
+      v-model="cloneModel"
+      v-if="data.inputType == 'date'"
+    />
 
+    <!-- money mask -->
     <input
+      v-else-if="data.dataType == 'money'"
       class="focus"
       :id="data.inputId"
       :type="data.inputType"
       :style="styleObject"
-      :class="{ notValidControl: !validation.isValid }"
+      :class="{
+        notValidControl: !validation.isValid,
+        'align-right': data.dataType == 'money',
+      }"
+      :placeholder="data.mask"
+      @focus="focus"
+      @blur="blur"
+      v-model="cloneModel"
+      v-money="money"
+      v-mask="data.mask"
+    />
+  <!-- no money mask -->
+    <input
+      v-else
+      class="focus"
+      :id="data.inputId"
+      :type="data.inputType"
+      :style="styleObject"
+      :class="{
+        notValidControl: !validation.isValid,
+        'align-right': data.dataType == 'money',
+      }"
+      :placeholder="data.mask"
       @focus="focus"
       @blur="blur"
       v-model="cloneModel"
@@ -24,15 +60,16 @@
 </template>
 
 <script>
-import moment from "moment";
 import validate from "../../store/validator.js";
-import DxDateBox from 'devextreme-vue/date-box';
 
+// dx datebox
+import "devextreme/dist/css/dx.light.css";
+import DxDateBox from "devextreme-vue/date-box";
 
 export default {
   name: "InputLabel",
   components: {
-    DxDateBox
+    DxDateBox,
   },
   props: {
     data: {
@@ -58,6 +95,14 @@ export default {
       },
       tooltipScale: 0,
       cloneModel: JSON.parse(JSON.stringify(this.model)),
+      money: {
+        decimal: "",
+        thousands: ".",
+        prefix: "",
+        suffix: " (VNĐ)",
+        precision: 0,
+        masked: true,
+      },
     };
   },
   methods: {
@@ -110,6 +155,7 @@ export default {
      */
     cloneModel() {
       this.$emit("changeValueInput", this.data.inputId, this.cloneModel);
+      console.log(this.cloneModel)
     },
 
     /**
@@ -118,9 +164,9 @@ export default {
      */
     model() {
       this.cloneModel = JSON.parse(JSON.stringify(this.model));
-      if (this.data.dataType == "Date") {
-        this.cloneModel = moment(this.cloneModel).format("YYYY-MM-DD");
-      }
+      // if (this.data.dataType == "Date") {
+      //   this.cloneModel = moment(this.cloneModel).format("YYYY-MM-DD");
+      // }
     },
   },
 };

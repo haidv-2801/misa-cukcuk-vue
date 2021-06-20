@@ -111,11 +111,11 @@
 /* style thanh scroll */
 ::-webkit-scrollbar {
   width: 5px;
-  height: 10px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #cdd3d6;
+  background-color: #BBBBBB;
   border-radius: 10px;
 }
 
@@ -192,3 +192,8 @@ button.btn:active {
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
+
+/* dxdatebox */
+.dx-state-focused {
+  border:1px solid #019160 !important;
+} 

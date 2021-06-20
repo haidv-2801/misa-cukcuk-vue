@@ -2,14 +2,35 @@
   <!-- filterbar -->
   <div class="main__filter">
     <div class="filter__left">
-      <input
-        tabindex="7"
-        class="search-box focus left__item"
-        type="text"
-        placeholder="Tìm kiếm theo Mã Tên hoặc Số điện thoại"
-        v-debounce:300ms="filterTable"
-        v-model="filterData"
-      />
+      <div class="search-gr">
+        <input
+          tabindex="2"
+          class="search-box focus left__item"
+          type="text"
+          placeholder="Tìm kiếm theo Mã Tên hoặc Số điện thoại"
+          v-debounce:300ms="filterTable"
+          v-model="filterData"
+        />
+
+        <span
+          v-show="visibleClearIcon"
+          @click="resetText()"
+          class="box__icon icon-textclear"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-x"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+            />
+          </svg>
+        </span>
+      </div>
 
       <DropdownAutoComplete v-bind:data="dropdownData[0]" />
 
@@ -19,7 +40,7 @@
       <button
         @click="refreshGrid()"
         class="btn"
-        tabindex="11"
+        tabindex="3"
         title="Làm mới"
       ></button>
     </div>
@@ -55,7 +76,8 @@ export default {
           items: ["Giám đốc", "Fresher Web", "DepOops", "BA"],
         },
       ],
-      filterData:''
+      filterData: "",
+      visibleClearIcon: false,
     };
   },
 
@@ -68,16 +90,74 @@ export default {
       this.$emit("refreshGrid");
     },
 
+    /**
+     * Call filter method in parent component
+     * DVHAI 14/06/2021
+     */
     filterTable() {
-      this.$emit('filterTable', this.filterData);
-    }
+      this.$emit("filterTable", this.filterData);
+    },
+
+    /**
+     * Clear text
+     * DVHAI 14/06/2021
+     */
+    resetText() {
+      this.filterData = "";
+
+      this.refreshGrid();
+    },
   },
 
   computed: {},
+
+  watch: {
+    /**
+     * Show and hide clear icon
+     * DVHAI 14/06/2021
+     */
+    filterData() {
+      if (this.filterData.length > 0) {
+        this.visibleClearIcon = true;
+      } else {
+        this.visibleClearIcon = false;
+      }
+    },
+  },
 };
 </script>
 
-<style>
+<style scoped>
+.focus:focus-visible {
+  border: 1px solid #019160;
+}
+
+/* icon clear */
+.box__icon {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: rgb(233, 235, 238);
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+
+.icon-textclear {
+  cursor: pointer;
+}
+
+.icon-textclear:hover {
+  background-color: rgb(233, 235, 238, 0.5);
+}
+
+.search-gr {
+  position: relative;
+}
+
 /* filter css */
 .main__filter {
   margin-top: 5px;

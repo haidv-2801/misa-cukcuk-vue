@@ -54,12 +54,12 @@ export default {
   data() {
     return {
       navItems: [
-        { icon: "", text: "Tổng quan" },
-        { icon: "", text: "Báo cáo" },
-        { icon: "", text: "Mua hàng" },
-        { icon: "", text: "Danh mục nhân viên" },
-        { icon: "", text: "Danh mục khách hàng" },
-        { icon: "", text: "Thiết lập hệ thống" },
+        { icon: "", link:"/overview", text: "Tổng quan" },
+        { icon: "", link:"/report", text: "Báo cáo" },
+        { icon: "", link:"/product", text: "Mua hàng" },
+        { icon: "", link:"/employee", text: "Danh mục nhân viên" },
+        { icon: "", link:"/customer", text: "Danh mục khách hàng" },
+        { icon: "", link:"/setting", text: "Thiết lập hệ thống" },
       ],
       displayOverlay: false,
       displayLoader: false,

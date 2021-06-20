@@ -1,3 +1,10 @@
+@media only screen and (max-width: 1366px) {
+    .sidebar {
+        width: var(--size-sidebar-collapsed) !important;
+    }
+}
+  
+
 .sidebar_state {
     width: var(--size-sidebar-collapsed) !important;
 } 

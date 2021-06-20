@@ -1,7 +1,7 @@
 <template>
   <div class="dropdown dropdown__key left__item" :style="styleObject">
     <!-- dropdown head -->
-    <div class="dropdown-box">
+    <div :class="{ focus: isFocus }" class="dropdown-box">
       <!-- icon clear -->
       <span
         v-show="visibleClearIcon"
@@ -25,9 +25,11 @@
       <!-- input data -->
       <input
         @focus="openDropdown()"
+        @blur="removeInputOutlineColor()"
         :placeholder="data.placeHolder"
         v-model="txtTitle"
         class="input-data"
+        tabindex="2"
       />
       <div
         :class="{ 'dropdown__row--hover': isShow }"
@@ -36,8 +38,8 @@
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
+          width="13"
+          height="13"
           fill="currentColor"
           class="bi bi-chevron-down icon__arrowDown"
           viewBox="0 0 16 16"
@@ -116,26 +118,30 @@ export default {
       txtTitle: "",
       visibleClearIcon: false,
       cloneModel: 0,
+      isFocus: false,
     };
   },
   created() {},
   methods: {
+    onPageDown() {
+      alert("test")
+    },
     /**
      * Close popup
      * DVHAI 17/06/2021
      */
-	   evtRowClick(index) {
+    evtRowClick(index) {
       this.curSelectedItem = this.data.items.indexOf(this.dropdownItems[index]);
-      
-      //open dropdown items
-      this.closeDropdown();
 
       //bind data to title
       if (this.curSelectedItem != null && this.curSelectedItem >= 0)
         this.txtTitle = this.data.items[this.curSelectedItem];
 
+      //open dropdown items
+      this.closeDropdown();
+
       this.curSelectedItem = 0;
-      
+
       //show clear icon
       this.visibleClearIcon = true;
 
@@ -179,7 +185,8 @@ export default {
      * DVHAI 12/06/2021
      */
     openDropdown() {
-      this.isShow = true;
+        this.isShow = true;
+        this.addInputOutlineColor();
     },
 
     /**
@@ -188,54 +195,74 @@ export default {
      */
     closeDropdown() {
       this.isShow = false;
+
+      this.removeInputOutlineColor();
     },
 
     /**
      * Change outline color
      * DVHAI 12/06/2021
      */
-    addInputOutlineColor(e) {
-      e.target.classList.add("focus");
+    addInputOutlineColor() {
+      this.isFocus = true;
     },
 
     /**
      * Lost focus
      * DVHAI 12/06/2021
      */
-    removeInputOutlineColor(e) {
-      e.target.classList.remove("focus");
+    removeInputOutlineColor() {
+      this.isFocus = false;
     },
   },
   computed: {
+    /**
+     * Track typing and filtering
+     * DVHAI 19/06/2021
+     */
     dropdownItems() {
-    
       if (this.txtTitle.length > 0) {
-
         return this.data.items.filter((x) => {
           return x.toLowerCase().indexOf(this.txtTitle.toLowerCase()) > -1;
         });
-
       } else {
         return this.data.items;
       }
     },
   },
   watch: {
+    /**
+     * Track cloneModel and change model value outside
+     * the component
+     * DVHAI 19/06/2021
+     */
     cloneModel() {
       this.$emit("changeValueInput", this.data.inputId, this.cloneModel);
     },
 
+    /**
+     * Clone to a new model
+     * DVHAI 19/06/2021
+     */
     model() {
       this.cloneModel = JSON.parse(JSON.stringify(this.model));
+
       if (this.curSelectedItem != null) this.evtRowClick(this.cloneModel);
     },
 
+    /**
+     * Back to original value
+     * DVHAI 19/06/2021
+     */
     curSelectedItem() {
-      this.cloneModel = this.data.items.indexOf(this.dropdownItems[this.curSelectedItem]);
-      if(this.cloneModel == -1) {
+      this.cloneModel = this.data.items.indexOf(
+        this.dropdownItems[this.curSelectedItem]
+      );
+
+      //no item selected
+      if (this.cloneModel == -1) {
         this.cloneModel = null;
       }
-      console.log("cur: " + this.cloneModel);
     },
   },
 };
@@ -288,6 +315,7 @@ export default {
 }
 
 .input-data {
+  border-radius: 4px;
   text-indent: 16px;
   height: 100%;
   outline: none;

@@ -15,6 +15,7 @@
         stroke-linejoin="round"
         class="feather feather-chevrons-left"
       >
+        <title>Trang đầu</title>
         <polyline points="11 17 6 12 11 7"></polyline>
         <polyline points="18 17 13 12 18 7"></polyline>
       </svg>
@@ -31,22 +32,19 @@
         stroke-linejoin="round"
         class="feather feather-chevron-left"
       >
+        <title>Trang trước</title>
         <polyline points="15 18 9 12 15 6"></polyline>
       </svg>
-
-      <button @click="btnClick($event)" tabindex="15" class="btn btn-number">
-        <span>1</span>
+      <button
+        v-for="(item, index) in pages"
+        :key="index"
+        :class="{'active': curSelectedPage == item}"
+        tabindex="15"
+        class="btn btn-number"
+        @click="btnClick(item)"
+      >
+        <span>{{item}}</span>
       </button>
-      <button @click="btnClick($event)" tabindex="16" class="btn btn-number">
-        <span>2</span>
-      </button>
-      <button @click="btnClick($event)" tabindex="17" class="btn btn-number">
-        <span>3</span>
-      </button>
-      <button @click="btnClick($event)" tabindex="18" class="btn btn-number">
-        <span>4</span>
-      </button>
-
       <svg
         tabindex="19"
         xmlns="http://www.w3.org/2000/svg"
@@ -60,6 +58,7 @@
         stroke-linejoin="round"
         class="feather feather-chevron-right"
       >
+        <title>Trang sau</title>
         <polyline points="9 18 15 12 9 6"></polyline>
       </svg>
       <svg
@@ -75,6 +74,7 @@
         stroke-linejoin="round"
         class="feather feather-chevrons-right"
       >
+        <title>Trang cuối</title>
         <polyline points="13 17 18 12 13 7"></polyline>
         <polyline points="6 17 11 12 6 7"></polyline>
       </svg>
@@ -87,11 +87,14 @@
 export default {
   name: "Pageing",
   data() {
-    return {};
+    return {
+      curSelectedPage: 1,
+      pages: [1, 2, 3, 4],
+    };
   },
   methods: {
-    btnClick(e) {
-      e.target.classList.add("active");
+    btnClick(index) {
+      this.curSelectedPage = index;
     },
   },
 };

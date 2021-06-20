@@ -1,12 +1,22 @@
 <template>
   <div class="main">
     <!-- confirm popup -->
-    <ConfirmDialog 
-    ref="confirmDialog" 
-    @deleteRecord="deleteRecord" />
+    <DialogConfirmDel
+      :data="entity"
+      ref="confirmDialogDel"
+      @deleteRecord="deleteRecord"
+    />
+
+    <DialogConfirmStopTyping
+      :data="entity"
+      ref="confirmDialogStop"
+      @closeForm="closeFormEmployeeDetail"
+    />
 
     <!-- form employee -->
-    <EmployeeDetail @refreshGrid="refreshGrid" ref="formEmployeeDetail" />
+    <EmployeeDetail 
+    @openDialogConfirmStoptyping="openDialogConfirmStoptyping"
+    @refreshGrid="refreshGrid" ref="formEmployeeDetail" />
 
     <!-- toolbar -->
     <EmployeeToolBar
@@ -15,9 +25,7 @@
     />
 
     <!-- filterbar -->
-    <EmployeeFilterBar 
-    @filterTable="filterTable"
-    @refreshGrid="refreshGrid" />
+    <EmployeeFilterBar @filterTable="filterTable" @refreshGrid="refreshGrid" />
 
     <!-- grid -->
     <Grid ref="Grid" @openFormEmployeeDetail="openFormEmployeeDetail" />
@@ -33,7 +41,8 @@ import EmployeeToolBar from "./EmployeeToolBar.vue";
 import EmployeeFilterBar from "./EmployeeFilterBar.vue";
 import Grid from "../../common/Grid.vue";
 import Paging from "../../common/Paging.vue";
-import ConfirmDialog from "../../common/ConfirmDialog.vue";
+import DialogConfirmDel from "../../common/vdialog/DialogConfirmDel.vue";
+import DialogConfirmStopTyping from "../../common/vdialog/DialogConfirmStopTyping.vue";
 
 export default {
   name: "EmployeeIndex",
@@ -43,30 +52,37 @@ export default {
     EmployeeFilterBar,
     Grid,
     Paging,
-    ConfirmDialog,
+    DialogConfirmDel,
+    DialogConfirmStopTyping
   },
   data() {
     return {
       isDisplayedEmployeeDetail: false,
+      entity: {
+        entityName: "Nhân Viên",
+      },
     };
   },
   methods: {
-
     filterTable(value) {
       this.$refs.Grid.filterTable(value);
     },
-    
+
     /**
      * Open from employee detail
      * DVHAI 14/06/2021
      */
     openFormEmployeeDetail(item) {
-      console.log(item);
       //invoke openform method
       this.$refs.formEmployeeDetail.openForm(item);
+    },
 
-      //send overlay event
-      this.$bus.emit("displayOverlay");
+     /**
+     * Close from employee detail
+     * DVHAI 14/06/2021
+     */
+    closeFormEmployeeDetail() {
+      this.$refs.formEmployeeDetail.closeForm();
     },
 
     /**
@@ -82,7 +98,7 @@ export default {
      * DVHAI 14/06/2021
      */
     openPopup() {
-      this.$refs.confirmDialog.openPopup();
+      this.$refs.confirmDialogDel.openPopup();
     },
 
     /**
@@ -93,6 +109,9 @@ export default {
       this.$refs.Grid.deleteRecord();
     },
 
+    openDialogConfirmStoptyping() {
+      this.$refs.confirmDialogStop.openPopup();
+    }
   },
 };
 </script>

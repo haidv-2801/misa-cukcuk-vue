@@ -13,7 +13,7 @@
             fill="currentColor"
             class="bi bi-x"
             viewBox="0 0 16 16"
-            @click="closeForm()"
+            @click="openDialogConfirmStoptyping()"
           >
             <path
               d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
@@ -52,7 +52,6 @@
               </div>
               <div class="form__row">
                 <InputLabel
-                  MustValidate="true"
                   @changeValueInput="changeValueInput"
                   :model="employeeModel.DateOfBirth"
                   :data="dateOfBirthInput"
@@ -77,7 +76,6 @@
                   :data="identityNumberInput"
                 />
                 <InputLabel
-                  MustValidate="true"
                   @changeValueInput="changeValueInput"
                   :model="employeeModel.IdentityDate"
                   :data="identityDateInput"
@@ -151,7 +149,6 @@
               </div>
               <div class="form__row">
                 <InputLabel
-                  MustValidate="true"
                   @changeValueInput="changeValueInput"
                   :model="employeeModel.JoinDate"
                   :data="joinDateInput"
@@ -171,7 +168,12 @@
         </div>
       </div>
       <div class="form__bottom">
-        <button class="btn-default btn-cancel" @click="closeForm()">Hủy</button>
+        <button
+          class="btn-default btn-cancel"
+          @click="openDialogConfirmStoptyping()"
+        >
+          Hủy
+        </button>
         <button @click="save()" class="btn-default btn-green">
           <svg
             width="16"
@@ -199,9 +201,7 @@
 
 <script>
 import InputLabel from "../../common/InputLabel.vue";
-import Dropdown from "../../common/Dropdown.vue";
 import DropdownAutoComplete from "../../common/DropdownAutoComplete.vue";
-// import EmployeeModel from "../../../models/employeeModel.js";
 
 function initState() {
   return {
@@ -262,7 +262,7 @@ function initState() {
       isRequired: true,
       inputType: "text",
       validation: ["required", "minLength:3"],
-      mask:""
+      mask: "",
     },
 
     employeeNameInput: {
@@ -271,7 +271,7 @@ function initState() {
       isRequired: true,
       inputType: "text",
       validation: ["required"],
-      mask:""
+      mask: "",
     },
 
     dateOfBirthInput: {
@@ -280,7 +280,7 @@ function initState() {
       inputType: "date",
       dataType: "Date",
       validation: [],
-      mask:""
+      mask: "",
     },
 
     identityNumberInput: {
@@ -289,7 +289,7 @@ function initState() {
       isRequired: true,
       inputType: "text",
       validation: ["required"],
-      mask:""
+      mask: "",
     },
 
     identityDateInput: {
@@ -298,7 +298,7 @@ function initState() {
       inputType: "date",
       dataType: "Date",
       validation: [],
-      mask:""
+      mask: "",
     },
 
     identityPlaceInput: {
@@ -306,7 +306,7 @@ function initState() {
       labelText: "Nơi cấp",
       inputType: "text",
       validation: [],
-      mask:""
+      mask: "",
     },
 
     emailInput: {
@@ -315,7 +315,7 @@ function initState() {
       isRequired: true,
       inputType: "text",
       validation: ["required", "email"],
-      mask:"",
+      mask: "",
       dataType: "Email",
     },
 
@@ -325,7 +325,7 @@ function initState() {
       isRequired: true,
       inputType: "text",
       validation: ["required"],
-      mask:"(###) ###-####"
+      mask: "(###) ###-####",
     },
 
     taxCodeInput: {
@@ -333,7 +333,7 @@ function initState() {
       labelText: "Mã số thuế cá nhân",
       inputType: "text",
       validation: [],
-      mask:""
+      mask: "",
     },
 
     salaryInput: {
@@ -341,8 +341,8 @@ function initState() {
       labelText: "Mức lương cơ bản",
       inputType: "text",
       validation: [],
-      mask:"",
-      dataType: "Number",
+      mask: "",
+      dataType: "money",
     },
 
     joinDateInput: {
@@ -351,7 +351,7 @@ function initState() {
       inputType: "date",
       dataType: "Date",
       validation: [],
-      mask:""
+      mask: "",
     },
 
     employeeModel: {},
@@ -364,7 +364,6 @@ export default {
   name: "EmployeeDetail",
   components: {
     InputLabel,
-    Dropdown,
     DropdownAutoComplete,
   },
   props: {},
@@ -377,6 +376,10 @@ export default {
     });
   },
   methods: {
+    openDialogConfirmStoptyping() {
+      this.$emit("openDialogConfirmStoptyping");
+    },
+
     /**
      * Reset all fields
      * DVHAI 14/06/2021
@@ -385,6 +388,9 @@ export default {
       Object.assign(this.$data, initState());
     },
 
+    openDialogConfirmStoptyping() {
+      this.$emit("openDialogConfirmStoptyping");
+    },
     /**
      * Close form
      * DVHAI 11/06/2021
@@ -392,7 +398,6 @@ export default {
     closeForm() {
       this.isOpen = false;
 
-      //hide overlay
       this.invokeOverlay();
     },
 
@@ -411,6 +416,7 @@ export default {
     async openForm(item) {
       this.resetWindow();
 
+      //form mode: null ? add : edit
       if (item != null) {
         this.bindDataForm(item);
         this.formMode = item.EmployeeId;
@@ -418,6 +424,7 @@ export default {
         this.employeeModel.EmployeeCode = await this.getNewEmployeeCode();
       }
 
+      this.invokeOverlay();
       this.isOpen = true;
     },
 
@@ -436,10 +443,9 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          this.closeForm();
           this.$bus.emit("openToast", {
-            type: "toast--error",
-            text: "Lỗi tự động tạo mã",
+            type: "toast--info",
+            text: "Không thể tạo mã",
           });
         });
 

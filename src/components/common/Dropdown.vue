@@ -5,7 +5,7 @@
   >
     <!-- dropdown head -->
     <div 
-    tabindex="0" 
+    tabindex="2" 
     class="dropdown-box" 
     :class="{ focus: isShow}"
     @focus="addInputOutlineColor($event)"
@@ -38,8 +38,8 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
+            width="13"
+            height="13"
             fill="currentColor"
             class="bi bi-chevron-down"
             viewBox="0 0 16 16"
@@ -72,8 +72,8 @@
           <div class="svg__box">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
+              width="13"
+              height="13"
               fill="currentColor"
               viewBox="0 0 16 16"
               v-show="curSelectedItem == i"
@@ -206,6 +206,8 @@ export default {
      */
     removeInputOutlineColor(e) {
       e.target.classList.remove('focus');
+
+      this.closeDropdown();
     }
   },
   computed: {},
