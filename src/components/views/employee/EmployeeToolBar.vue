@@ -15,7 +15,6 @@
       </button>
       <button
         class="btn btn__delete"
-        commandtype="Delete"
         title="Xóa nhân viên"
         tabindex="3"
         @click="openPopup()"

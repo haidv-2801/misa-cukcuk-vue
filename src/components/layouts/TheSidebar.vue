@@ -99,7 +99,6 @@ export default {
   computed: {},
   watch: {
     $route(to, from) {
-      console.log(from);
       let index = this.data.map((x) => x.link).indexOf(to.path);
       this.curSelectedItem = index;
     },

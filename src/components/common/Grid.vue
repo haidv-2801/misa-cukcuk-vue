@@ -4,7 +4,7 @@
       <thead>
         <tr>
           <th
-            v-for="(item, index) in data.thead"
+            v-for="(item, index) in data.column"
             :key="index"
             :class="{
               'align-right': item.dataType == Resource.DataTypeColumn.Number,
@@ -17,15 +17,15 @@
       </thead>
       <tbody>
         <tr
-          v-for="(item, index) in data.tbody"
+          v-for="(item, index) in data.data"
           :key="index"
           :class="{ active: multiSelectList.includes(index) }"
           @click.exact="selectRow(index)"
-          @dblclick="openFormEmployeeDetail(item)"
+          @dblclick="openFormDetail(item)"
           @click.ctrl="multiSelectRow(index)"
         >
           <td
-            v-for="(column, index) in data.thead"
+            v-for="(column, index) in data.column"
             :key="index"
             :class="{
               'align-right': column.dataType == Resource.DataTypeColumn.Number,
@@ -48,19 +48,25 @@
 </template>
 
 <script>
-import employee from "../../store/employeeData.js";
 import Resource from "../../scripts/common/resource.js";
 import Enumeration from "../../scripts/common/enumeration.js";
 import CommonFn from "../../scripts/common/common.js";
+import Paging from "../../components/common/Paging.vue";
 
 export default {
   name: "Grid",
+  props: {
+    gridData: {
+      type: Object,
+      default: () => {},
+    },
+  },
+  components: {
+    Paging
+  },
   data() {
     return {
-      data: {
-        thead: employee.column,
-        tbody: employee.data,
-      },
+      data: JSON.parse(JSON.stringify(this.gridData)),
       CommonFn: CommonFn,
       Enumeration: Enumeration,
       Resource: Resource,
@@ -68,7 +74,7 @@ export default {
     };
   },
   created() {
-    this.getDataServer();
+    this.data = this.gridData;
   },
   methods: {
     selectRow(index) {
@@ -76,30 +82,7 @@ export default {
     },
 
     /**
-     * Filter data
-     * DVHAI 13/06/2021
-     */
-    filterTable(filterString) {
-      if (filterString.toString().length > 0) {
-        let url = `http://cukcuk.manhnv.net/v1/Employees/Filter?pageSize=10&pageNumber=1&fullName=${filterString}`;
-        this.axios
-          .get(url)
-          .then((response) => {
-            this.data.tbody = response.data.Data;
-          })
-          .catch((error) => {
-            this.$bus.emit("openToast", {
-              type: "toast--error",
-              text: "Lỗi. Vui lòng liên hệ MISA",
-            });
-          });
-      } else {
-        this.getDataServer()
-      }
-    },
-
-    /**
-     * Multiselect row by type ctl+click
+     * Multiselect row by typing ctl+click
      * DVHAI 13/06/2021
      */
     multiSelectRow(index) {
@@ -118,28 +101,7 @@ export default {
      * DVHAI 13/06/2021
      */
     getSelectedRow() {
-      var res = this.multiSelectList[0];
-      return res;
-    },
-
-    /**
-     * Get data from server
-     * DVHAI 13/06/2021
-     */
-    getDataServer() {
-      this.$bus.emit("displayLoader");
-      this.axios
-        .get("http://cukcuk.manhnv.net/v1/Employees")
-        .then((response) => {
-          this.data.tbody = response.data;
-          this.$bus.emit("displayLoader");
-        })
-        .catch((error) => {
-          this.$bus.emit("openToast", {
-            type: "toast--error",
-            text: "Lỗi. Vui lòng liên hệ MISA",
-          });
-        });
+      return this.multiSelectList;
     },
 
     /**
@@ -191,37 +153,11 @@ export default {
      * If edit mode -> bind data
      * DVHAI 13/06/2021
      */
-    openFormEmployeeDetail(item) {
-      this.$emit("openFormEmployeeDetail", item);
-    },
-
-    /**
-     * Delete record
-     * DVHAI 13/06/2021
-     */
-    async deleteRecord() {
-        for (const item of this.multiSelectList) {
-        let url = "http://cukcuk.manhnv.net/v1/Employees/",
-          id = this.data.tbody[item].EmployeeId,
-          urlFull = url + id;
-
-        await this.axios
-          .delete(urlFull)
-          .then((response) => {
-            this.getDataServer();
-            this.multiSelectList = [0];
-          })
-          .catch((error) => {
-            console.log(error);
-
-            this.$bus.emit("openToast", {
-              type: "toast--error",
-              text: "Lỗi. Vui lòng liên hệ MISA",
-            });
-          });
-      }
+    openFormDetail(item) {
+      this.$emit("openFormDetail", item);
     },
   },
+  watch: {},
 };
 </script>
 
@@ -267,7 +203,7 @@ table {
 table tr {
   cursor: pointer;
   height: 40px;
-  border-bottom: 1px solid var(--color-hint);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.08);
 }
 
 table tbody tr:nth-child(odd) {

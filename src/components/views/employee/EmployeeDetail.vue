@@ -202,6 +202,7 @@
 <script>
 import InputLabel from "../../common/InputLabel.vue";
 import DropdownAutoComplete from "../../common/DropdownAutoComplete.vue";
+import EmployeeAPI from "../../../api/coponents/EmployeeAPI";
 
 function initState() {
   return {
@@ -279,7 +280,7 @@ function initState() {
       labelText: "Ngày sinh",
       inputType: "date",
       dataType: "Date",
-      validation: [],
+      validation: ['required'],
       mask: "",
     },
 
@@ -433,12 +434,10 @@ export default {
      * DVHAI 14/06/2021
      */
     async getNewEmployeeCode() {
-      let ans = "",
-        url = "http://cukcuk.manhnv.net/v1/Employees/NewEmployeeCode";
-
-      await this.axios
-        .get(url)
-        .then((response) => {
+      let ans = "";
+      
+      await EmployeeAPI.getNewEmployeecode()
+        .then(function(response) {
           ans = response.data;
         })
         .catch((error) => {

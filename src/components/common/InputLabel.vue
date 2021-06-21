@@ -9,6 +9,7 @@
     <label v-else>{{ data.labelText }}</label>
 
     <DxDateBox
+      class="focus"
       :displayFormat="'dd/MM/yyyy'"
       :placeholder="'dd/MM/yyyy'"
       :useMaskBehavior="true"
@@ -22,7 +23,7 @@
     />
 
     <!-- money mask -->
-    <input
+    <!-- <input
       v-else-if="data.dataType == 'money'"
       class="focus"
       :id="data.inputId"
@@ -38,7 +39,7 @@
       v-model="cloneModel"
       v-money="money"
       v-mask="data.mask"
-    />
+    /> -->
   <!-- no money mask -->
     <input
       v-else
@@ -155,7 +156,6 @@ export default {
      */
     cloneModel() {
       this.$emit("changeValueInput", this.data.inputId, this.cloneModel);
-      console.log(this.cloneModel)
     },
 
     /**
@@ -164,9 +164,6 @@ export default {
      */
     model() {
       this.cloneModel = JSON.parse(JSON.stringify(this.model));
-      // if (this.data.dataType == "Date") {
-      //   this.cloneModel = moment(this.cloneModel).format("YYYY-MM-DD");
-      // }
     },
   },
 };

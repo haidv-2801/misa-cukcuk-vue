@@ -1,5 +1,5 @@
 var APIConfig = {
-    development: 'https://jsonplaceholder.typicode.com',
+    development: 'http://cukcuk.manhnv.net',
     production: 'local:8081'
 }
 

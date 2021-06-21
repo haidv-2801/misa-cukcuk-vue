@@ -14,9 +14,11 @@
     />
 
     <!-- form employee -->
-    <EmployeeDetail 
-    @openDialogConfirmStoptyping="openDialogConfirmStoptyping"
-    @refreshGrid="refreshGrid" ref="formEmployeeDetail" />
+    <EmployeeDetail
+      @openDialogConfirmStoptyping="openDialogConfirmStoptyping"
+      @refreshGrid="refreshGrid"
+      ref="formEmployeeDetail"
+    />
 
     <!-- toolbar -->
     <EmployeeToolBar
@@ -25,13 +27,22 @@
     />
 
     <!-- filterbar -->
-    <EmployeeFilterBar @filterTable="filterTable" @refreshGrid="refreshGrid" />
+    <EmployeeFilterBar 
+    @changeValueFilterString="changeValueFilterString"
+    @filterTable="filterTable" 
+    @refreshGrid="refreshGrid" />
 
     <!-- grid -->
-    <Grid ref="Grid" @openFormEmployeeDetail="openFormEmployeeDetail" />
+    <Grid
+      ref="Grid"
+      :gridData="gridDataTable"
+      @openFormDetail="openFormEmployeeDetail"
+    />
 
     <!-- Pagination -->
-    <Paging />
+    <Paging 
+    @changeValuePage="changeValuePage"
+    :data="pagination" />
   </div>
 </template>
 
@@ -43,6 +54,7 @@ import Grid from "../../common/Grid.vue";
 import Paging from "../../common/Paging.vue";
 import DialogConfirmDel from "../../common/vdialog/DialogConfirmDel.vue";
 import DialogConfirmStopTyping from "../../common/vdialog/DialogConfirmStopTyping.vue";
+import EmployeeAPI from "../../../api/coponents/EmployeeAPI";
 
 export default {
   name: "EmployeeIndex",
@@ -53,19 +65,184 @@ export default {
     Grid,
     Paging,
     DialogConfirmDel,
-    DialogConfirmStopTyping
+    DialogConfirmStopTyping,
   },
   data() {
     return {
       isDisplayedEmployeeDetail: false,
+
       entity: {
         entityName: "Nhân Viên",
       },
+
+      gridDataTable: {
+        column: [
+          {
+            fieldName: "EmployeeCode",
+            displayName: "Mã nhân viên",
+            dataType: "",
+            displayType: "",
+          },
+          {
+            fieldName: "FullName",
+            displayName: "Tên nhân viên",
+            dataType: "",
+            displayType: "",
+          },
+          {
+            fieldName: "Gender",
+            displayName: "Giới tính",
+            dataType: "Enum",
+            displayType: "Gender",
+          },
+          {
+            fieldName: "DateOfBirth",
+            displayName: "Ngày sinh",
+            dataType: "Date",
+            displayType: "",
+          },
+          {
+            fieldName: "PhoneNumber",
+            displayName: "Số điện thoại",
+            dataType: "Number",
+            displayType: "",
+          },
+          {
+            fieldName: "Email",
+            displayName: "Email",
+            dataType: "",
+            displayType: "",
+          },
+          {
+            fieldName: "Address",
+            displayName: "Địa chỉ",
+            dataType: "",
+            displayType: "",
+          },
+          {
+            fieldName: "IdentityNumber",
+            displayName: "CMND/CCCD",
+            dataType: "Number",
+            displayType: "",
+          },
+          {
+            fieldName: "DepartmentName",
+            displayName: "Phòng ban",
+            dataType: "",
+            displayType: "",
+          },
+          {
+            fieldName: "PositionName",
+            displayName: "Vị trí",
+            dataType: "",
+            displayType: "",
+          },
+          {
+            fieldName: "Salary",
+            displayName: "Lương",
+            dataType: "Number",
+            displayType: "Money",
+          },
+          {
+            fieldName: "WorkStatus",
+            displayName: "Tình trạng",
+            dataType: "Enum",
+            displayType: "WorkStatus",
+          },
+        ],
+        data: [],
+      },
+
+      pagination: {
+        pageSize: 4,
+        pageNumber: 1,
+        totalRecord: 0,
+      },
+
+      filterString: ""
     };
   },
+  created() {
+    /**
+     * Get data from server
+     * DVHAI 13/06/2021
+     */
+    this.filterTable();
+  },
+  
+  watch: {
+    pagination: {
+      deep:true,
+      handler: function() {
+        this.filterTable();
+      }
+    }
+  },
+
   methods: {
-    filterTable(value) {
-      this.$refs.Grid.filterTable(value);
+
+    changeValuePage(value) {
+      this.pagination = value;
+    },
+
+    changeValueFilterString(value) {
+      this.filterString = value;
+    },
+
+    /**
+     * Config data paging
+     * DVHAI 21/06/2021
+     */
+    configDataPaging() {},
+
+    /**
+     * Get data from server
+     * DVHAI 13/06/2021
+     */
+    getDataGrid() {
+      this.$bus.emit("displayLoader");
+      EmployeeAPI.getAll()
+        .then((response) => {
+          this.gridDataTable.data = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$bus.emit("openToast", {
+            type: "toast--error",
+            text: "Lỗi. Vui lòng liên hệ MISA",
+          });
+        })
+        .finally(() => {
+          this.$bus.emit("displayLoader");
+        });
+    },
+
+    /**
+     * Filter
+     * DVHAI 21/06/2021
+     */
+    filterTable() {
+      if (this.filterString.toString().length <= 0) {
+        //get all
+        this.filterString = "n";
+      }
+
+      //params: pagesize, pagenumber, filterString
+      this.$bus.emit("displayLoader");
+      EmployeeAPI.filter(this.pagination.pageSize, this.pagination.pageNumber - 1, this.filterString)
+        .then((response) => {
+          this.gridDataTable.data = response.data.Data;
+          this.pagination.totalRecord = response.data.TotalRecord;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$bus.emit("openToast", {
+            type: "toast--error",
+            text: "Lỗi. Vui lòng liên hệ MISA",
+          });
+        }).finally(()=>{
+          this.$bus.emit("displayLoader");
+        });
     },
 
     /**
@@ -77,7 +254,7 @@ export default {
       this.$refs.formEmployeeDetail.openForm(item);
     },
 
-     /**
+    /**
      * Close from employee detail
      * DVHAI 14/06/2021
      */
@@ -90,7 +267,7 @@ export default {
      * DVHAI 14/06/2021
      */
     refreshGrid() {
-      this.$refs.Grid.getDataServer();
+      this.filterTable();
     },
 
     /**
@@ -105,13 +282,34 @@ export default {
      * Delete selected record
      * DVHAI 14/06/2021
      */
-    deleteRecord() {
-      this.$refs.Grid.deleteRecord();
+    async deleteRecord() {
+      let listSelectedRow = await this.$refs.Grid.getSelectedRow();
+
+      for (const item of listSelectedRow) {
+        let id = this.gridDataTable.data[item].EmployeeId;
+
+        await EmployeeAPI.delete(id)
+          .then((response) => {
+            this.$bus.emit("openToast", {
+              type: "toast--success",
+              text: "Xóa thành công Nhân Viên",
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+            this.$bus.emit("openToast", {
+              type: "toast--error",
+              text: "Lỗi. Vui lòng liên hệ MISA",
+            });
+          });
+      }
+
+      this.refreshGrid();
     },
 
     openDialogConfirmStoptyping() {
       this.$refs.confirmDialogStop.openPopup();
-    }
+    },
   },
 };
 </script>

@@ -1,100 +1,164 @@
 <template>
   <div id="pagination" class="main__pagination">
-    <div class="pagi__left">Hiển thị <b>1-10/1000</b> nhân viên</div>
+    <div class="pagi__left">
+      Hiển thị
+      <b>1-{{ pagination.pageSize }}/{{ pagination.totalRecord }}</b> nhân viên
+    </div>
     <div class="pagi__mid">
-      <svg
-        tabindex="13"
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="feather feather-chevrons-left"
-      >
-        <title>Trang đầu</title>
-        <polyline points="11 17 6 12 11 7"></polyline>
-        <polyline points="18 17 13 12 18 7"></polyline>
-      </svg>
-      <svg
-        tabindex="14"
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="feather feather-chevron-left"
-      >
-        <title>Trang trước</title>
-        <polyline points="15 18 9 12 15 6"></polyline>
-      </svg>
+      <div class="btn-page-control">
+        <svg
+          @click="firstPage()"
+          tabindex="13"
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="feather feather-chevrons-left"
+        >
+          <title>Trang đầu</title>
+          <polyline points="11 17 6 12 11 7"></polyline>
+          <polyline points="18 17 13 12 18 7"></polyline>
+        </svg>
+      </div>
+      <div class="btn-page-control">
+        <svg
+          @click="prePage()"
+          tabindex="14"
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="feather feather-chevron-left"
+        >
+          <title>Trang trước</title>
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </div>
       <button
         v-for="(item, index) in pages"
         :key="index"
-        :class="{'active': curSelectedPage == item}"
+        :class="{ active: pagination.pageNumber == item }"
         tabindex="15"
         class="btn btn-number"
         @click="btnClick(item)"
       >
-        <span>{{item}}</span>
+        <span>{{ item }}</span>
       </button>
-      <svg
-        tabindex="19"
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="feather feather-chevron-right"
-      >
-        <title>Trang sau</title>
-        <polyline points="9 18 15 12 9 6"></polyline>
-      </svg>
-      <svg
-        tabindex="20"
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="feather feather-chevrons-right"
-      >
-        <title>Trang cuối</title>
-        <polyline points="13 17 18 12 13 7"></polyline>
-        <polyline points="6 17 11 12 6 7"></polyline>
-      </svg>
+      <div class="btn-page-control">
+        <svg
+          @click="nextPage()"
+          tabindex="19"
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="feather feather-chevron-right"
+        >
+          <title>Trang sau</title>
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </div>
+      <div class="btn-page-control">
+        <svg
+          @click="lastPage()"
+          tabindex="20"
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="feather feather-chevrons-right"
+        >
+          <title>Trang cuối</title>
+          <polyline points="13 17 18 12 13 7"></polyline>
+          <polyline points="6 17 11 12 6 7"></polyline>
+        </svg>
+      </div>
     </div>
-    <div class="pagi__right"><b>20</b> nhân viên/trang</div>
+    <div class="pagi__right">
+      <b>{{ pagination.pageSize }}</b> nhân viên/trang
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Pageing",
+  name: "Paging",
+  props: {
+    data: {
+      type: Object,
+      default: function() {
+        return {
+          pageSize: 4,
+          pageNumber: 1,
+          totalRecord: 0,
+        };
+      },
+    },
+  },
+  created() {
+    //making page
+    this.pages = Array.from(
+      { length: this.pagination.pageSize },
+      (_, i) => i + 1
+    );
+  },
   data() {
     return {
-      curSelectedPage: 1,
-      pages: [1, 2, 3, 4],
+      pagination: JSON.parse(JSON.stringify(this.data)),
+      pages: [],
     };
   },
   methods: {
     btnClick(index) {
-      this.curSelectedPage = index;
+      this.pagination.pageNumber = index;
+    },
+
+    prePage() {
+      if (this.pagination.pageNumber > 1) {
+        this.pagination.pageNumber--;
+      }
+    },
+
+    firstPage() {
+      this.pagination.pageNumber = 1;
+    },
+
+    lastPage() {
+      this.pagination.pageNumber = this.pagination.pageSize;
+    },
+
+    nextPage() {
+      if (this.pagination.pageNumber < this.pagination.pageSize) {
+        this.pagination.pageNumber++;
+      }
+    },
+  },
+  watch: {
+    pagination: {
+      deep: true,
+      handler: function() {
+        this.$emit("changeValuePage", this.pagination);
+      },
     },
   },
 };
@@ -114,12 +178,16 @@ export default {
 }
 
 .pagi__mid {
-  cursor: pointer;
   align-items: center;
   display: flex;
   text-align: center;
   flex: 1;
   justify-content: center;
+  cursor: pointer;
+}
+
+.pagi__mid svg {
+  outline: none;
 }
 
 .pagi__mid button {

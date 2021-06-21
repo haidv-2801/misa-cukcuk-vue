@@ -8,7 +8,7 @@
           class="search-box focus left__item"
           type="text"
           placeholder="Tìm kiếm theo Mã Tên hoặc Số điện thoại"
-          v-debounce:300ms="filterTable"
+          v-debounce:400ms="filterTable"
           v-model="filterData"
         />
 
@@ -95,17 +95,17 @@ export default {
      * DVHAI 14/06/2021
      */
     filterTable() {
-      this.$emit("filterTable", this.filterData);
+      this.$emit("filterTable");
     },
 
     /**
      * Clear text
      * DVHAI 14/06/2021
      */
-    resetText() {
+    async resetText() {
       this.filterData = "";
-
-      this.refreshGrid();
+      await this.$emit("changeValueFilterString", this.filterData);
+      await this.refreshGrid();
     },
   },
 
@@ -122,6 +122,8 @@ export default {
       } else {
         this.visibleClearIcon = false;
       }
+
+      this.$emit("changeValueFilterString", this.filterData);
     },
   },
 };
