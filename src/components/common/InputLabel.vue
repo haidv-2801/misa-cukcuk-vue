@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import validate from "../../store/validator.js";
+import validate from "../../scripts/common/validator.js";
 
 // dx datebox
 import "devextreme/dist/css/dx.light.css";
