@@ -34,7 +34,9 @@
 
       <DropdownAutoComplete v-bind:data="dropdownData[0]" />
 
-      <Dropdown v-bind:data="dropdownData[1]" />
+      <DropdownAutoComplete v-bind:data="dropdownData[1]" />
+
+      <DropdownMaster :data="dropdownDepartment"/>
     </div>
     <div class="filter__right">
       <button
@@ -48,17 +50,34 @@
 </template>
 
 <script>
-import Dropdown from "../../common/Dropdown.vue";
-import DropdownAutoComplete from "../../common/DropdownAutoComplete.vue";
+import DropdownAutoComplete from "../../common/vCombobox/DropdownAutoComplete.vue";
+import DropdownMaster from "../../common/vCombobox/DropdownMaster.vue";
 
 export default {
   name: "FilterBar",
   components: {
-    Dropdown,
     DropdownAutoComplete,
+    DropdownMaster
   },
   data() {
     return {
+      dropdownDepartment: {
+        data: {
+          title: "Tất cả phòng ban",
+          placeHolder: "Chọn/Nhập phòng ban",
+          items: [
+            "Phòng nhân sự",
+            "Phòng kế toán",
+            "Phòng kinh doanh",
+            "Phòng sản xuất",
+          ],
+        },
+        style: {
+          width: 'calc(var(--size-width-M) * 3)',
+          height: '40px'
+        }
+      },
+
       dropdownData: [
         {
           title: "Tất cả phòng ban",

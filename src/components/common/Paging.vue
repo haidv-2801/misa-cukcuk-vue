@@ -105,7 +105,6 @@ export default {
       default: function() {
         return {
           pageSize: 4,
-          defaultPageSize: 4,
           pageNumber: 1,
           totalRecord: 0,
         };
@@ -113,19 +112,15 @@ export default {
     },
   },
   created() {
-    //recaculate pagesize
-    if (this.pagination.defaultPageSize > this.pagination.pageSize) {
-      this.pagination.defaultPageSize = this.pagination.pageSize;
-    }
     //making page
     this.pages = Array.from(
-      { length: this.pagination.defaultPageSize },
+      { length: this.pagination.pageSize },
       (_, i) => i + 1
     );
   },
   data() {
     return {
-      pagination: JSON.parse(JSON.stringify(this.data)),
+      pagination: this.pagination = JSON.parse(JSON.stringify(this.data)),
       pages: [],
     };
   },
@@ -155,6 +150,13 @@ export default {
     },
   },
   watch: {
+    // data: {
+    //   deep: true,
+    //   handler: function() {
+    //     this.pagination = JSON.parse(JSON.stringify(this.data));
+    //   }
+    // },
+
     pagination: {
       deep: true,
       handler: function() {
@@ -243,7 +245,6 @@ export default {
   display: flex;
   align-items: center;
   border-radius: 4px;
-  border: 1px solid var(--color-hint);
   justify-content: center;
 }
 

@@ -158,7 +158,6 @@ export default {
       //use for paging
       pagination: {
         pageSize: 4,
-        defaultPageSize: 4,
         pageNumber: 1,
         totalRecord: 0,
       },
@@ -249,7 +248,6 @@ export default {
         .then((response) => {
           this.gridDataTable.data = response.data.Data;
           this.pagination.totalRecord = response.data.TotalRecord;
-          this.pagination.pageSize = response.data.TotalPage;
         })
         .catch((error) => {
           console.log(error);
