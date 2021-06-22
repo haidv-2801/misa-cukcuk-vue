@@ -27,10 +27,11 @@
     />
 
     <!-- filterbar -->
-    <EmployeeFilterBar 
-    @changeValueFilterString="changeValueFilterString"
-    @filterTable="filterTable" 
-    @refreshGrid="refreshGrid" />
+    <EmployeeFilterBar
+      @changeValueFilterString="changeValueFilterString"
+      @filterTable="filterTable"
+      @refreshGrid="refreshGrid"
+    />
 
     <!-- grid -->
     <Grid
@@ -40,9 +41,7 @@
     />
 
     <!-- Pagination -->
-    <Paging 
-    @changeValuePage="changeValuePage"
-    :data="pagination" />
+    <Paging @changeValuePage="changeValuePage" :data="pagination" />
   </div>
 </template>
 
@@ -69,12 +68,15 @@ export default {
   },
   data() {
     return {
+      //use for form detail
       isDisplayedEmployeeDetail: false,
 
+      //use form cofirm log
       entity: {
         entityName: "Nhân Viên",
       },
 
+      //use for grid
       gridDataTable: {
         column: [
           {
@@ -153,13 +155,16 @@ export default {
         data: [],
       },
 
+      //use for paging
       pagination: {
         pageSize: 4,
+        defaultPageSize: 4,
         pageNumber: 1,
         totalRecord: 0,
       },
 
-      filterString: ""
+      //use for filter bar
+      filterString: "",
     };
   },
   created() {
@@ -169,22 +174,29 @@ export default {
      */
     this.filterTable();
   },
-  
+
   watch: {
     pagination: {
-      deep:true,
+      deep: true,
       handler: function() {
         this.filterTable();
-      }
-    }
+      },
+    },
   },
 
   methods: {
-
+    /**
+     * Change page number
+     * DVHAI 21/06/2021
+     */
     changeValuePage(value) {
       this.pagination = value;
     },
 
+    /**
+     * Change value filter string
+     * DVHAI 21/06/2021
+     */
     changeValueFilterString(value) {
       this.filterString = value;
     },
@@ -229,10 +241,15 @@ export default {
 
       //params: pagesize, pagenumber, filterString
       this.$bus.emit("displayLoader");
-      EmployeeAPI.filter(this.pagination.pageSize, this.pagination.pageNumber - 1, this.filterString)
+      EmployeeAPI.filter(
+        this.pagination.pageSize,
+        this.pagination.pageNumber - 1,
+        this.filterString
+      )
         .then((response) => {
           this.gridDataTable.data = response.data.Data;
           this.pagination.totalRecord = response.data.TotalRecord;
+          this.pagination.pageSize = response.data.TotalPage;
         })
         .catch((error) => {
           console.log(error);
@@ -240,7 +257,8 @@ export default {
             type: "toast--error",
             text: "Lỗi. Vui lòng liên hệ MISA",
           });
-        }).finally(()=>{
+        })
+        .finally(() => {
           this.$bus.emit("displayLoader");
         });
     },

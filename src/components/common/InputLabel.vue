@@ -23,7 +23,7 @@
     />
 
     <!-- money mask -->
-    <!-- <input
+    <input
       v-else-if="data.dataType == 'money'"
       class="focus"
       :id="data.inputId"
@@ -39,7 +39,7 @@
       v-model="cloneModel"
       v-money="money"
       v-mask="data.mask"
-    /> -->
+    />
   <!-- no money mask -->
     <input
       v-else
@@ -102,7 +102,7 @@ export default {
         prefix: "",
         suffix: " (VNĐ)",
         precision: 0,
-        masked: true,
+        masked: false,
       },
     };
   },
@@ -156,6 +156,7 @@ export default {
      */
     cloneModel() {
       this.$emit("changeValueInput", this.data.inputId, this.cloneModel);
+      console.log(this.cloneModel)
     },
 
     /**

@@ -5,9 +5,8 @@
       <b>1-{{ pagination.pageSize }}/{{ pagination.totalRecord }}</b> nhân viên
     </div>
     <div class="pagi__mid">
-      <div class="btn-page-control">
+      <div @click="firstPage()" class="btn-page-control">
         <svg
-          @click="firstPage()"
           tabindex="13"
           xmlns="http://www.w3.org/2000/svg"
           width="20"
@@ -25,9 +24,8 @@
           <polyline points="18 17 13 12 18 7"></polyline>
         </svg>
       </div>
-      <div class="btn-page-control">
+      <div @click="prePage()" class="btn-page-control">
         <svg
-          @click="prePage()"
           tabindex="14"
           xmlns="http://www.w3.org/2000/svg"
           width="20"
@@ -54,9 +52,8 @@
       >
         <span>{{ item }}</span>
       </button>
-      <div class="btn-page-control">
+      <div @click="nextPage()" class="btn-page-control">
         <svg
-          @click="nextPage()"
           tabindex="19"
           xmlns="http://www.w3.org/2000/svg"
           width="20"
@@ -73,9 +70,8 @@
           <polyline points="9 18 15 12 9 6"></polyline>
         </svg>
       </div>
-      <div class="btn-page-control">
+      <div @click="lastPage()" class="btn-page-control">
         <svg
-          @click="lastPage()"
           tabindex="20"
           xmlns="http://www.w3.org/2000/svg"
           width="20"
@@ -109,6 +105,7 @@ export default {
       default: function() {
         return {
           pageSize: 4,
+          defaultPageSize: 4,
           pageNumber: 1,
           totalRecord: 0,
         };
@@ -116,9 +113,13 @@ export default {
     },
   },
   created() {
+    //recaculate pagesize
+    if (this.pagination.defaultPageSize > this.pagination.pageSize) {
+      this.pagination.defaultPageSize = this.pagination.pageSize;
+    }
     //making page
     this.pages = Array.from(
-      { length: this.pagination.pageSize },
+      { length: this.pagination.defaultPageSize },
       (_, i) => i + 1
     );
   },
@@ -215,24 +216,38 @@ export default {
 /* các button pre, next, first, last 
         trong phân trang
     */
-.pagi__mid svg:first-child {
+.btn-page-control:first-child {
   margin-right: 20px;
 }
 
-.pagi__mid svg:nth-child(2) {
+.btn-page-control:nth-child(2) {
   margin-right: 15px;
 }
 
-.pagi__mid svg:nth-of-type(3) {
+.btn-page-control:nth-of-type(3) {
   margin-left: 15px;
 }
 
-.pagi__mid svg:nth-of-type(4) {
+.btn-page-control:nth-of-type(4) {
   margin-left: 20px;
 }
 
 .pagi__right {
   text-align: right;
   flex: 2;
+}
+
+.btn-page-control {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  border: 1px solid var(--color-hint);
+  justify-content: center;
+}
+
+.btn-page-control:hover {
+  background-color: #e9ebee;
 }
 </style>

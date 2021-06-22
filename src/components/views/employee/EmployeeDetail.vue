@@ -280,7 +280,7 @@ function initState() {
       labelText: "Ngày sinh",
       inputType: "date",
       dataType: "Date",
-      validation: ['required'],
+      validation: ["required"],
       mask: "",
     },
 
@@ -377,6 +377,14 @@ export default {
     });
   },
   methods: {
+    openOverlay() {
+      this.displayOverlay = !this.displayOverlay;
+    },
+
+    /**
+     * Open DialogConfirmStoptyping
+     * DVHAI 21/06/2021
+     */
     openDialogConfirmStoptyping() {
       this.$emit("openDialogConfirmStoptyping");
     },
@@ -389,9 +397,6 @@ export default {
       Object.assign(this.$data, initState());
     },
 
-    openDialogConfirmStoptyping() {
-      this.$emit("openDialogConfirmStoptyping");
-    },
     /**
      * Close form
      * DVHAI 11/06/2021
@@ -407,7 +412,7 @@ export default {
      * DVHAI 14/06/2021
      */
     invokeOverlay() {
-      this.$bus.emit("displayOverlay");
+      this.$bus.emit("invokeOverlay");
     },
 
     /**
@@ -426,6 +431,7 @@ export default {
       }
 
       this.invokeOverlay();
+
       this.isOpen = true;
     },
 
@@ -435,7 +441,7 @@ export default {
      */
     async getNewEmployeeCode() {
       let ans = "";
-      
+
       await EmployeeAPI.getNewEmployeecode()
         .then(function(response) {
           ans = response.data;
@@ -455,13 +461,9 @@ export default {
      * Bind data to edit form
      * DVHAI 14/06/2021
      */
-    bindDataForm(item) {
+    async bindDataForm(item) {
       //Get record by id
-      this.getEmployeeById(item.EmployeeId);
-
-      // if (emp != null) {
-      //   this.employeeModel = emp;
-      // }
+      this.employeeModel = await this.getEmployeeById(item.EmployeeId);
     },
 
     /**
@@ -469,13 +471,11 @@ export default {
      * DVHAI 14/06/2021
      */
     async getEmployeeById(id) {
-      let item = null,
-        url = `http://cukcuk.manhnv.net/v1/Employees/${id}`;
+      let emp = null;
 
-      await this.axios
-        .get(url)
+      await EmployeeAPI.getById(id)
         .then((response) => {
-          this.employeeModel = response.data;
+          emp = response.data;
         })
         .catch((error) => {
           console.log(error);
@@ -486,7 +486,7 @@ export default {
           });
         });
 
-      return item;
+      return emp;
     },
 
     /**

@@ -6,7 +6,7 @@
     </div>
 
     <!-- overlay -->
-    <div class="overlay" v-show="displayOverlay"></div>
+    <div id="overlay" v-show="displayOverlay"></div>
 
     <!-- toast msg -->
     <div class="toast-list">
@@ -36,8 +36,8 @@ import Toast from "../src/components/common/Toast.vue";
 export default {
   name: "App",
   created() {
-    //lắng nghe sự kiện bật overlay
-    this.$bus.on("displayOverlay", () => {
+    // lắng nghe sự kiện bật overlay
+    this.$bus.on("invokeOverlay", () => {
       this.displayOverlay = !this.displayOverlay;
     });
 

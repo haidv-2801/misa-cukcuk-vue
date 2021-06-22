@@ -308,6 +308,7 @@ export default {
   justify-content: center;
   display: flex;
   height: 100%;
+  cursor: pointer;
 }
 
 .icon__arrowDown {

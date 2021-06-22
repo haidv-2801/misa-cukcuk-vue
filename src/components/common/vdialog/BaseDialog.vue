@@ -31,7 +31,7 @@
 }
 
 .alert {
-  z-index: 3000;
+  z-index: 4000;
   height: fit-content;
   position: fixed;
   top: 0;
@@ -94,6 +94,8 @@
   justify-content: flex-end;
   align-items: center;
   padding: 10px 24px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
 .alert__iconClose {
