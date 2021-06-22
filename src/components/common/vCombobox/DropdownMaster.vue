@@ -161,9 +161,9 @@ span.dx-clear-button-area {
   align-items: center;
 }
 
-.dxdatebox .dx-button-content {
+/* .dxdatebox .dx-button-content {
     background-color: whitesmoke;
-}
+} */
 
 .dx-dropdowneditor-icon::after {
     transition: .2s;
@@ -172,6 +172,6 @@ span.dx-clear-button-area {
 
 .dxdatebox .dx-dropdowneditor-button.dx-state-active .dx-dropdowneditor-icon,
 .dx-dropdowneditor.dx-dropdowneditor-active .dx-dropdowneditor-icon {
-  background-color: unset;
+  /* background-color: unset; */
 }
 </style>
