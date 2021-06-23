@@ -31,12 +31,9 @@
           </svg>
         </span>
       </div>
-
-      <DropdownAutoComplete v-bind:data="dropdownData[0]" />
-
-      <DropdownAutoComplete v-bind:data="dropdownData[1]" />
-
-      <DropdownMaster :data="dropdownDepartment"/>
+      <DropdownMaster class="paddingleft-10" :data="dropdownPosition" />
+      
+      <DropdownMaster class="paddingleft-10" :data="dropdownDepartment" />
     </div>
     <div class="filter__right">
       <button
@@ -50,20 +47,17 @@
 </template>
 
 <script>
-import DropdownAutoComplete from "../../common/vCombobox/DropdownAutoComplete.vue";
 import DropdownMaster from "../../common/vCombobox/DropdownMaster.vue";
 
 export default {
   name: "FilterBar",
   components: {
-    DropdownAutoComplete,
-    DropdownMaster
+    DropdownMaster,
   },
   data() {
     return {
       dropdownDepartment: {
         data: {
-          title: "Tất cả phòng ban",
           placeHolder: "Chọn/Nhập phòng ban",
           items: [
             "Phòng nhân sự",
@@ -73,28 +67,22 @@ export default {
           ],
         },
         style: {
-          width: 'calc(var(--size-width-M) * 3)',
-          height: '40px'
-        }
+          width: "calc(var(--size-width-M) * 3)",
+          height: "40px",
+        },
       },
 
-      dropdownData: [
-        {
-          title: "Tất cả phòng ban",
-          placeHolder: "Chọn/Nhập phòng ban",
-          items: [
-            "Phòng nhân sự",
-            "Phòng kế toán",
-            "Phòng kinh doanh",
-            "Phòng sản xuất",
-          ],
-        },
-        {
-          title: "Tất cả vị trí",
+      dropdownPosition: {
+        data: {
           placeHolder: "Chọn/Nhập vị trí",
           items: ["Giám đốc", "Fresher Web", "DepOops", "BA"],
         },
-      ],
+        style: {
+          width: "calc(var(--size-width-M) * 3)",
+          height: "40px",
+        },
+      },
+
       filterData: "",
       visibleClearIcon: false,
     };
@@ -149,6 +137,11 @@ export default {
 </script>
 
 <style scoped>
+
+.paddingleft-10 {
+  margin-left: 10px;
+}
+
 .focus:focus-visible {
   border: 1px solid #019160;
 }
@@ -189,10 +182,6 @@ export default {
 
 .filter__left {
   display: flex;
-}
-
-.left__item {
-  margin-right: 10px;
 }
 
 .search-box {

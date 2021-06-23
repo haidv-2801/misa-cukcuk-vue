@@ -64,6 +64,12 @@ html {
   width: 740px;
 }
 
+.form__add input {
+  color: #000000;
+  font-family: GoogleRegular;
+  font-size: 1rem;
+}
+
 @media only screen and (max-height: 768px) {
   .form__add {
     overflow: auto;

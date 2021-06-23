@@ -49,7 +49,7 @@ export default class BaseAPI {
    * @param {*} id
    * @param {*} body
    */
-  insert(id, body) {
-    return BaseAPIConfig.post(`${this.controler}/${id}`, body);
+  insert(body) {
+    return BaseAPIConfig.post(`${this.controler}`, body);
   }
 }

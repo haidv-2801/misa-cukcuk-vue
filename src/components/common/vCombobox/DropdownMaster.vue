@@ -8,6 +8,7 @@
     :width="data.style.width"
     :height="data.style.height"
     :data-source="data.data.items"
+    v-model="cloneModel"
   />
 </template>
 
@@ -21,14 +22,47 @@ export default {
       type: Object,
       default: () => {},
     },
+    model: {
+      type: Number,
+      default: 0
+    }
+  },
+  data() {
+    return {
+      cloneModel: -1,
+    };
   },
   components: {
     DxSelectBox,
+  },
+  methods: {},
+  watch: {
+    /**
+     * Track cloneModel and change model value outside
+     * the component
+     * DVHAI 19/06/2021
+     */
+    cloneModel() {
+      let value = this.data.data.items.indexOf(this.cloneModel);
+      this.$emit("changeValueInput", this.data.data.inputId, value);
+    },
+
+    model() {
+      this.cloneModel = this.model;
+    }
   },
 };
 </script>
 
 <style>
+.dx-texteditor {
+  border: 1px solid #bbbbbb;
+}
+
+.dxdatebox.dx-state-focused .dx-texteditor {
+  border: 1px solid #019160;
+}
+
 .dxdatebox .dx-icon-clear::before {
   content: "";
 }
@@ -66,7 +100,6 @@ export default {
   border-bottom-left-radius: 0px;
   font-size: 0px;
   background-image: url("../../../assets/icon/arrow-down.svg");
-  border-left: 1px solid#bbbbbb;
   background-size: 13px;
 }
 
@@ -81,17 +114,15 @@ export default {
   font-size: 13px;
   padding-left: 7px;
 }
+
 .dxdatebox .dx-texteditor-input {
   font-weight: 550;
 }
 
-.dxdatebox .dx-dropdowneditor-input-wrapper .dx-selectbox-container {
-  border-color: 1px solid #bbbbbb !important;
-}
-
-.dxdatebox .dx-texteditor.dx-editor-outlined {
+.dx-texteditor.dx-editor-outlined {
   border: 1px solid #bbbbbb;
 }
+
 .dx-show-clear-button .dx-icon-clear {
   position: relative;
   top: 0;
@@ -120,7 +151,16 @@ export default {
 }
 
 .dx-list .dx-list-item {
-  padding-left: 40px;
+  background-image: url("../../../assets/icon/check-lg.svg");
+  background-repeat: no-repeat;
+  background-size: 0;
+  background-position-x: 10px;
+  background-position-y: center;
+  padding-left: 33px;
+}
+
+.dx-list .dx-list-item.dx-list-item-selected {
+  background-size: 13px;
 }
 
 .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item.dx-state-focused {
@@ -130,16 +170,13 @@ export default {
   outline: none !important;
 }
 
-.dx-state-focused {
-}
-
 .dxdatebox .dx-popup-wrapper > .dx-overlay-content {
   box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px;
   border-radius: 4px;
 }
 
 .dx-scrollview-content {
-  height: 166px;
+  max-height: 166px;
 }
 
 .dxdatebox span.dx-icon.dx-icon-clear {
@@ -161,17 +198,19 @@ span.dx-clear-button-area {
   align-items: center;
 }
 
-/* .dxdatebox .dx-button-content {
-    background-color: whitesmoke;
-} */
-
-.dx-dropdowneditor-icon::after {
-    transition: .2s;
-    transform: rotateY(180deg);
+.dxdatebox .dx-button-content {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-left: 1px solid#bbbbbb;
 }
 
-.dxdatebox .dx-dropdowneditor-button.dx-state-active .dx-dropdowneditor-icon,
-.dx-dropdowneditor.dx-dropdowneditor-active .dx-dropdowneditor-icon {
-  /* background-color: unset; */
+.dxdatebox.dx-dropdowneditor-active .dx-button-content {
+  background-color: #e9ebee;
+  border-left: none;
+}
+
+.dxdatebox.dx-dropdowneditor-active .dx-dropdowneditor-icon {
+  transform: rotateX(180deg);
+  background-color: unset;
 }
 </style>

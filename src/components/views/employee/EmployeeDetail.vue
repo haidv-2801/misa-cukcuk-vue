@@ -59,11 +59,10 @@
                 <div class="row__item">
                   <label for="">Giới tính</label>
                   <div class="dropdown__gender dropdown__key left__item">
-                    <DropdownAutoComplete
+                    <DropdownMaster
                       @changeValueInput="changeValueInput"
+                      :data="dropdownGender"
                       :model="employeeModel.Gender"
-                      :styleObject="styleDropdown"
-                      :data="genderDropdown"
                     />
                   </div>
                 </div>
@@ -116,20 +115,18 @@
               <div class="form__row">
                 <div class="row__item">
                   <label for="">Vịtrí</label>
-                  <DropdownAutoComplete
+                  <DropdownMaster
                     @changeValueInput="changeValueInput"
                     :model="employeeModel.PositionName"
-                    :styleObject="styleDropdown"
-                    :data="positionDropdown"
+                    :data="dropdownPosition"
                   />
                 </div>
                 <div class="row__item">
                   <label for="">Phòng ban</label>
-                  <DropdownAutoComplete
+                  <DropdownMaster
                     @changeValueInput="changeValueInput"
+                    :data="dropdownDepartment"
                     :model="employeeModel.DepartmentName"
-                    :styleObject="styleDropdown"
-                    :data="departmentDropdown"
                   />
                 </div>
               </div>
@@ -155,11 +152,10 @@
                 />
                 <div class="row__item">
                   <label for="">Tình trạng công việc</label>
-                  <DropdownAutoComplete
+                  <DropdownMaster
                     @changeValueInput="changeValueInput"
+                    :data="dropdownWorkStatus"
                     :model="employeeModel.WorkStatus"
-                    :styleObject="styleDropdown"
-                    :data="workStatusDropdown"
                   />
                 </div>
               </div>
@@ -201,7 +197,7 @@
 
 <script>
 import InputLabel from "../../common/InputLabel.vue";
-import DropdownAutoComplete from "../../common/vCombobox/DropdownAutoComplete.vue";
+import DropdownMaster from "../../common/vCombobox/DropdownMaster.vue";
 import EmployeeAPI from "../../../api/coponents/EmployeeAPI";
 
 function initState() {
@@ -214,46 +210,63 @@ function initState() {
     },
 
     // data form
-
-    departmentDropdown: {
-      inputId: "DepartmentName",
-      placeHolder: "Chọn/Nhập phòng ban",
-      title: "Tất cả phòng ban",
-      items: [
-        "Phòng nhân sự",
-        "Phòng kế toán",
-        "Phòng kinh doanh",
-        "Phòng sản xuất",
-      ],
-      dataType: "Enum",
-      enumName: "",
+    dropdownDepartment: {
+      data: {
+        inputId: "DepartmentName",
+        placeHolder: "Chọn/Nhập phòng ban",
+        items: [
+          "Phòng nhân sự",
+          "Phòng kế toán",
+          "Phòng kinh doanh",
+          "Phòng sản xuất",
+        ],
+      },
+      style: {
+        width: "100%",
+        height: "40px",
+      },
     },
 
-    positionDropdown: {
-      inputId: "PositionName",
-      placeHolder: "Chọn/Nhập vị trí",
-      title: "Tất cả vị trí",
-      items: ["Giám đốc", "Fresher Web", "DepOops", "BA"],
-      dataType: "Enum",
-      enumName: "",
+    dropdownPosition: {
+      data: {
+        inputId: "PositionName",
+        placeHolder: "Chọn/Nhập vị trí",
+        items: ["Giám đốc", "Fresher Web", "DepOops", "BA"],
+        // dataType: "Enum",
+        // enumName: "Gender",
+      },
+      style: {
+        width: "100%",
+        height: "40px",
+      },
     },
 
-    workStatusDropdown: {
-      inputId: "WorkStatus",
-      placeHolder: "Chọn/Nhập tình trạng",
-      title: "Chọn tình trạng",
-      items: ["Đang làm việc", "Đang thử việc", "Đã nghỉ việc"],
-      dataType: "Enum",
-      enumName: "WorkStatus",
+    dropdownWorkStatus: {
+      data: {
+        inputId: "WorkStatus",
+        placeHolder: "Chọn/Nhập tình trạng",
+        items: ["Đang làm việc", "Đang thử việc", "Đã nghỉ việc"],
+        // dataType: "Enum",
+        // enumName: "Gender",
+      },
+      style: {
+        width: "100%",
+        height: "40px",
+      },
     },
 
-    genderDropdown: {
-      inputId: "Gender",
-      placeHolder: "Chọn/Nhập giới tính",
-      title: "Chọn giới tính",
-      items: ["Nữ", "Nam", "Khác"],
-      dataType: "Enum",
-      enumName: "Gender",
+    dropdownGender: {
+      data: {
+        inputId: "Gender",
+        placeHolder: "Chọn/Nhập giới tính",
+        items: ["Nữ", "Nam", "Khác"],
+        dataType: "Enum",
+        enumName: "Gender",
+      },
+      style: {
+        width: "100%",
+        height: "40px",
+      },
     },
 
     //input
@@ -365,7 +378,7 @@ export default {
   name: "EmployeeDetail",
   components: {
     InputLabel,
-    DropdownAutoComplete,
+    DropdownMaster,
   },
   props: {},
   data() {
@@ -493,13 +506,54 @@ export default {
      * Save data
      * DVHAI 14/06/2021
      */
+    // async save() {
+    //   await this.validateSuccess();
+
+    //   if (this.allInputValid) {
+    //     if (this.formMode == null) {
+    //       this.axios
+    //         .post("http://cukcuk.manhnv.net/v1/Employees/", this.employeeModel)
+    //         .then((response) => {
+    //           this.refreshGrid();
+    //           this.$bus.emit("openToast", {
+    //             type: "toast--success",
+    //             text: "Thêm nhân viên thành công",
+    //           });
+    //         })
+    //         .catch((error) => {
+    //           console.log(error);
+    //           this.$bus.emit("openToast", {
+    //             type: "toast--error",
+    //             text: "Lỗi. Vui lòng liên hệ MISA",
+    //           });
+    //         });
+    //     } else {
+    //       let url = `http://cukcuk.manhnv.net/v1/Employees/${this.employeeModel.EmployeeId}`;
+    //       this.axios
+    //         .put(url, this.employeeModel)
+    //         .then((response) => {
+    //           this.refreshGrid();
+    //           this.$bus.emit("openToast", {
+    //             type: "toast--success",
+    //             text: "Sửa nhân viên thành công",
+    //           });
+    //         })
+    //         .catch((error) => {
+    //           console.log(error);
+    //           this.$bus.emit("openToast", {
+    //             type: "toast--error",
+    //             text: "Lỗi. Vui lòng liên hệ MISA",
+    //           });
+    //         });
+    //     }
+    //   }
+    // },
     async save() {
       await this.validateSuccess();
 
       if (this.allInputValid) {
         if (this.formMode == null) {
-          this.axios
-            .post("http://cukcuk.manhnv.net/v1/Employees/", this.employeeModel)
+          EmployeeAPI.insert(this.employeeModel)
             .then((response) => {
               this.refreshGrid();
               this.$bus.emit("openToast", {
@@ -515,9 +569,8 @@ export default {
               });
             });
         } else {
-          let url = `http://cukcuk.manhnv.net/v1/Employees/${this.employeeModel.EmployeeId}`;
-          this.axios
-            .put(url, this.employeeModel)
+          debugger;
+          EmployeeAPI.update(this.employeeModel.EmployeeId, this.employeeModel)
             .then((response) => {
               this.refreshGrid();
               this.$bus.emit("openToast", {
@@ -535,7 +588,6 @@ export default {
         }
       }
     },
-
     /**
      * Refresh grid
      * DVHAI 14/06/2021

@@ -4,9 +4,11 @@
     <div class="nav">
       <div class="nav__item">
         <!-- logo -->
-        <div 
-        title="Thu/Phóng"
-        class="nav__toggle btnToggle" @click="changeSidebarState()">
+        <div
+          title="Thu/Phóng"
+          class="nav__toggle btnToggle"
+          @click="changeSidebarState()"
+        >
           <!-- background here -->
         </div>
         <div class="nav__logo">
@@ -17,7 +19,6 @@
       <!-- navbar -->
       <div
         tabindex="1"
-        class="nav__item"
         v-for="(item, index) in data"
         :key="index"
         :class="{
@@ -29,6 +30,7 @@
         @mouseout="evtMouseOut()"
       >
         <router-link
+          class="nav__item"
           :title="item.text"
           :class="{ 'a__color--active': curSelectedItem == index }"
           :to="item.link"

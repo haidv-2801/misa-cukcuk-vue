@@ -39,10 +39,10 @@
     width: 100%;
     padding-left: 16px;
     cursor: pointer;
-    display: flex;
+    display: inline-flex !important;
     align-items: center;
-    height: 40px;
-    line-height: 40px;
+    height: 44px !important;
+    line-height: 44px !important;
 }
 
 .nav__item:focus-visible {
