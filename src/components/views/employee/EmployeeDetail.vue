@@ -40,8 +40,10 @@
                 <InputLabel
                   MustValidate="true"
                   @changeValueInput="changeValueInput"
+                  @checkUnique="checkUnique"
                   :model="employeeModel.EmployeeCode"
                   :data="employeeCodeInput"
+                  :ref="employeeCodeInput.inputId"
                 />
                 <InputLabel
                   MustValidate="true"
@@ -52,6 +54,7 @@
               </div>
               <div class="form__row">
                 <InputLabel
+                  MustValidate="true"
                   @changeValueInput="changeValueInput"
                   :model="employeeModel.DateOfBirth"
                   :data="dateOfBirthInput"
@@ -71,8 +74,10 @@
                 <InputLabel
                   MustValidate="true"
                   @changeValueInput="changeValueInput"
+                  @checkUnique="checkUnique"
                   :model="employeeModel.IdentityNumber"
                   :data="identityNumberInput"
+                  :ref="identityNumberInput.inputId"
                 />
                 <InputLabel
                   @changeValueInput="changeValueInput"
@@ -277,6 +282,7 @@ function initState() {
       inputType: "text",
       validation: ["required", "minLength:3"],
       mask: "",
+      isUnique: true
     },
 
     employeeNameInput: {
@@ -301,8 +307,8 @@ function initState() {
       inputId: "IdentityNumber",
       labelText: "Số CMTND/ Căn cước",
       isRequired: true,
-      inputType: "text",
-      validation: ["required"],
+      inputType: "number",
+      validation: ["required", "maxLength:12", "minLength:10"],
       mask: "",
     },
 
@@ -390,6 +396,10 @@ export default {
     });
   },
   methods: {
+     /**
+     * Open overlay
+     * DVHAI 21/06/2021
+     */
     openOverlay() {
       this.displayOverlay = !this.displayOverlay;
     },
@@ -502,54 +512,9 @@ export default {
       return emp;
     },
 
-    /**
-     * Save data
-     * DVHAI 14/06/2021
-     */
-    // async save() {
-    //   await this.validateSuccess();
 
-    //   if (this.allInputValid) {
-    //     if (this.formMode == null) {
-    //       this.axios
-    //         .post("http://cukcuk.manhnv.net/v1/Employees/", this.employeeModel)
-    //         .then((response) => {
-    //           this.refreshGrid();
-    //           this.$bus.emit("openToast", {
-    //             type: "toast--success",
-    //             text: "Thêm nhân viên thành công",
-    //           });
-    //         })
-    //         .catch((error) => {
-    //           console.log(error);
-    //           this.$bus.emit("openToast", {
-    //             type: "toast--error",
-    //             text: "Lỗi. Vui lòng liên hệ MISA",
-    //           });
-    //         });
-    //     } else {
-    //       let url = `http://cukcuk.manhnv.net/v1/Employees/${this.employeeModel.EmployeeId}`;
-    //       this.axios
-    //         .put(url, this.employeeModel)
-    //         .then((response) => {
-    //           this.refreshGrid();
-    //           this.$bus.emit("openToast", {
-    //             type: "toast--success",
-    //             text: "Sửa nhân viên thành công",
-    //           });
-    //         })
-    //         .catch((error) => {
-    //           console.log(error);
-    //           this.$bus.emit("openToast", {
-    //             type: "toast--error",
-    //             text: "Lỗi. Vui lòng liên hệ MISA",
-    //           });
-    //         });
-    //     }
-    //   }
-    // },
     async save() {
-      await this.validateSuccess();
+      await this.validateAll();
 
       if (this.allInputValid) {
         if (this.formMode == null) {
@@ -569,7 +534,6 @@ export default {
               });
             });
         } else {
-          debugger;
           EmployeeAPI.update(this.employeeModel.EmployeeId, this.employeeModel)
             .then((response) => {
               this.refreshGrid();
@@ -609,7 +573,7 @@ export default {
      * Check all input
      * DVHAI 14/06/2021
      */
-    validateSuccess() {
+    validateAll() {
       this.allInputValid = true;
       var elValidate = this.$refs.formGroup.querySelectorAll("[MustValidate]");
 
@@ -618,6 +582,35 @@ export default {
         el.querySelector(".focus").blur();
       }
     },
+
+    /**
+     * Check unique value
+     * DVHAI 23/06/2021
+     */
+    async checkUnique(key, value) {
+        let isUnique = true;
+      //api
+      await EmployeeAPI
+      .getEmployeeBycode(1, 0, value)
+      .then((response)=>{
+        if(response.status != 204 && this.employeeModel.EmployeeId != response.data.Data[0].EmployeeId) {
+          isUnique = false;
+        }
+      })
+      .catch((error)=>{
+        isUnique = true;
+      });
+
+      this.$refs[key].changeUniqueState(isUnique);
+    },
+
+    /**
+     * Check unique value
+     * DVHAI 23/06/2021
+     */
+    getEmployeeByCode(code) {
+
+    }
   },
 };
 </script>

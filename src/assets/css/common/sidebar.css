@@ -46,8 +46,9 @@
 }
 
 .nav__item:focus-visible {
+    border: none;
     outline: none;
-    background-color: #01B075;
+    background-color: #019160;
     color: white;
 }
 

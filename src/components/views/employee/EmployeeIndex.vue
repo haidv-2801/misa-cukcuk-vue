@@ -41,7 +41,9 @@
     />
 
     <!-- Pagination -->
-    <Paging @changeValuePage="changeValuePage" :data="pagination" />
+    <Paging 
+    :key="pagingCompomentKey"
+    @changeValuePage="changeValuePage" :data="pagination" />
   </div>
 </template>
 
@@ -157,13 +159,22 @@ export default {
 
       //use for paging
       pagination: {
-        pageSize: 4,
+        //dev
+        pageSize: 20,
         pageNumber: 1,
+
+        //max total page
+        totalPage: 4,
         totalRecord: 0,
+
+        maximumPage: 4
       },
 
       //use for filter bar
       filterString: "",
+
+    //reload component
+      pagingCompomentKey: 0
     };
   },
   created() {
@@ -175,12 +186,12 @@ export default {
   },
 
   watch: {
-    pagination: {
-      deep: true,
-      handler: function() {
-        this.filterTable();
-      },
-    },
+    // pagination: {
+    //   deep: true,
+    //   handler: function() {
+    //     this.filterTable();
+    //   },
+    // },
   },
 
   methods: {
@@ -248,6 +259,7 @@ export default {
         .then((response) => {
           this.gridDataTable.data = response.data.Data;
           this.pagination.totalRecord = response.data.TotalRecord;
+          this.pagination.totalPage = response.data.TotalPage;
         })
         .catch((error) => {
           console.log(error);
@@ -323,6 +335,11 @@ export default {
       this.refreshGrid();
     },
 
+    /**
+     * Open DialogConfirmStoptyping
+     * form employee detail
+     * DVHAI 14/06/2021
+     */
     openDialogConfirmStoptyping() {
       this.$refs.confirmDialogStop.openPopup();
     },

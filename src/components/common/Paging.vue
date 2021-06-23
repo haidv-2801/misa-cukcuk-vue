@@ -43,7 +43,7 @@
         </svg>
       </div>
       <button
-        v-for="(item, index) in pages"
+        v-for="(item, index) in listPages"
         :key="index"
         :class="{ active: pagination.pageNumber == item }"
         tabindex="15"
@@ -102,26 +102,22 @@ export default {
   props: {
     data: {
       type: Object,
-      default: function() {
-        return {
-          pageSize: 4,
-          pageNumber: 1,
-          totalRecord: 0,
-        };
-      },
+      default: () => {},
     },
   },
   created() {
-    //making page
-    this.pages = Array.from(
-      { length: this.pagination.pageSize },
-      (_, i) => i + 1
-    );
+    //clone new pagination info
+    this.pagination = JSON.parse(JSON.stringify(this.data));
+
+    //set segment in list page
+    this.lowerBound = 1;
+    this.upperBound = this.pagination.totalPage;
   },
   data() {
     return {
-      pagination: this.pagination = JSON.parse(JSON.stringify(this.data)),
-      pages: [],
+      pagination: JSON.parse(JSON.stringify(this.data)),
+      lowerBound: 0,
+      upperBound: 0,
     };
   },
   methods: {
@@ -140,29 +136,31 @@ export default {
     },
 
     lastPage() {
-      this.pagination.pageNumber = this.pagination.pageSize;
+      this.pagination.pageNumber = this.pagination.totalPage;
     },
 
     nextPage() {
-      if (this.pagination.pageNumber < this.pagination.pageSize) {
+      if (this.pagination.pageNumber < this.pagination.totalPage) {
         this.pagination.pageNumber++;
       }
     },
   },
+  computed: {
+    listPages() {
+      let lPage = [];
+      for (let i = this.lowerBound; i <= this.upperBound; i++) {
+        lPage.push(i);
+      }
+      return lPage;
+    },
+  },
   watch: {
-    // data: {
+    // pagination: {
     //   deep: true,
     //   handler: function() {
-    //     this.pagination = JSON.parse(JSON.stringify(this.data));
-    //   }
+    //     this.$emit("changeValuePage", this.pagination);
+    //   },
     // },
-
-    pagination: {
-      deep: true,
-      handler: function() {
-        this.$emit("changeValuePage", this.pagination);
-      },
-    },
   },
 };
 </script>
