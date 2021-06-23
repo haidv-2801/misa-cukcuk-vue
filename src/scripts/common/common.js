@@ -104,7 +104,7 @@ CommonFn.removeSymbol = (value) => {
  * DVHAI 05/06/2021 
  */
  CommonFn.onlyNumber = (value) => {
-    return value.replace(/[^\d]/gi, '');
+    return value.toString().replace(/[^\d]/gi, '');
 }
 
 export default CommonFn

@@ -23,7 +23,7 @@
     />
 
     <!-- money mask -->
-    <!-- <input
+    <input
       v-else-if="data.dataType == 'money'"
       class="focus"
       :id="data.inputId"
@@ -39,8 +39,8 @@
       v-model="cloneModel"
       v-money="money"
       v-mask="data.mask"
-    /> -->
-  <!-- no money mask -->
+    />
+    <!-- no money mask -->
     <input
       v-else
       class="focus"
@@ -62,6 +62,7 @@
 
 <script>
 import validate from "../../scripts/common/validator.js";
+import CommonFn from "../../scripts/common/common.js";
 
 // dx datebox
 import "devextreme/dist/css/dx.light.css";
@@ -90,12 +91,19 @@ export default {
   },
   data() {
     return {
+      //validation state
       validation: {
         isValid: true,
         error: "",
       },
+
+      //(1-show error, 0-hide error)
       tooltipScale: 0,
+
+      //clone data model in prop
       cloneModel: JSON.parse(JSON.stringify(this.model)),
+
+      //v-money format
       money: {
         decimal: "",
         thousands: ".",
@@ -104,9 +112,19 @@ export default {
         precision: 0,
         masked: false,
       },
+
+      isUniqueValue: true,
     };
   },
   methods: {
+    /**
+     * Chang unique state refered by parent component
+     * DVHAI 14/06/2021
+     */
+    changeUniqueState(isUnique) {
+      this.isUniqueValue = isUnique;
+    },
+
     /**
      * Focus input
      * DVHAI 14/06/2021
@@ -114,6 +132,8 @@ export default {
     focus() {
       this.tooltipScale = 0;
       this.validation.isValid = true;
+
+      this.changeUniqueState(true);
     },
 
     /**
@@ -121,11 +141,24 @@ export default {
      * DVHAI 14/06/2021
      */
     blur() {
+      //validate custom
       this.validate();
+
+      //validate unique
+      if (this.data.isUnique == true)
+        this.validateUnique(this.data.inputId, this.cloneModel);
     },
 
     /**
-     * Validate
+     * Validate unique
+     * DVHAI 14/06/2021
+     */
+    validateUnique(key, value) {
+      this.$emit("checkUnique", key, value);
+    },
+
+    /**
+     * Validate cútom
      * DVHAI 14/06/2021
      */
     validate() {
@@ -136,16 +169,27 @@ export default {
               ? validate[cons[0]](this.cloneModel)(cons[1])
               : validate[x](this.cloneModel);
 
-        this.validation.isValid = validateResult.isValid;
-        this.validation.error =
-          '"' + this.data.labelText + " " + validateResult.msg + '"';
-        this.tooltipScale = validateResult.isValid == false ? 1 : 0;
+        let errMsg = '"' + this.data.labelText + " " + validateResult.msg + '"';
 
+        //raise error
+        this.setValidateError(validateResult.isValid, errMsg);
+
+        //error fire
         if (!validateResult.isValid) {
           this.$bus.emit("allInputValid", validateResult.isValid);
           break;
         }
       }
+    },
+
+    /**
+     * Set validate error
+     * DVHAI 14/06/2021
+     */
+    setValidateError(isValid, errorMsg) {
+      this.validation.isValid = isValid;
+      this.validation.error = errorMsg;
+      this.tooltipScale = isValid == false ? 1 : 0;
     },
   },
   computed: {},
@@ -155,8 +199,14 @@ export default {
      * DVHAI 14/06/2021
      */
     cloneModel() {
-      this.$emit("changeValueInput", this.data.inputId, this.cloneModel);
-      console.log(this.cloneModel)
+      //if is money convert to number format
+      let moneyNumber = this.cloneModel;
+
+      if (this.data.dataType == "money")
+        moneyNumber = CommonFn.onlyNumber(this.cloneModel);
+
+      //change real value in parent component
+      this.$emit("changeValueInput", this.data.inputId, moneyNumber);
     },
 
     /**
@@ -165,6 +215,15 @@ export default {
      */
     model() {
       this.cloneModel = JSON.parse(JSON.stringify(this.model));
+    },
+
+    /**
+     * Tracking unique value, if false raise error
+     * DVHAI 14/06/2021
+     */
+    isUniqueValue: function(val) {
+      let errMsg = "'" + this.data.labelText + " đã tồn tại" + "'";
+      this.setValidateError(val, errMsg);
     },
   },
 };
@@ -180,6 +239,7 @@ input {
   color: #000000;
   height: 40px;
   padding-left: 16px;
+  padding-right: 16px;
 }
 
 .color-red {

@@ -43,7 +43,7 @@
         </svg>
       </div>
       <button
-        v-for="(item, index) in pages"
+        v-for="(item, index) in listPages"
         :key="index"
         :class="{ active: pagination.pageNumber == item }"
         tabindex="15"
@@ -102,67 +102,121 @@ export default {
   props: {
     data: {
       type: Object,
-      default: function() {
-        return {
-          pageSize: 4,
-          pageNumber: 1,
-          totalRecord: 0,
-        };
-      },
+      default: () => {},
     },
   },
   created() {
-    //making page
-    this.pages = Array.from(
-      { length: this.pagination.pageSize },
-      (_, i) => i + 1
-    );
+    this.pagination = JSON.parse(JSON.stringify(this.data));
   },
   data() {
     return {
-      pagination: this.pagination = JSON.parse(JSON.stringify(this.data)),
-      pages: [],
+      pagination: JSON.parse(JSON.stringify(this.data)),
+
+      pageStep: 0
     };
   },
   methods: {
+    /**
+     * Select page number
+     * DVHAI 13/06/2021
+     */
     btnClick(index) {
       this.pagination.pageNumber = index;
     },
 
+    /**
+     * Select previus page
+     * DVHAI 13/06/2021
+     */
     prePage() {
       if (this.pagination.pageNumber > 1) {
+        if(this.pagination.pageNumber == this.lowerBoundPage) {
+          this.pageStep--;
+        }
         this.pagination.pageNumber--;
       }
     },
 
+    /**
+     * Select first page
+     * DVHAI 13/06/2021
+     */
     firstPage() {
+      this.pageStep = 0;
       this.pagination.pageNumber = 1;
     },
 
+    /**
+     * Select last page
+     * DVHAI 13/06/2021
+     */
     lastPage() {
-      this.pagination.pageNumber = this.pagination.pageSize;
+      this.pageStep = this.pagination.totalPage - this.pagination.maximumPage;
+      this.pagination.pageNumber = this.pagination.totalPage;
     },
 
+    /**
+     * Select page number
+     * DVHAI 13/06/2021
+     */
     nextPage() {
-      if (this.pagination.pageNumber < this.pagination.pageSize) {
+      if (this.pagination.pageNumber < this.pagination.totalPage) {
+        if(this.pagination.pageNumber == this.upperBoundPage) {
+          this.pageStep++;
+        }
         this.pagination.pageNumber++;
       }
     },
   },
-  watch: {
-    // data: {
-    //   deep: true,
-    //   handler: function() {
-    //     this.pagination = JSON.parse(JSON.stringify(this.data));
-    //   }
-    // },
+  computed: {
+    //list page number
+    listPages() {
+      let lPage = [];
+      for (let i = this.lowerBoundPage; i <= this.upperBoundPage; i++) {
+        lPage.push(i);
+      }
+      debugger
+      return lPage;
+    },
 
-    pagination: {
+    //currentPageNumber
+    currentPageNumber() {
+      return this.pagination.pageNumber;
+    },
+
+    //currentPageSize
+    currentPageSize() {
+      return this.pagination.pageSize;
+    },
+
+    //lowerBoundPage
+    lowerBoundPage() {
+      return Math.max(1, 1 + this.pageStep);
+    },
+
+    //upperBoundPage
+    upperBoundPage() {
+      return Math.min(this.pagination.maximumPage + this.pageStep, this.pagination.totalPage);
+    }
+  },
+  watch: {
+    //tracking current pagenumber
+    currentPageNumber: function(value) {
+      this.$emit("changePageNumber", value);
+    },
+
+    //tracking current pagesize
+    currentPageSize: function(value) {
+      this.$emit("changePageSize", value);
+    },
+
+    //tracking props data and clone to a new one
+    data: {
       deep: true,
       handler: function() {
-        this.$emit("changeValuePage", this.pagination);
-      },
-    },
+        this.pagination = JSON.parse(JSON.stringify(this.data));
+      }
+    }
   },
 };
 </script>

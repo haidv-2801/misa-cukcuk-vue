@@ -1,49 +1,57 @@
 <template>
-  <div class="main__grid">
-    <table>
-      <thead>
-        <tr>
-          <th
-            v-for="(item, index) in data.column"
+  <div>
+    <div class="main__grid">
+      <table>
+        <thead>
+          <tr>
+            <th
+              v-for="(item, index) in data.column"
+              :key="index"
+              :class="{
+                'align-right': item.dataType == Resource.DataTypeColumn.Number,
+                'align-center': item.dataType == Resource.DataTypeColumn.Date,
+              }"
+            >
+              {{ item.displayName }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(item, index) in data.data"
             :key="index"
-            :class="{
-              'align-right': item.dataType == Resource.DataTypeColumn.Number,
-              'align-center': item.dataType == Resource.DataTypeColumn.Date,
-            }"
+            :class="{ active: multiSelectList.includes(index) }"
+            @click.exact="selectRow(index)"
+            @dblclick="openFormDetail(item)"
+            @click.ctrl="multiSelectRow(index)"
           >
-            {{ item.displayName }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="(item, index) in data.data"
-          :key="index"
-          :class="{ active: multiSelectList.includes(index) }"
-          @click.exact="selectRow(index)"
-          @dblclick="openFormDetail(item)"
-          @click.ctrl="multiSelectRow(index)"
-        >
-          <td
-            v-for="(column, index) in data.column"
-            :key="index"
-            :class="{
-              'align-right': column.dataType == Resource.DataTypeColumn.Number,
-              'align-center': column.dataType == Resource.DataTypeColumn.Date,
-            }"
-            :title="item[column.fieldName]"
-          >
-            {{
-              formatValue(
-                item[column.fieldName],
-                column.dataType,
-                column.displayType
-              )
-            }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            <td
+              v-for="(column, index) in data.column"
+              :key="index"
+              :class="{
+                'align-right':
+                  column.dataType == Resource.DataTypeColumn.Number,
+                'align-center': column.dataType == Resource.DataTypeColumn.Date,
+              }"
+              :title="item[column.fieldName]"
+            >
+              {{
+                formatValue(
+                  item[column.fieldName],
+                  column.dataType,
+                  column.displayType
+                )
+              }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <Paging
+      :data="gridData.pagination"
+      @changePageNumber="changePageNumber"
+      @changePageSize="changePageSize"
+    />
   </div>
 </template>
 
@@ -62,7 +70,7 @@ export default {
     },
   },
   components: {
-    Paging
+    Paging,
   },
   data() {
     return {
@@ -156,6 +164,22 @@ export default {
     openFormDetail(item) {
       this.$emit("openFormDetail", item);
     },
+
+    /**
+     * Change page number
+     * DVHAI 13/06/2021
+     */
+    changePageNumber(value) {
+      this.$emit("changePageNumber", value);
+    },
+
+    /**
+     * Change page number
+     * DVHAI 13/06/2021
+     */
+    changePageSize(value) {
+      this.$emit("changePageSize", value);
+    },
   },
   watch: {},
 };
@@ -231,5 +255,6 @@ th {
   text-align: left;
   max-width: 300px;
 }
+
 /* i */
 </style>

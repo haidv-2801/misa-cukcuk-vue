@@ -33,7 +33,7 @@ export default class BaseAPI {
    * @param {*} body
    */
   update(id, body) {
-    return BaseAPIConfig.update(`${this.controler}/${id}`, body);
+    return BaseAPIConfig.put(`${this.controler}/${id}`, body);
   }
 
   /**

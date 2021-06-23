@@ -16,9 +16,10 @@
         </div>
       </div>
 
-      <!-- navbar -->
+      <!-- navbar-->
       <div
-        tabindex="1"
+        
+        class="nav__item--focused"
         v-for="(item, index) in data"
         :key="index"
         :class="{

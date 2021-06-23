@@ -38,10 +38,9 @@
       ref="Grid"
       :gridData="gridDataTable"
       @openFormDetail="openFormEmployeeDetail"
+      @changePageSize="changePageSize"
+      @changePageNumber="changePageNumber"
     />
-
-    <!-- Pagination -->
-    <Paging @changeValuePage="changeValuePage" :data="pagination" />
   </div>
 </template>
 
@@ -153,16 +152,16 @@ export default {
           },
         ],
         data: [],
+        pagination: {
+          pageSize: 7,
+          pageNumber: 1,
+          totalPage: null,
+          totalRecord: null,
+          maximumPage: 4,
+        },
       },
 
-      //use for paging
-      pagination: {
-        pageSize: 4,
-        pageNumber: 1,
-        totalRecord: 0,
-      },
-
-      //use for filter bar
+      //use for filterbar
       filterString: "",
     };
   },
@@ -174,22 +173,27 @@ export default {
     this.filterTable();
   },
 
-  watch: {
-    pagination: {
-      deep: true,
-      handler: function() {
-        this.filterTable();
-      },
-    },
-  },
+  watch: {},
 
   methods: {
     /**
      * Change page number
      * DVHAI 21/06/2021
      */
-    changeValuePage(value) {
-      this.pagination = value;
+    changePageNumber(value) {
+      this.gridDataTable.pagination.pageNumber = value;
+
+      this.refreshGrid();
+    },
+
+    /**
+     * Change page size
+     * DVHAI 21/06/2021
+     */
+    changePageSize(value) {
+      this.gridDataTable.pagination.pageSize = value;
+
+      this.refreshGrid();
     },
 
     /**
@@ -241,13 +245,15 @@ export default {
       //params: pagesize, pagenumber, filterString
       this.$bus.emit("displayLoader");
       EmployeeAPI.filter(
-        this.pagination.pageSize,
-        this.pagination.pageNumber - 1,
+        this.gridDataTable.pagination.pageSize,
+        this.gridDataTable.pagination.pageNumber - 1,
         this.filterString
       )
         .then((response) => {
+          debugger
           this.gridDataTable.data = response.data.Data;
-          this.pagination.totalRecord = response.data.TotalRecord;
+          this.gridDataTable.pagination.totalRecord = response.data.TotalRecord;
+          this.gridDataTable.pagination.totalPage = response.data.TotalPage;
         })
         .catch((error) => {
           console.log(error);
@@ -323,6 +329,11 @@ export default {
       this.refreshGrid();
     },
 
+    /**
+     * Open DialogConfirmStoptyping
+     * form employee detail
+     * DVHAI 14/06/2021
+     */
     openDialogConfirmStoptyping() {
       this.$refs.confirmDialogStop.openPopup();
     },

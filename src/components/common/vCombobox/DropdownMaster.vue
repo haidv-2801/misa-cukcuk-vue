@@ -24,8 +24,8 @@ export default {
     },
     model: {
       type: Number,
-      default: 0
-    }
+      default: -1,
+    },
   },
   data() {
     return {
@@ -44,12 +44,13 @@ export default {
      */
     cloneModel() {
       let value = this.data.data.items.indexOf(this.cloneModel);
+      if (value == -1) value = null;
       this.$emit("changeValueInput", this.data.data.inputId, value);
     },
 
     model() {
-      this.cloneModel = this.model;
-    }
+      this.cloneModel = this.data.data.items[this.model];
+    },
   },
 };
 </script>
