@@ -106,61 +106,117 @@ export default {
     },
   },
   created() {
-    //clone new pagination info
     this.pagination = JSON.parse(JSON.stringify(this.data));
-
-    //set segment in list page
-    this.lowerBound = 1;
-    this.upperBound = this.pagination.totalPage;
   },
   data() {
     return {
       pagination: JSON.parse(JSON.stringify(this.data)),
-      lowerBound: 0,
-      upperBound: 0,
+
+      pageStep: 0
     };
   },
   methods: {
+    /**
+     * Select page number
+     * DVHAI 13/06/2021
+     */
     btnClick(index) {
       this.pagination.pageNumber = index;
     },
 
+    /**
+     * Select previus page
+     * DVHAI 13/06/2021
+     */
     prePage() {
       if (this.pagination.pageNumber > 1) {
+        if(this.pagination.pageNumber == this.lowerBoundPage) {
+          this.pageStep--;
+        }
         this.pagination.pageNumber--;
       }
     },
 
+    /**
+     * Select first page
+     * DVHAI 13/06/2021
+     */
     firstPage() {
+      this.pageStep = 0;
       this.pagination.pageNumber = 1;
     },
 
+    /**
+     * Select last page
+     * DVHAI 13/06/2021
+     */
     lastPage() {
+      this.pageStep = this.pagination.totalPage - this.pagination.maximumPage;
       this.pagination.pageNumber = this.pagination.totalPage;
     },
 
+    /**
+     * Select page number
+     * DVHAI 13/06/2021
+     */
     nextPage() {
       if (this.pagination.pageNumber < this.pagination.totalPage) {
+        if(this.pagination.pageNumber == this.upperBoundPage) {
+          this.pageStep++;
+        }
         this.pagination.pageNumber++;
       }
     },
   },
   computed: {
+    //list page number
     listPages() {
       let lPage = [];
-      for (let i = this.lowerBound; i <= this.upperBound; i++) {
+      for (let i = this.lowerBoundPage; i <= this.upperBoundPage; i++) {
         lPage.push(i);
       }
+      debugger
       return lPage;
     },
+
+    //currentPageNumber
+    currentPageNumber() {
+      return this.pagination.pageNumber;
+    },
+
+    //currentPageSize
+    currentPageSize() {
+      return this.pagination.pageSize;
+    },
+
+    //lowerBoundPage
+    lowerBoundPage() {
+      return Math.max(1, 1 + this.pageStep);
+    },
+
+    //upperBoundPage
+    upperBoundPage() {
+      return Math.min(this.pagination.maximumPage + this.pageStep, this.pagination.totalPage);
+    }
   },
   watch: {
-    // pagination: {
-    //   deep: true,
-    //   handler: function() {
-    //     this.$emit("changeValuePage", this.pagination);
-    //   },
-    // },
+    //tracking current pagenumber
+    currentPageNumber: function(value) {
+      this.$emit("changePageNumber", value);
+    },
+
+    //tracking current pagesize
+    currentPageSize: function(value) {
+      this.$emit("changePageSize", value);
+    },
+
+    //tracking props data and clone to a new one
+    data: {
+      deep: true,
+      handler: function() {
+        this.pagination = JSON.parse(JSON.stringify(this.data));
+      }
+    }
   },
 };
 </script>
