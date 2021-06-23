@@ -2,7 +2,8 @@
   <div id="pagination" class="main__pagination">
     <div class="pagi__left">
       Hiển thị
-      <b>1-{{ pagination.pageSize }}/{{ pagination.totalRecord }}</b> nhân viên
+      <b>{{ fromNumber }}-{{ toNumber }}/{{ pagination.totalRecord }}</b> nhân
+      viên
     </div>
     <div class="pagi__mid">
       <div @click="firstPage()" class="btn-page-control">
@@ -91,7 +92,37 @@
       </div>
     </div>
     <div class="pagi__right">
-      <b>{{ pagination.pageSize }}</b> nhân viên/trang
+      <span>
+        <b>{{ pagination.pageSize }}</b> nhân viên/trang
+      </span>
+      <div class="test">
+        <svg
+          width="12"
+          height="12"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 448 512"
+          class="icon__pagenumber"
+          @click="increPagesize()"
+        >
+          <title>Tăng số trang</title>
+          <path
+            d="M240.971 130.524l194.343 194.343c9.373 9.373 9.373 24.569 0 33.941l-22.667 22.667c-9.357 9.357-24.522 9.375-33.901.04L224 227.495 69.255 381.516c-9.379 9.335-24.544 9.317-33.901-.04l-22.667-22.667c-9.373-9.373-9.373-24.569 0-33.941L207.03 130.525c9.372-9.373 24.568-9.373 33.941-.001z"
+          />
+        </svg>
+        <svg
+          width="12"
+          height="12"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 448 512"
+          class="icon__pagenumber"
+          @click="descPagesize()"
+        >
+          <title>Giảm số trang</title>
+          <path
+            d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+          />
+        </svg>
+      </div>
     </div>
   </div>
 </template>
@@ -112,10 +143,20 @@ export default {
     return {
       pagination: JSON.parse(JSON.stringify(this.data)),
 
-      pageStep: 0
+      pageStep: 0,
     };
   },
   methods: {
+    increPagesize() {
+      if(this.pagination.pageSize < this.pagination.totalRecord)
+        this.pagination.pageSize++;
+    },
+
+    descPagesize() {
+      if(this.pagination.pageSize > 1)
+        this.pagination.pageSize--;
+    },
+
     /**
      * Select page number
      * DVHAI 13/06/2021
@@ -130,7 +171,7 @@ export default {
      */
     prePage() {
       if (this.pagination.pageNumber > 1) {
-        if(this.pagination.pageNumber == this.lowerBoundPage) {
+        if (this.pagination.pageNumber == this.lowerBoundPage) {
           this.pageStep--;
         }
         this.pagination.pageNumber--;
@@ -161,7 +202,7 @@ export default {
      */
     nextPage() {
       if (this.pagination.pageNumber < this.pagination.totalPage) {
-        if(this.pagination.pageNumber == this.upperBoundPage) {
+        if (this.pagination.pageNumber == this.upperBoundPage) {
           this.pageStep++;
         }
         this.pagination.pageNumber++;
@@ -169,13 +210,24 @@ export default {
     },
   },
   computed: {
+    //page segment
+    fromNumber() {
+      let from =
+        this.pagination.pageSize * (this.pagination.pageNumber - 1) + 1;
+      return from.toString().padStart(2, "0");
+    },
+
+    toNumber() {
+      let to = this.pagination.pageSize * this.pagination.pageNumber;
+      return to.toString().padStart(2, "0");
+    },
+
     //list page number
     listPages() {
       let lPage = [];
       for (let i = this.lowerBoundPage; i <= this.upperBoundPage; i++) {
         lPage.push(i);
       }
-      debugger
       return lPage;
     },
 
@@ -196,8 +248,11 @@ export default {
 
     //upperBoundPage
     upperBoundPage() {
-      return Math.min(this.pagination.maximumPage + this.pageStep, this.pagination.totalPage);
-    }
+      return Math.min(
+        this.pagination.maximumPage + this.pageStep,
+        this.pagination.totalPage
+      );
+    },
   },
   watch: {
     //tracking current pagenumber
@@ -215,13 +270,26 @@ export default {
       deep: true,
       handler: function() {
         this.pagination = JSON.parse(JSON.stringify(this.data));
-      }
-    }
+      },
+    },
   },
 };
 </script>
 
 <style scoped>
+.test {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.test svg:hover {
+  opacity: 0.7;
+  background-size: #838383;
+}
 /* pagination css */
 .main__pagination {
   align-items: center;
@@ -289,8 +357,19 @@ export default {
 }
 
 .pagi__right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   text-align: right;
   flex: 2;
+}
+.pagi__right span {
+  margin-right: 10px;
+}
+
+.pagi__right .icon__pagenumber {
+  cursor: pointer;
+  margin: 0 16px 0px 10px;
 }
 
 .btn-page-control {

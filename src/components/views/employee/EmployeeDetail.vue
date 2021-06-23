@@ -282,7 +282,7 @@ function initState() {
       inputType: "text",
       validation: ["required", "minLength:3"],
       mask: "",
-      isUnique: true
+      isUnique: true,
     },
 
     employeeNameInput: {
@@ -396,7 +396,7 @@ export default {
     });
   },
   methods: {
-     /**
+    /**
      * Open overlay
      * DVHAI 21/06/2021
      */
@@ -463,11 +463,11 @@ export default {
      * DVHAI 14/06/2021
      */
     async getNewEmployeeCode() {
-      let ans = "";
+      let employeeCode = "";
 
       await EmployeeAPI.getNewEmployeecode()
         .then(function(response) {
-          ans = response.data;
+          employeeCode = response.data;
         })
         .catch((error) => {
           console.log(error);
@@ -477,7 +477,7 @@ export default {
           });
         });
 
-      return ans;
+      return employeeCode;
     },
 
     /**
@@ -511,7 +511,6 @@ export default {
 
       return emp;
     },
-
 
     async save() {
       await this.validateAll();
@@ -588,18 +587,20 @@ export default {
      * DVHAI 23/06/2021
      */
     async checkUnique(key, value) {
-        let isUnique = true;
+      let isUnique = true;
       //api
-      await EmployeeAPI
-      .getEmployeeBycode(1, 0, value)
-      .then((response)=>{
-        if(response.status != 204 && this.employeeModel.EmployeeId != response.data.Data[0].EmployeeId) {
-          isUnique = false;
-        }
-      })
-      .catch((error)=>{
-        isUnique = true;
-      });
+      await EmployeeAPI.getEmployeeBycode(1, 0, value)
+        .then((response) => {
+          if (
+            response.status != 204 &&
+            this.employeeModel.EmployeeId != response.data.Data[0].EmployeeId
+          ) {
+            isUnique = false;
+          }
+        })
+        .catch((error) => {
+          isUnique = true;
+        });
 
       this.$refs[key].changeUniqueState(isUnique);
     },
@@ -608,9 +609,7 @@ export default {
      * Check unique value
      * DVHAI 23/06/2021
      */
-    getEmployeeByCode(code) {
-
-    }
+    getEmployeeByCode(code) {},
   },
 };
 </script>

@@ -250,7 +250,6 @@ export default {
         this.filterString
       )
         .then((response) => {
-          debugger
           this.gridDataTable.data = response.data.Data;
           this.gridDataTable.pagination.totalRecord = response.data.TotalRecord;
           this.gridDataTable.pagination.totalPage = response.data.TotalPage;
