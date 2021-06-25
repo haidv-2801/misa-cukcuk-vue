@@ -200,10 +200,10 @@ export default {
      */
     cloneModel() {
       //if is money convert to number format
-      let moneyNumber = this.cloneModel;
+      let moneyNumber = this.cloneModel || "";
 
       if (this.data.dataType == "money")
-        moneyNumber = CommonFn.onlyNumber(this.cloneModel);
+        moneyNumber = CommonFn.onlyNumber(moneyNumber);
 
       //change real value in parent component
       this.$emit("changeValueInput", this.data.inputId, moneyNumber);

@@ -1,6 +1,8 @@
 var validate = validate || {};
 
 validate.required = (value) => {
+  value = value || "";
+  
   let isValid = false,
     msg = "";
 

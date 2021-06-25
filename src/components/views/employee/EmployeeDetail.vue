@@ -513,9 +513,12 @@ export default {
     },
 
     async save() {
+      //validate all fields
       await this.validateAll();
 
+      //is valid
       if (this.allInputValid) {
+        //is formadd
         if (this.formMode == null) {
           EmployeeAPI.insert(this.employeeModel)
             .then((response) => {
@@ -533,6 +536,7 @@ export default {
               });
             });
         } else {
+          //is formedit
           EmployeeAPI.update(this.employeeModel.EmployeeId, this.employeeModel)
             .then((response) => {
               this.refreshGrid();
@@ -604,12 +608,6 @@ export default {
 
       this.$refs[key].changeUniqueState(isUnique);
     },
-
-    /**
-     * Check unique value
-     * DVHAI 23/06/2021
-     */
-    getEmployeeByCode(code) {},
   },
 };
 </script>

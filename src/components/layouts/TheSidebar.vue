@@ -101,6 +101,7 @@ export default {
   },
   computed: {},
   watch: {
+    //tracking router and select
     $route(to, from) {
       let index = this.data.map((x) => x.link).indexOf(to.path);
       this.curSelectedItem = index;

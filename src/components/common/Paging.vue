@@ -6,7 +6,10 @@
       viên
     </div>
     <div class="pagi__mid">
-      <div @click="firstPage()" class="btn-page-control">
+      <div 
+      :class="{'disable': pagination.pageNumber == 1}"
+      @click="firstPage()" 
+      class="btn-page-control">
         <svg
           tabindex="13"
           xmlns="http://www.w3.org/2000/svg"
@@ -25,7 +28,10 @@
           <polyline points="18 17 13 12 18 7"></polyline>
         </svg>
       </div>
-      <div @click="prePage()" class="btn-page-control">
+      <div 
+      @click="prePage()" 
+      :class="{'disable':  pagination.pageNumber == 1}"
+      class="btn-page-control">
         <svg
           tabindex="14"
           xmlns="http://www.w3.org/2000/svg"
@@ -53,7 +59,9 @@
       >
         <span>{{ item }}</span>
       </button>
-      <div @click="nextPage()" class="btn-page-control">
+      <div 
+      :class="{'disable':  pagination.pageNumber == pagination.totalPage}"
+      @click="nextPage()" class="btn-page-control">
         <svg
           tabindex="19"
           xmlns="http://www.w3.org/2000/svg"
@@ -71,7 +79,9 @@
           <polyline points="9 18 15 12 9 6"></polyline>
         </svg>
       </div>
-      <div @click="lastPage()" class="btn-page-control">
+      <div 
+      :class="{'disable': pagination.pageNumber == pagination.totalPage}"
+      @click="lastPage()" class="btn-page-control">
         <svg
           tabindex="20"
           xmlns="http://www.w3.org/2000/svg"
@@ -141,20 +151,36 @@ export default {
   },
   data() {
     return {
+      //clone model to new one
       pagination: JSON.parse(JSON.stringify(this.data)),
 
+      //to calculate page segment
       pageStep: 0,
     };
   },
   methods: {
+    /**
+     * Select page number
+     * DVHAI 13/06/2021
+     */
     increPagesize() {
-      if(this.pagination.pageSize < this.pagination.totalRecord)
+      if (this.pagination.pageSize < this.pagination.totalRecord) {
         this.pagination.pageSize++;
+        this.pageStep = 0;
+        this.pagination.pageNumber = 1;
+      }
     },
 
+    /**
+     * Select page number
+     * DVHAI 13/06/2021
+     */
     descPagesize() {
-      if(this.pagination.pageSize > 1)
+      if (this.pagination.pageSize > 1) {
         this.pagination.pageSize--;
+        this.pageStep = 0;
+        this.pagination.pageNumber = 1;
+      }
     },
 
     /**
@@ -277,6 +303,11 @@ export default {
 </script>
 
 <style scoped>
+.disable {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
 .test {
   width: 20px;
   height: 20px;
