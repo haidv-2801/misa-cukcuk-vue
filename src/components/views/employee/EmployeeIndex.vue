@@ -193,7 +193,17 @@ export default {
     changePageSize(value) {
       this.gridDataTable.pagination.pageSize = value;
 
+      this.resetPageNumber(1)
+
       this.refreshGrid();
+    },
+
+    /**
+     * Reset pagenumber
+     * DVHAI 21/06/2021
+     */
+    resetPageNumber(pageNumber) {
+      this.gridDataTable.pagination.pageNumber = pageNumber;
     },
 
     /**
