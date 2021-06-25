@@ -105,7 +105,7 @@ export default {
           {
             fieldName: "PhoneNumber",
             displayName: "Số điện thoại",
-            dataType: "Number",
+            dataType: "",
             displayType: "",
           },
           {
