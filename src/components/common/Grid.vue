@@ -253,7 +253,7 @@ th {
   white-space: nowrap;
   padding: 0 10px 0 16px;
   text-align: left;
-  max-width: 300px;
+  max-width: 250px;
 }
 
 /* i */
