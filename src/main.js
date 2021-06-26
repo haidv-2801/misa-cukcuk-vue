@@ -14,7 +14,7 @@ import vueDebounce   from "vue-debounce";
 
 Vue.use(Bus)
 Vue.use(VueAxios, axios)
-Vue.use(VueMask);
+Vue.use(VueMask, {masked:false,placeholder:'false'});
 Vue.use(money);
 Vue.use(vueDebounce);
 

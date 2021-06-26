@@ -39,6 +39,7 @@
       v-model="cloneModel"
       v-money="money"
       v-mask="data.mask"
+      :masked="false"
     />
     <!-- no money mask -->
     <input
@@ -54,6 +55,8 @@
       :placeholder="data.mask"
       @focus="focus"
       @blur="blur"
+      @mouseover="raiseErrorMsg()"
+      @mouseleave="hideErrorMsg()"
       v-model="cloneModel"
       v-mask="data.mask"
     />
@@ -118,6 +121,24 @@ export default {
   },
   methods: {
     /**
+     * Raise error when hover
+     * DVHAI 14/06/2021
+     */
+    raiseErrorMsg() {
+      if(!this.validation.isValid) {
+        this.tooltipScale = 1;
+      }
+    },
+
+     /**
+     * Hide error when lost hover
+     * DVHAI 14/06/2021
+     */
+    hideErrorMsg() {
+      this.tooltipScale = 0;
+    },
+
+    /**
      * Chang unique state refered by parent component
      * DVHAI 14/06/2021
      */
@@ -158,7 +179,7 @@ export default {
     },
 
     /**
-     * Validate cútom
+     * Validate custom
      * DVHAI 14/06/2021
      */
     validate() {
@@ -189,7 +210,7 @@ export default {
     setValidateError(isValid, errorMsg) {
       this.validation.isValid = isValid;
       this.validation.error = errorMsg;
-      this.tooltipScale = isValid == false ? 1 : 0;
+      // this.tooltipScale = isValid == false ? 1 : 0;
     },
   },
   computed: {},

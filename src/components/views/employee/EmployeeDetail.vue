@@ -345,7 +345,7 @@ function initState() {
       isRequired: true,
       inputType: "text",
       validation: ["required"],
-      mask: "(###) ###-####",
+      mask: ['(###) ###-####'],
     },
 
     taxCodeInput: {
