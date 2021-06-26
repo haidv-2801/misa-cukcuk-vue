@@ -114,10 +114,8 @@ html {
   
 }
 
-.form__head,
-.form__main,
-.form__bottom {
-  padding: 0 24px;
+.form__main {
+  padding: 0 20px;
 }
 
 .form__title {
@@ -131,6 +129,7 @@ html {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-right: 10px;
 }
 
 .head__right {
@@ -199,6 +198,7 @@ html {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  padding-right: 30px;
 }
 
 .form__bottom button {
