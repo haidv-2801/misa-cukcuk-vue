@@ -226,8 +226,8 @@ table {
 
 table tr {
   cursor: pointer;
-  height: 40px;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+  height: 48px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 table tbody tr:nth-child(odd) {
